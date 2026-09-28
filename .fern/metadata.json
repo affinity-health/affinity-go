@@ -1,0 +1,16 @@
+{
+  "cliVersion": "5.112.0",
+  "generatorName": "fernapi/fern-go-sdk",
+  "generatorVersion": "1.47.2",
+  "generatorConfig": {
+    "packageName": "affinity",
+    "module": {
+      "path": "github.com/affinity-health/affinity-go"
+    }
+  },
+  "originGitCommit": "fcbfd1cc0491bb7199af4fb6db66c0455a5efe2e",
+  "originGitCommitIsDirty": true,
+  "invokedBy": "manual",
+  "requestedVersion": "0.1.0",
+  "sdkVersion": "v0.1.0"
+}
