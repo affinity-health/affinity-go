@@ -35,12 +35,12 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Returns the practices that belong to the platform. The default Affinity-Version is 2026-09-28.
-func (c *Client) ListPractices(
+func (c *Client) List(
 	ctx context.Context,
 	request *affinity.ListPracticesRequest,
 	opts ...option.RequestOption,
 ) (*affinity.ListPracticesResponse, error) {
-	response, err := c.WithRawResponse.ListPractices(
+	response, err := c.WithRawResponse.List(
 		ctx,
 		request,
 		opts...,
@@ -52,12 +52,12 @@ func (c *Client) ListPractices(
 }
 
 // Creates a practice owned by the platform. Set liveEnabled to true to enable Live access at creation with an approved platform and a Live request. Defaults to false. Requires practices:write. Send Idempotency-Key when you retry the same request.
-func (c *Client) CreatePractice(
+func (c *Client) Create(
 	ctx context.Context,
 	request *affinity.CreatePracticeRequest,
 	opts ...option.RequestOption,
 ) (*affinity.CreatePracticeResponse, error) {
-	response, err := c.WithRawResponse.CreatePractice(
+	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
 		opts...,
@@ -69,12 +69,12 @@ func (c *Client) CreatePractice(
 }
 
 // Returns one practice that belongs to the platform.
-func (c *Client) GetPractice(
+func (c *Client) Get(
 	ctx context.Context,
-	request *affinity.GetPracticeRequest,
+	request *affinity.GetPracticesRequest,
 	opts ...option.RequestOption,
 ) (*affinity.GetPracticeResponse, error) {
-	response, err := c.WithRawResponse.GetPractice(
+	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
 		opts...,
@@ -86,12 +86,12 @@ func (c *Client) GetPractice(
 }
 
 // Updates one practice owned by the platform. Set liveEnabled to true or false to control Live access with an approved platform and a Live request. Affinity Admin decisions take precedence. Requires practices:write. Send Idempotency-Key when you retry the same request.
-func (c *Client) UpdatePractice(
+func (c *Client) Update(
 	ctx context.Context,
 	request *affinity.UpdatePracticeRequest,
 	opts ...option.RequestOption,
 ) (*affinity.UpdatePracticeResponse, error) {
-	response, err := c.WithRawResponse.UpdatePractice(
+	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
 		opts...,

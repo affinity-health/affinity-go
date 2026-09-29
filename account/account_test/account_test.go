@@ -77,7 +77,7 @@ func VerifyRequestCount(
 	require.Equal(t, expected, len(result.Requests))
 }
 
-func TestAccountGetAccountWithWireMock(
+func TestAccountGetWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -93,14 +93,14 @@ func TestAccountGetAccountWithWireMock(
 			"acct_01j2y8m6jcc9tt24af5pw9x1bc",
 		),
 	}
-	_, invocationErr := client.Account.GetAccount(
+	_, invocationErr := client.Account.Get(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestAccountGetAccountWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestAccountGetWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestAccountGetAccountWithWireMock", "GET", "/v1/account", map[string]interface{}{"orgId": "acct_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
+	VerifyRequestCount(t, "TestAccountGetWithWireMock", "GET", "/v1/account", map[string]interface{}{"orgId": "acct_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
 }

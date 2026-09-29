@@ -77,7 +77,7 @@ func VerifyRequestCount(
 	require.Equal(t, expected, len(result.Requests))
 }
 
-func TestOrdersListOrdersWithWireMock(
+func TestOrdersListWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -105,19 +105,19 @@ func TestOrdersListOrdersWithWireMock(
 			"ord_01j2y8m6jcc9tt24af5pw9x1bc",
 		),
 	}
-	_, invocationErr := client.Orders.ListOrders(
+	_, invocationErr := client.Orders.List(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersListOrdersWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestOrdersListWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersListOrdersWithWireMock", "GET", "/v1/orders", map[string]interface{}{"endingBefore": "ord_01j2y8m6jcc9tt24af5pw9x1bc", "orderId": "ord_01j2y8m6jcc9tt24af5pw9x1bc", "patientId": "pat_01j2y8m6jcc9tt24af5pw9x1bc", "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc", "startingAfter": "ord_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
+	VerifyRequestCount(t, "TestOrdersListWithWireMock", "GET", "/v1/orders", map[string]interface{}{"endingBefore": "ord_01j2y8m6jcc9tt24af5pw9x1bc", "orderId": "ord_01j2y8m6jcc9tt24af5pw9x1bc", "patientId": "pat_01j2y8m6jcc9tt24af5pw9x1bc", "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc", "startingAfter": "ord_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
 }
 
-func TestOrdersCreateOrderWithWireMock(
+func TestOrdersCreateWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -145,19 +145,19 @@ func TestOrdersCreateOrderWithWireMock(
 			},
 		},
 	}
-	_, invocationErr := client.Orders.CreateOrder(
+	_, invocationErr := client.Orders.Create(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersCreateOrderWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestOrdersCreateWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersCreateOrderWithWireMock", "POST", "/v1/orders", nil, 1)
+	VerifyRequestCount(t, "TestOrdersCreateWithWireMock", "POST", "/v1/orders", nil, 1)
 }
 
-func TestOrdersGetOrderWithWireMock(
+func TestOrdersGetWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -168,22 +168,22 @@ func TestOrdersGetOrderWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithAPIKey("test-value"),
 	)
-	request := &affinity.GetOrderRequest{
+	request := &affinity.GetOrdersRequest{
 		OrderID: "ord_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Orders.GetOrder(
+	_, invocationErr := client.Orders.Get(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersGetOrderWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestOrdersGetWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersGetOrderWithWireMock", "GET", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
+	VerifyRequestCount(t, "TestOrdersGetWithWireMock", "GET", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
 }
 
-func TestOrdersCancelOrderWithWireMock(
+func TestOrdersCancelWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -199,135 +199,19 @@ func TestOrdersCancelOrderWithWireMock(
 		IdempotencyKey: "Idempotency-Key",
 		Reason:         "reason",
 	}
-	_, invocationErr := client.Orders.CancelOrder(
+	_, invocationErr := client.Orders.Cancel(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersCancelOrderWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestOrdersCancelWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersCancelOrderWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/cancel", nil, 1)
+	VerifyRequestCount(t, "TestOrdersCancelWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/cancel", nil, 1)
 }
 
-func TestOrdersActOnOrderExceptionWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.ActOnOrderExceptionRequest{
-		OrderID:        "ord_01j2y8m6jcc9tt24af5pw9x1bc",
-		ExceptionID:    "fex_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		Action:         affinity.ActOnOrderExceptionRequestActionAcknowledge,
-	}
-	_, invocationErr := client.Orders.ActOnOrderException(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersActOnOrderExceptionWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersActOnOrderExceptionWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/exceptions/fex_01j2y8m6jcc9tt24af5pw9x1bc/actions", nil, 1)
-}
-
-func TestOrdersListOrderEventsWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.ListOrderEventsRequest{
-		OrderID: "ord_01j2y8m6jcc9tt24af5pw9x1bc",
-		EndingBefore: affinity.String(
-			"evt_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-		StartingAfter: affinity.String(
-			"evt_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-	}
-	_, invocationErr := client.Orders.ListOrderEvents(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersListOrderEventsWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersListOrderEventsWithWireMock", "GET", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/events", map[string]interface{}{"endingBefore": "evt_01j2y8m6jcc9tt24af5pw9x1bc", "startingAfter": "evt_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
-}
-
-func TestOrdersGetOrderTestSimulationWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.GetOrderTestSimulationRequest{
-		OrderID: "ord_01j2y8m6jcc9tt24af5pw9x1bc",
-	}
-	_, invocationErr := client.Orders.GetOrderTestSimulation(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersGetOrderTestSimulationWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersGetOrderTestSimulationWithWireMock", "GET", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/test-simulation", nil, 1)
-}
-
-func TestOrdersUpdateOrderTestSimulationWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.UpdateOrderTestSimulationRequest{
-		OrderID:        "ord_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		Mode:           affinity.UpdateOrderTestSimulationRequestModeAutomatic,
-		Scenario:       affinity.UpdateOrderTestSimulationRequestScenarioSuccessful,
-	}
-	_, invocationErr := client.Orders.UpdateOrderTestSimulation(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersUpdateOrderTestSimulationWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersUpdateOrderTestSimulationWithWireMock", "PUT", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/test-simulation", nil, 1)
-}
-
-func TestOrdersPreviewOrderWithWireMock(
+func TestOrdersPreviewWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -346,19 +230,19 @@ func TestOrdersPreviewOrderWithWireMock(
 			},
 		},
 	}
-	_, invocationErr := client.Orders.PreviewOrder(
+	_, invocationErr := client.Orders.Preview(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersPreviewOrderWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestOrdersPreviewWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersPreviewOrderWithWireMock", "POST", "/v1/order-previews", nil, 1)
+	VerifyRequestCount(t, "TestOrdersPreviewWithWireMock", "POST", "/v1/order-previews", nil, 1)
 }
 
-func TestOrdersSignOrderWithWireMock(
+func TestOrdersSignWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -375,19 +259,19 @@ func TestOrdersSignOrderWithWireMock(
 		PracticeID:           "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 		SignatureAttestation: true,
 	}
-	_, invocationErr := client.Orders.SignOrder(
+	_, invocationErr := client.Orders.Sign(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersSignOrderWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestOrdersSignWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersSignOrderWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/sign", nil, 1)
+	VerifyRequestCount(t, "TestOrdersSignWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/sign", nil, 1)
 }
 
-func TestOrdersSignAndSubmitOrderWithWireMock(
+func TestOrdersSignAndSubmitWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -404,19 +288,19 @@ func TestOrdersSignAndSubmitOrderWithWireMock(
 		PracticeID:           "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 		SignatureAttestation: true,
 	}
-	_, invocationErr := client.Orders.SignAndSubmitOrder(
+	_, invocationErr := client.Orders.SignAndSubmit(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersSignAndSubmitOrderWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestOrdersSignAndSubmitWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersSignAndSubmitOrderWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/sign-and-submit", nil, 1)
+	VerifyRequestCount(t, "TestOrdersSignAndSubmitWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/sign-and-submit", nil, 1)
 }
 
-func TestOrdersSubmitOrderWithWireMock(
+func TestOrdersSubmitWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -432,19 +316,19 @@ func TestOrdersSubmitOrderWithWireMock(
 		IdempotencyKey: "Idempotency-Key",
 		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Orders.SubmitOrder(
+	_, invocationErr := client.Orders.Submit(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersSubmitOrderWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestOrdersSubmitWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersSubmitOrderWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/submit", nil, 1)
+	VerifyRequestCount(t, "TestOrdersSubmitWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/submit", nil, 1)
 }
 
-func TestOrdersRejectOrderWithWireMock(
+func TestOrdersRejectWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -461,137 +345,14 @@ func TestOrdersRejectOrderWithWireMock(
 		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 		Reason:         "reason",
 	}
-	_, invocationErr := client.Orders.RejectOrder(
+	_, invocationErr := client.Orders.Reject(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersRejectOrderWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestOrdersRejectWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersRejectOrderWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/rejection", nil, 1)
-}
-
-func TestOrdersAddOrderPrescriptionWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.AddOrderPrescriptionRequest{
-		OrderID:        "ord_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		Prescription: &affinity.AddOrderPrescriptionRequestPrescription{
-			DaysSupply:   1,
-			Dispensing:   &affinity.AddOrderPrescriptionRequestPrescriptionDispensing{},
-			Directions:   "directions",
-			MedicationID: "cat_01j2y8m6jcc9tt24af5pw9x1bc",
-			Quantity: &affinity.AddOrderPrescriptionRequestPrescriptionQuantity{
-				AddOrderPrescriptionRequestPrescriptionQuantityOne: affinity.AddOrderPrescriptionRequestPrescriptionQuantityOneInfinity,
-			},
-			QuantityUnit: "quantityUnit",
-			Refills:      1,
-		},
-	}
-	_, invocationErr := client.Orders.AddOrderPrescription(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersAddOrderPrescriptionWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersAddOrderPrescriptionWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/prescriptions", nil, 1)
-}
-
-func TestOrdersUpdateOrderPrescriptionWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.UpdateOrderPrescriptionRequest{
-		OrderID:        "ord_01j2y8m6jcc9tt24af5pw9x1bc",
-		PrescriptionID: "rx_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		Prescription: &affinity.UpdateOrderPrescriptionRequestPrescription{
-			DaysSupply:   1,
-			Dispensing:   &affinity.UpdateOrderPrescriptionRequestPrescriptionDispensing{},
-			Directions:   "directions",
-			MedicationID: "cat_01j2y8m6jcc9tt24af5pw9x1bc",
-			Quantity: &affinity.UpdateOrderPrescriptionRequestPrescriptionQuantity{
-				UpdateOrderPrescriptionRequestPrescriptionQuantityOne: affinity.UpdateOrderPrescriptionRequestPrescriptionQuantityOneInfinity,
-			},
-			QuantityUnit: "quantityUnit",
-			Refills:      1,
-		},
-	}
-	_, invocationErr := client.Orders.UpdateOrderPrescription(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersUpdateOrderPrescriptionWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersUpdateOrderPrescriptionWithWireMock", "PATCH", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/prescriptions/rx_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestOrdersCreateOrderBatchWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.CreateOrderBatchRequest{
-		IdempotencyKey: "Idempotency-Key",
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		Orders: []*affinity.CreateOrderBatchRequestOrdersItem{
-			&affinity.CreateOrderBatchRequestOrdersItem{
-				Prescriptions: []*affinity.CreateOrderBatchRequestOrdersItemPrescriptionsItem{
-					&affinity.CreateOrderBatchRequestOrdersItemPrescriptionsItem{
-						DaysSupply:   1,
-						Dispensing:   &affinity.CreateOrderBatchRequestOrdersItemPrescriptionsItemDispensing{},
-						Directions:   "directions",
-						MedicationID: "cat_01j2y8m6jcc9tt24af5pw9x1bc",
-						Quantity: &affinity.CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantity{
-							CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne: affinity.CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneInfinity,
-						},
-						QuantityUnit: "quantityUnit",
-						Refills:      1,
-					},
-				},
-			},
-		},
-	}
-	_, invocationErr := client.Orders.CreateOrderBatch(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrdersCreateOrderBatchWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersCreateOrderBatchWithWireMock", "POST", "/v1/order-batches", nil, 1)
+	VerifyRequestCount(t, "TestOrdersRejectWithWireMock", "POST", "/v1/orders/ord_01j2y8m6jcc9tt24af5pw9x1bc/rejection", nil, 1)
 }

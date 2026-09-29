@@ -65,8 +65,8 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/affinity-health/affinity-go")
-	headers.Set("X-Fern-SDK-Version", "v0.1.0")
-	headers.Set("User-Agent", "github.com/affinity-health/affinity-go/0.1.0")
+	headers.Set("X-Fern-SDK-Version", "v0.2.0")
+	headers.Set("User-Agent", "github.com/affinity-health/affinity-go/0.2.0")
 	return headers
 }
 

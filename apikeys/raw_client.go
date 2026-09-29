@@ -32,7 +32,7 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 	}
 }
 
-func (r *RawClient) CreatePlatformPracticeAPIKey(
+func (r *RawClient) Create(
 	ctx context.Context,
 	request *affinity.CreatePlatformPracticeAPIKeyRequest,
 	opts ...option.RequestOption,
@@ -80,7 +80,7 @@ func (r *RawClient) CreatePlatformPracticeAPIKey(
 	}, nil
 }
 
-func (r *RawClient) GetAPIAccess(
+func (r *RawClient) GetAccess(
 	ctx context.Context,
 	opts ...option.RequestOption,
 ) (*core.Response[*affinity.GetAPIAccessResponse], error) {

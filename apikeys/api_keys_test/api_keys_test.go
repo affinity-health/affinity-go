@@ -77,7 +77,7 @@ func VerifyRequestCount(
 	require.Equal(t, expected, len(result.Requests))
 }
 
-func TestAPIKeysCreatePlatformPracticeAPIKeyWithWireMock(
+func TestAPIKeysCreateWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -93,19 +93,19 @@ func TestAPIKeysCreatePlatformPracticeAPIKeyWithWireMock(
 		IdempotencyKey: "Idempotency-Key",
 		Name:           "name",
 	}
-	_, invocationErr := client.APIKeys.CreatePlatformPracticeAPIKey(
+	_, invocationErr := client.APIKeys.Create(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestAPIKeysCreatePlatformPracticeAPIKeyWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestAPIKeysCreateWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestAPIKeysCreatePlatformPracticeAPIKeyWithWireMock", "POST", "/v1/practices/practiceId/api-keys", nil, 1)
+	VerifyRequestCount(t, "TestAPIKeysCreateWithWireMock", "POST", "/v1/practices/practiceId/api-keys", nil, 1)
 }
 
-func TestAPIKeysGetAPIAccessWithWireMock(
+func TestAPIKeysGetAccessWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -116,13 +116,13 @@ func TestAPIKeysGetAPIAccessWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithAPIKey("test-value"),
 	)
-	_, invocationErr := client.APIKeys.GetAPIAccess(
+	_, invocationErr := client.APIKeys.GetAccess(
 		context.TODO(),
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestAPIKeysGetAPIAccessWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestAPIKeysGetAccessWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestAPIKeysGetAPIAccessWithWireMock", "GET", "/v1/auth/access", nil, 1)
+	VerifyRequestCount(t, "TestAPIKeysGetAccessWithWireMock", "GET", "/v1/auth/access", nil, 1)
 }

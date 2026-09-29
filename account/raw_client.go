@@ -32,7 +32,7 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 	}
 }
 
-func (r *RawClient) GetAccount(
+func (r *RawClient) Get(
 	ctx context.Context,
 	request *affinity.GetAccountRequest,
 	opts ...option.RequestOption,

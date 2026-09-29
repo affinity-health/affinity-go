@@ -175,17 +175,17 @@ func (c *CreatePracticeRequest) MarshalJSON() ([]byte, error) {
 }
 
 var (
-	getPracticeRequestFieldPracticeID = big.NewInt(1 << 0)
+	getPracticesRequestFieldPracticeID = big.NewInt(1 << 0)
 )
 
-type GetPracticeRequest struct {
+type GetPracticesRequest struct {
 	PracticeID string `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 }
 
-func (g *GetPracticeRequest) require(field *big.Int) {
+func (g *GetPracticesRequest) require(field *big.Int) {
 	if g.explicitFields == nil {
 		g.explicitFields = big.NewInt(0)
 	}
@@ -194,9 +194,9 @@ func (g *GetPracticeRequest) require(field *big.Int) {
 
 // SetPracticeID sets the PracticeID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetPracticeRequest) SetPracticeID(practiceID string) {
+func (g *GetPracticesRequest) SetPracticeID(practiceID string) {
 	g.PracticeID = practiceID
-	g.require(getPracticeRequestFieldPracticeID)
+	g.require(getPracticesRequestFieldPracticeID)
 }
 
 var (
@@ -5585,6 +5585,7 @@ var (
 )
 
 type UpdatePracticeRequest struct {
+	// Optional in the SDK. A fresh key is generated once per call when omitted. Supply a stable key to retry across calls.
 	IdempotencyKey *string `json:"-" url:"-"`
 	PracticeID     string  `json:"-" url:"-"`
 	// Enable or disable Live access for an owned practice. Requires an approved platform and a Live request. Affinity Admin decisions take precedence.

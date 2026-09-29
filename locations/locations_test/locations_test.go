@@ -77,7 +77,7 @@ func VerifyRequestCount(
 	require.Equal(t, expected, len(result.Requests))
 }
 
-func TestLocationsListPracticeLocationsWithWireMock(
+func TestLocationsListWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -88,7 +88,7 @@ func TestLocationsListPracticeLocationsWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithAPIKey("test-value"),
 	)
-	request := &affinity.ListPracticeLocationsRequest{
+	request := &affinity.ListLocationsRequest{
 		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 		StartingAfter: affinity.String(
 			"loc_01j2y8m6jcc9tt24af5pw9x1bc",
@@ -97,19 +97,19 @@ func TestLocationsListPracticeLocationsWithWireMock(
 			"loc_01j2y8m6jcc9tt24af5pw9x1bc",
 		),
 	}
-	_, invocationErr := client.Locations.ListPracticeLocations(
+	_, invocationErr := client.Locations.List(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestLocationsListPracticeLocationsWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestLocationsListWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestLocationsListPracticeLocationsWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/locations", map[string]interface{}{"startingAfter": "loc_01j2y8m6jcc9tt24af5pw9x1bc", "endingBefore": "loc_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
+	VerifyRequestCount(t, "TestLocationsListWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/locations", map[string]interface{}{"startingAfter": "loc_01j2y8m6jcc9tt24af5pw9x1bc", "endingBefore": "loc_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
 }
 
-func TestLocationsCreatePracticeLocationWithWireMock(
+func TestLocationsCreateWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -121,23 +121,22 @@ func TestLocationsCreatePracticeLocationWithWireMock(
 		option.WithAPIKey("test-value"),
 	)
 	request := &affinity.CreatePracticeLocationRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		Name:           "name",
+		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+		Name:       "name",
 	}
-	_, invocationErr := client.Locations.CreatePracticeLocation(
+	_, invocationErr := client.Locations.Create(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestLocationsCreatePracticeLocationWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestLocationsCreateWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestLocationsCreatePracticeLocationWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/locations", nil, 1)
+	VerifyRequestCount(t, "TestLocationsCreateWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/locations", nil, 1)
 }
 
-func TestLocationsGetPracticeLocationWithWireMock(
+func TestLocationsGetWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -148,23 +147,23 @@ func TestLocationsGetPracticeLocationWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithAPIKey("test-value"),
 	)
-	request := &affinity.GetPracticeLocationRequest{
+	request := &affinity.GetLocationsRequest{
 		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 		LocationID: "loc_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Locations.GetPracticeLocation(
+	_, invocationErr := client.Locations.Get(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestLocationsGetPracticeLocationWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestLocationsGetWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestLocationsGetPracticeLocationWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/locations/loc_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
+	VerifyRequestCount(t, "TestLocationsGetWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/locations/loc_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
 }
 
-func TestLocationsUpdatePracticeLocationWithWireMock(
+func TestLocationsUpdateWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -176,23 +175,22 @@ func TestLocationsUpdatePracticeLocationWithWireMock(
 		option.WithAPIKey("test-value"),
 	)
 	request := &affinity.UpdatePracticeLocationRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		LocationID:     "loc_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
+		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+		LocationID: "loc_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Locations.UpdatePracticeLocation(
+	_, invocationErr := client.Locations.Update(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestLocationsUpdatePracticeLocationWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestLocationsUpdateWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestLocationsUpdatePracticeLocationWithWireMock", "PATCH", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/locations/loc_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
+	VerifyRequestCount(t, "TestLocationsUpdateWithWireMock", "PATCH", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/locations/loc_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
 }
 
-func TestLocationsArchivePracticeLocationWithWireMock(
+func TestLocationsArchiveWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -203,19 +201,18 @@ func TestLocationsArchivePracticeLocationWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithAPIKey("test-value"),
 	)
-	request := &affinity.ArchivePracticeLocationRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		LocationID:     "loc_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
+	request := &affinity.ArchiveLocationsRequest{
+		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+		LocationID: "loc_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Locations.ArchivePracticeLocation(
+	_, invocationErr := client.Locations.Archive(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestLocationsArchivePracticeLocationWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestLocationsArchiveWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestLocationsArchivePracticeLocationWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/locations/loc_01j2y8m6jcc9tt24af5pw9x1bc/archive", nil, 1)
+	VerifyRequestCount(t, "TestLocationsArchiveWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/locations/loc_01j2y8m6jcc9tt24af5pw9x1bc/archive", nil, 1)
 }

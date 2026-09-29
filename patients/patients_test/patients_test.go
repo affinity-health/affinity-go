@@ -77,161 +77,7 @@ func VerifyRequestCount(
 	require.Equal(t, expected, len(result.Requests))
 }
 
-func TestPatientsListPatientAddressesWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.ListPatientAddressesRequest{
-		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PatientID:  "pat_01j2y8m6jcc9tt24af5pw9x1bc",
-		StartingAfter: affinity.String(
-			"addr_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-		EndingBefore: affinity.String(
-			"addr_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-	}
-	_, invocationErr := client.Patients.ListPatientAddresses(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsListPatientAddressesWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsListPatientAddressesWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc/addresses", map[string]interface{}{"startingAfter": "addr_01j2y8m6jcc9tt24af5pw9x1bc", "endingBefore": "addr_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
-}
-
-func TestPatientsCreatePatientAddressWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.CreatePatientAddressRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PatientID:      "pat_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		Address: &affinity.CreatePatientAddressRequestAddress{
-			City:       "city",
-			Line1:      "line1",
-			PostalCode: "postalCode",
-			State:      "state",
-		},
-	}
-	_, invocationErr := client.Patients.CreatePatientAddress(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsCreatePatientAddressWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsCreatePatientAddressWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc/addresses", nil, 1)
-}
-
-func TestPatientsArchivePatientAddressWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.ArchivePatientAddressRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PatientID:      "pat_01j2y8m6jcc9tt24af5pw9x1bc",
-		AddressID:      "addr_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-	}
-	_, invocationErr := client.Patients.ArchivePatientAddress(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsArchivePatientAddressWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsArchivePatientAddressWithWireMock", "DELETE", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc/addresses/addr_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestPatientsUpdatePatientAddressWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.UpdatePatientAddressRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PatientID:      "pat_01j2y8m6jcc9tt24af5pw9x1bc",
-		AddressID:      "addr_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-	}
-	_, invocationErr := client.Patients.UpdatePatientAddress(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsUpdatePatientAddressWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsUpdatePatientAddressWithWireMock", "PATCH", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc/addresses/addr_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestPatientsSetDefaultPatientAddressWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.SetDefaultPatientAddressRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PatientID:      "pat_01j2y8m6jcc9tt24af5pw9x1bc",
-		AddressID:      "addr_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-	}
-	_, invocationErr := client.Patients.SetDefaultPatientAddress(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsSetDefaultPatientAddressWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsSetDefaultPatientAddressWithWireMock", "PUT", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc/addresses/addr_01j2y8m6jcc9tt24af5pw9x1bc/default", nil, 1)
-}
-
-func TestPatientsListPatientsWithWireMock(
+func TestPatientsListWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -251,19 +97,19 @@ func TestPatientsListPatientsWithWireMock(
 			"pat_01j2y8m6jcc9tt24af5pw9x1bc",
 		),
 	}
-	_, invocationErr := client.Patients.ListPatients(
+	_, invocationErr := client.Patients.List(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsListPatientsWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestPatientsListWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsListPatientsWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients", map[string]interface{}{"endingBefore": "pat_01j2y8m6jcc9tt24af5pw9x1bc", "startingAfter": "pat_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
+	VerifyRequestCount(t, "TestPatientsListWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients", map[string]interface{}{"endingBefore": "pat_01j2y8m6jcc9tt24af5pw9x1bc", "startingAfter": "pat_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
 }
 
-func TestPatientsCreatePatientWithWireMock(
+func TestPatientsCreateWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -275,27 +121,26 @@ func TestPatientsCreatePatientWithWireMock(
 		option.WithAPIKey("test-value"),
 	)
 	request := &affinity.CreatePatientRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		DateOfBirth:    "dateOfBirth",
+		PracticeID:  "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+		DateOfBirth: "dateOfBirth",
 		Name: &affinity.CreatePatientRequestName{
 			First: "first",
 			Last:  "last",
 		},
 	}
-	_, invocationErr := client.Patients.CreatePatient(
+	_, invocationErr := client.Patients.Create(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsCreatePatientWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestPatientsCreateWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsCreatePatientWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients", nil, 1)
+	VerifyRequestCount(t, "TestPatientsCreateWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients", nil, 1)
 }
 
-func TestPatientsGetPatientWithWireMock(
+func TestPatientsGetWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -306,23 +151,23 @@ func TestPatientsGetPatientWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithAPIKey("test-value"),
 	)
-	request := &affinity.GetPatientRequest{
+	request := &affinity.GetPatientsRequest{
 		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 		PatientID:  "pat_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Patients.GetPatient(
+	_, invocationErr := client.Patients.Get(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsGetPatientWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestPatientsGetWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsGetPatientWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
+	VerifyRequestCount(t, "TestPatientsGetWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
 }
 
-func TestPatientsDeletePatientWithWireMock(
+func TestPatientsDeleteWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -333,24 +178,23 @@ func TestPatientsDeletePatientWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithAPIKey("test-value"),
 	)
-	request := &affinity.DeletePatientRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PatientID:      "pat_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
+	request := &affinity.DeletePatientsRequest{
+		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+		PatientID:  "pat_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Patients.DeletePatient(
+	_, invocationErr := client.Patients.Delete(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsDeletePatientWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestPatientsDeleteWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsDeletePatientWithWireMock", "DELETE", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
+	VerifyRequestCount(t, "TestPatientsDeleteWithWireMock", "DELETE", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
 }
 
-func TestPatientsUpdatePatientWithWireMock(
+func TestPatientsUpdateWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -362,87 +206,17 @@ func TestPatientsUpdatePatientWithWireMock(
 		option.WithAPIKey("test-value"),
 	)
 	request := &affinity.UpdatePatientRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PatientID:      "pat_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-	}
-	_, invocationErr := client.Patients.UpdatePatient(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsUpdatePatientWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsUpdatePatientWithWireMock", "PATCH", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestPatientsGetPatientAllergiesWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.GetPatientAllergiesRequest{
 		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 		PatientID:  "pat_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Patients.GetPatientAllergies(
+	_, invocationErr := client.Patients.Update(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsGetPatientAllergiesWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestPatientsUpdateWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsGetPatientAllergiesWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc/allergies", nil, 1)
-}
-
-func TestPatientsReplacePatientAllergiesWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.ReplacePatientAllergiesRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PatientID:      "pat_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		Allergies: []*affinity.ReplacePatientAllergiesRequestAllergiesItem{
-			&affinity.ReplacePatientAllergiesRequestAllergiesItem{
-				Category: affinity.ReplacePatientAllergiesRequestAllergiesItemCategoryDrug,
-				Reactions: []*affinity.ReplacePatientAllergiesRequestAllergiesItemReactionsItem{
-					&affinity.ReplacePatientAllergiesRequestAllergiesItemReactionsItem{
-						Display: "display",
-					},
-				},
-				Source:             affinity.ReplacePatientAllergiesRequestAllergiesItemSourceDoctor,
-				Substance:          "substance",
-				VerificationStatus: affinity.ReplacePatientAllergiesRequestAllergiesItemVerificationStatusUnconfirmed,
-			},
-		},
-		ReviewStatus: affinity.ReplacePatientAllergiesRequestReviewStatusNotReviewed,
-	}
-	_, invocationErr := client.Patients.ReplacePatientAllergies(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPatientsReplacePatientAllergiesWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPatientsReplacePatientAllergiesWithWireMock", "PUT", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc/allergies", nil, 1)
+	VerifyRequestCount(t, "TestPatientsUpdateWithWireMock", "PATCH", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/patients/pat_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
 }

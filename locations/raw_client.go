@@ -3,6 +3,7 @@
 package locations
 
 import (
+ "github.com/google/uuid"
 	context "context"
 	http "net/http"
 
@@ -32,9 +33,9 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 	}
 }
 
-func (r *RawClient) ListPracticeLocations(
+func (r *RawClient) List(
 	ctx context.Context,
-	request *affinity.ListPracticeLocationsRequest,
+	request *affinity.ListLocationsRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*affinity.ListPracticeLocationsResponse], error) {
 	options := core.NewRequestOptions(opts...)
@@ -84,7 +85,7 @@ func (r *RawClient) ListPracticeLocations(
 	}, nil
 }
 
-func (r *RawClient) CreatePracticeLocation(
+func (r *RawClient) Create(
 	ctx context.Context,
 	request *affinity.CreatePracticeLocationRequest,
 	opts ...option.RequestOption,
@@ -103,7 +104,9 @@ func (r *RawClient) CreatePracticeLocation(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	headers.Add("Idempotency-Key", request.IdempotencyKey)
+	if request.IdempotencyKey != nil {
+ headers.Add("Idempotency-Key", *request.IdempotencyKey)
+ } else { headers.Add("Idempotency-Key", uuid.NewString()) } // affinity-sdk-auto-key
 	headers.Add("Content-Type", "application/json")
 	var response *affinity.CreatePracticeLocationResponse
 	raw, err := r.caller.Call(
@@ -132,9 +135,9 @@ func (r *RawClient) CreatePracticeLocation(
 	}, nil
 }
 
-func (r *RawClient) GetPracticeLocation(
+func (r *RawClient) Get(
 	ctx context.Context,
-	request *affinity.GetPracticeLocationRequest,
+	request *affinity.GetLocationsRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*affinity.GetPracticeLocationResponse], error) {
 	options := core.NewRequestOptions(opts...)
@@ -178,7 +181,7 @@ func (r *RawClient) GetPracticeLocation(
 	}, nil
 }
 
-func (r *RawClient) UpdatePracticeLocation(
+func (r *RawClient) Update(
 	ctx context.Context,
 	request *affinity.UpdatePracticeLocationRequest,
 	opts ...option.RequestOption,
@@ -198,7 +201,9 @@ func (r *RawClient) UpdatePracticeLocation(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	headers.Add("Idempotency-Key", request.IdempotencyKey)
+	if request.IdempotencyKey != nil {
+ headers.Add("Idempotency-Key", *request.IdempotencyKey)
+ } else { headers.Add("Idempotency-Key", uuid.NewString()) } // affinity-sdk-auto-key
 	headers.Add("Content-Type", "application/json")
 	var response *affinity.UpdatePracticeLocationResponse
 	raw, err := r.caller.Call(
@@ -227,9 +232,9 @@ func (r *RawClient) UpdatePracticeLocation(
 	}, nil
 }
 
-func (r *RawClient) ArchivePracticeLocation(
+func (r *RawClient) Archive(
 	ctx context.Context,
-	request *affinity.ArchivePracticeLocationRequest,
+	request *affinity.ArchiveLocationsRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*affinity.ArchivePracticeLocationResponse], error) {
 	options := core.NewRequestOptions(opts...)
@@ -247,7 +252,10 @@ func (r *RawClient) ArchivePracticeLocation(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	headers.Add("Idempotency-Key", request.IdempotencyKey)
+	if request.IdempotencyKey != nil {
+ headers.Add("Idempotency-Key", *request.IdempotencyKey)
+ } else { headers.Add("Idempotency-Key", uuid.NewString()) } // affinity-sdk-auto-key
+
 	var response *affinity.ArchivePracticeLocationResponse
 	raw, err := r.caller.Call(
 		ctx,

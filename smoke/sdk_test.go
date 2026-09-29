@@ -33,9 +33,9 @@ func TestHeadersQueryAndResponse(t *testing.T) {
         io.WriteString(w, `{"object":"list","data":[],"hasMore":false,"url":"/v1/orders"}`)
     }))
     defer server.Close()
-    sdk := client.NewClient(option.WithAPIKey("synthetic-key"), option.WithAffinityVersion(ptr("2026-09-28")),
+    sdk := client.NewClient(option.WithAPIKey("synthetic-key"),
         option.WithBaseURL(server.URL), option.WithoutRetries())
-    page, err := sdk.Orders.ListOrders(context.Background(), &affinity.ListOrdersRequest{
+    page, err := sdk.Orders.List(context.Background(), &affinity.ListOrdersRequest{
         StartingAfter: ptr("ord_cursor"), Limit: ptr(2), AffinityActorID: ptr("user-synthetic"), AffinityActorType: ptr("user"),
     })
     if err != nil { t.Fatal(err) }
@@ -59,9 +59,9 @@ func TestKeyedRetryAndError(t *testing.T) {
         io.WriteString(w, `{"type":"about:blank","title":"Invalid request","status":422,"detail":"Synthetic validation failure"}`)
     }))
     defer server.Close()
-    sdk := client.NewClient(option.WithAPIKey("synthetic-key"), option.WithAffinityVersion(ptr("2026-09-28")),
+    sdk := client.NewClient(option.WithAPIKey("synthetic-key"),
         option.WithBaseURL(server.URL), option.WithMaxAttempts(2))
-    _, err := sdk.Orders.CreateOrder(context.Background(), &affinity.CreateOrderRequest{
+    _, err := sdk.Orders.Create(context.Background(), &affinity.CreateOrderRequest{
         IdempotencyKey: "stable-synthetic-key", PracticeID: "prac_synthetic", PatientID: ptr("pat_synthetic"),
         Prescriptions: []*affinity.CreateOrderRequestPrescriptionsItem{},
     })
@@ -76,6 +76,6 @@ func TestCanceledContext(t *testing.T) {
     ctx, cancel := context.WithCancel(context.Background())
     cancel()
     sdk := client.NewClient(option.WithAPIKey("synthetic-key"), option.WithBaseURL("http://127.0.0.1:1"), option.WithoutRetries())
-    _, err := sdk.APIKeys.GetAPIAccess(ctx)
+    _, err := sdk.APIKeys.GetAccess(ctx)
     if !errors.Is(err, context.Canceled) { t.Fatalf("expected cancellation: %v", err) }
 }

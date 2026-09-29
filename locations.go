@@ -10,21 +10,22 @@ import (
 )
 
 var (
-	archivePracticeLocationRequestFieldIdempotencyKey = big.NewInt(1 << 0)
-	archivePracticeLocationRequestFieldPracticeID     = big.NewInt(1 << 1)
-	archivePracticeLocationRequestFieldLocationID     = big.NewInt(1 << 2)
+	archiveLocationsRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	archiveLocationsRequestFieldPracticeID     = big.NewInt(1 << 1)
+	archiveLocationsRequestFieldLocationID     = big.NewInt(1 << 2)
 )
 
-type ArchivePracticeLocationRequest struct {
-	IdempotencyKey string `json:"-" url:"-"`
-	PracticeID     string `json:"-" url:"-"`
-	LocationID     string `json:"-" url:"-"`
+type ArchiveLocationsRequest struct {
+	// Optional in the SDK. A fresh key is generated once per call when omitted. Supply a stable key to retry across calls.
+	IdempotencyKey *string `json:"-" url:"-"`
+	PracticeID     string  `json:"-" url:"-"`
+	LocationID     string  `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 }
 
-func (a *ArchivePracticeLocationRequest) require(field *big.Int) {
+func (a *ArchiveLocationsRequest) require(field *big.Int) {
 	if a.explicitFields == nil {
 		a.explicitFields = big.NewInt(0)
 	}
@@ -33,23 +34,23 @@ func (a *ArchivePracticeLocationRequest) require(field *big.Int) {
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (a *ArchivePracticeLocationRequest) SetIdempotencyKey(idempotencyKey string) {
+func (a *ArchiveLocationsRequest) SetIdempotencyKey(idempotencyKey *string) {
 	a.IdempotencyKey = idempotencyKey
-	a.require(archivePracticeLocationRequestFieldIdempotencyKey)
+	a.require(archiveLocationsRequestFieldIdempotencyKey)
 }
 
 // SetPracticeID sets the PracticeID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (a *ArchivePracticeLocationRequest) SetPracticeID(practiceID string) {
+func (a *ArchiveLocationsRequest) SetPracticeID(practiceID string) {
 	a.PracticeID = practiceID
-	a.require(archivePracticeLocationRequestFieldPracticeID)
+	a.require(archiveLocationsRequestFieldPracticeID)
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (a *ArchivePracticeLocationRequest) SetLocationID(locationID string) {
+func (a *ArchiveLocationsRequest) SetLocationID(locationID string) {
 	a.LocationID = locationID
-	a.require(archivePracticeLocationRequestFieldLocationID)
+	a.require(archiveLocationsRequestFieldLocationID)
 }
 
 var (
@@ -67,7 +68,8 @@ var (
 )
 
 type CreatePracticeLocationRequest struct {
-	IdempotencyKey string  `json:"-" url:"-"`
+	// Optional in the SDK. A fresh key is generated once per call when omitted. Supply a stable key to retry across calls.
+	IdempotencyKey *string `json:"-" url:"-"`
 	PracticeID     string  `json:"-" url:"-"`
 	City           *string `json:"city,omitempty" url:"-"`
 	Country        *string `json:"country,omitempty" url:"-"`
@@ -93,7 +95,7 @@ func (c *CreatePracticeLocationRequest) require(field *big.Int) {
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreatePracticeLocationRequest) SetIdempotencyKey(idempotencyKey string) {
+func (c *CreatePracticeLocationRequest) SetIdempotencyKey(idempotencyKey *string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(createPracticeLocationRequestFieldIdempotencyKey)
 }
@@ -190,11 +192,11 @@ func (c *CreatePracticeLocationRequest) MarshalJSON() ([]byte, error) {
 }
 
 var (
-	getPracticeLocationRequestFieldPracticeID = big.NewInt(1 << 0)
-	getPracticeLocationRequestFieldLocationID = big.NewInt(1 << 1)
+	getLocationsRequestFieldPracticeID = big.NewInt(1 << 0)
+	getLocationsRequestFieldLocationID = big.NewInt(1 << 1)
 )
 
-type GetPracticeLocationRequest struct {
+type GetLocationsRequest struct {
 	PracticeID string `json:"-" url:"-"`
 	LocationID string `json:"-" url:"-"`
 
@@ -202,7 +204,7 @@ type GetPracticeLocationRequest struct {
 	explicitFields *big.Int `json:"-" url:"-"`
 }
 
-func (g *GetPracticeLocationRequest) require(field *big.Int) {
+func (g *GetLocationsRequest) require(field *big.Int) {
 	if g.explicitFields == nil {
 		g.explicitFields = big.NewInt(0)
 	}
@@ -211,38 +213,38 @@ func (g *GetPracticeLocationRequest) require(field *big.Int) {
 
 // SetPracticeID sets the PracticeID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetPracticeLocationRequest) SetPracticeID(practiceID string) {
+func (g *GetLocationsRequest) SetPracticeID(practiceID string) {
 	g.PracticeID = practiceID
-	g.require(getPracticeLocationRequestFieldPracticeID)
+	g.require(getLocationsRequestFieldPracticeID)
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetPracticeLocationRequest) SetLocationID(locationID string) {
+func (g *GetLocationsRequest) SetLocationID(locationID string) {
 	g.LocationID = locationID
-	g.require(getPracticeLocationRequestFieldLocationID)
+	g.require(getLocationsRequestFieldLocationID)
 }
 
 var (
-	listPracticeLocationsRequestFieldPracticeID    = big.NewInt(1 << 0)
-	listPracticeLocationsRequestFieldLimit         = big.NewInt(1 << 1)
-	listPracticeLocationsRequestFieldStartingAfter = big.NewInt(1 << 2)
-	listPracticeLocationsRequestFieldEndingBefore  = big.NewInt(1 << 3)
-	listPracticeLocationsRequestFieldStatus        = big.NewInt(1 << 4)
+	listLocationsRequestFieldPracticeID    = big.NewInt(1 << 0)
+	listLocationsRequestFieldLimit         = big.NewInt(1 << 1)
+	listLocationsRequestFieldStartingAfter = big.NewInt(1 << 2)
+	listLocationsRequestFieldEndingBefore  = big.NewInt(1 << 3)
+	listLocationsRequestFieldStatus        = big.NewInt(1 << 4)
 )
 
-type ListPracticeLocationsRequest struct {
-	PracticeID    string                              `json:"-" url:"-"`
-	Limit         *int                                `json:"-" url:"limit,omitempty"`
-	StartingAfter *string                             `json:"-" url:"startingAfter,omitempty"`
-	EndingBefore  *string                             `json:"-" url:"endingBefore,omitempty"`
-	Status        *ListPracticeLocationsRequestStatus `json:"-" url:"status,omitempty"`
+type ListLocationsRequest struct {
+	PracticeID    string                      `json:"-" url:"-"`
+	Limit         *int                        `json:"-" url:"limit,omitempty"`
+	StartingAfter *string                     `json:"-" url:"startingAfter,omitempty"`
+	EndingBefore  *string                     `json:"-" url:"endingBefore,omitempty"`
+	Status        *ListLocationsRequestStatus `json:"-" url:"status,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 }
 
-func (l *ListPracticeLocationsRequest) require(field *big.Int) {
+func (l *ListLocationsRequest) require(field *big.Int) {
 	if l.explicitFields == nil {
 		l.explicitFields = big.NewInt(0)
 	}
@@ -251,37 +253,37 @@ func (l *ListPracticeLocationsRequest) require(field *big.Int) {
 
 // SetPracticeID sets the PracticeID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListPracticeLocationsRequest) SetPracticeID(practiceID string) {
+func (l *ListLocationsRequest) SetPracticeID(practiceID string) {
 	l.PracticeID = practiceID
-	l.require(listPracticeLocationsRequestFieldPracticeID)
+	l.require(listLocationsRequestFieldPracticeID)
 }
 
 // SetLimit sets the Limit field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListPracticeLocationsRequest) SetLimit(limit *int) {
+func (l *ListLocationsRequest) SetLimit(limit *int) {
 	l.Limit = limit
-	l.require(listPracticeLocationsRequestFieldLimit)
+	l.require(listLocationsRequestFieldLimit)
 }
 
 // SetStartingAfter sets the StartingAfter field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListPracticeLocationsRequest) SetStartingAfter(startingAfter *string) {
+func (l *ListLocationsRequest) SetStartingAfter(startingAfter *string) {
 	l.StartingAfter = startingAfter
-	l.require(listPracticeLocationsRequestFieldStartingAfter)
+	l.require(listLocationsRequestFieldStartingAfter)
 }
 
 // SetEndingBefore sets the EndingBefore field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListPracticeLocationsRequest) SetEndingBefore(endingBefore *string) {
+func (l *ListLocationsRequest) SetEndingBefore(endingBefore *string) {
 	l.EndingBefore = endingBefore
-	l.require(listPracticeLocationsRequestFieldEndingBefore)
+	l.require(listLocationsRequestFieldEndingBefore)
 }
 
 // SetStatus sets the Status field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListPracticeLocationsRequest) SetStatus(status *ListPracticeLocationsRequestStatus) {
+func (l *ListLocationsRequest) SetStatus(status *ListLocationsRequestStatus) {
 	l.Status = status
-	l.require(listPracticeLocationsRequestFieldStatus)
+	l.require(listLocationsRequestFieldStatus)
 }
 
 var (
@@ -2180,25 +2182,25 @@ func (u UpdatePracticeLocationResponseStatus) Ptr() *UpdatePracticeLocationRespo
 	return &u
 }
 
-type ListPracticeLocationsRequestStatus string
+type ListLocationsRequestStatus string
 
 const (
-	ListPracticeLocationsRequestStatusActive   ListPracticeLocationsRequestStatus = "active"
-	ListPracticeLocationsRequestStatusArchived ListPracticeLocationsRequestStatus = "archived"
+	ListLocationsRequestStatusActive   ListLocationsRequestStatus = "active"
+	ListLocationsRequestStatusArchived ListLocationsRequestStatus = "archived"
 )
 
-func NewListPracticeLocationsRequestStatusFromString(s string) (ListPracticeLocationsRequestStatus, error) {
+func NewListLocationsRequestStatusFromString(s string) (ListLocationsRequestStatus, error) {
 	switch s {
 	case "active":
-		return ListPracticeLocationsRequestStatusActive, nil
+		return ListLocationsRequestStatusActive, nil
 	case "archived":
-		return ListPracticeLocationsRequestStatusArchived, nil
+		return ListLocationsRequestStatusArchived, nil
 	}
-	var t ListPracticeLocationsRequestStatus
+	var t ListLocationsRequestStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
 }
 
-func (l ListPracticeLocationsRequestStatus) Ptr() *ListPracticeLocationsRequestStatus {
+func (l ListLocationsRequestStatus) Ptr() *ListLocationsRequestStatus {
 	return &l
 }
 
@@ -2218,7 +2220,8 @@ var (
 )
 
 type UpdatePracticeLocationRequest struct {
-	IdempotencyKey string  `json:"-" url:"-"`
+	// Optional in the SDK. A fresh key is generated once per call when omitted. Supply a stable key to retry across calls.
+	IdempotencyKey *string `json:"-" url:"-"`
 	PracticeID     string  `json:"-" url:"-"`
 	LocationID     string  `json:"-" url:"-"`
 	City           *string `json:"city,omitempty" url:"-"`
@@ -2245,7 +2248,7 @@ func (u *UpdatePracticeLocationRequest) require(field *big.Int) {
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdatePracticeLocationRequest) SetIdempotencyKey(idempotencyKey string) {
+func (u *UpdatePracticeLocationRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(updatePracticeLocationRequestFieldIdempotencyKey)
 }

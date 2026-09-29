@@ -35,12 +35,12 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Creates a practice API key for a connected practice. Requires a platform key with service_keys:write and every requested scope. The practice key uses the platform key's Test or Live mode and cannot outlive it. Requires Idempotency-Key for safe retries; the secret is returned in the encrypted replay response for 24 hours.
-func (c *Client) CreatePlatformPracticeAPIKey(
+func (c *Client) Create(
 	ctx context.Context,
 	request *affinity.CreatePlatformPracticeAPIKeyRequest,
 	opts ...option.RequestOption,
 ) (*affinity.CreatePlatformPracticeAPIKeyResponse, error) {
-	response, err := c.WithRawResponse.CreatePlatformPracticeAPIKey(
+	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
 		opts...,
@@ -52,11 +52,11 @@ func (c *Client) CreatePlatformPracticeAPIKey(
 }
 
 // Returns the subject, mode, and scopes for the API key.
-func (c *Client) GetAPIAccess(
+func (c *Client) GetAccess(
 	ctx context.Context,
 	opts ...option.RequestOption,
 ) (*affinity.GetAPIAccessResponse, error) {
-	response, err := c.WithRawResponse.GetAPIAccess(
+	response, err := c.WithRawResponse.GetAccess(
 		ctx,
 		opts...,
 	)

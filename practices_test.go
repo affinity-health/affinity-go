@@ -561,9 +561,9 @@ func TestSettersMarkExplicitCreatePracticeRequest(t *testing.T) {
 
 }
 
-func TestSettersGetPracticeRequest(t *testing.T) {
+func TestSettersGetPracticesRequest(t *testing.T) {
 	t.Run("SetPracticeID", func(t *testing.T) {
-		obj := &GetPracticeRequest{}
+		obj := &GetPracticesRequest{}
 		var fernTestValuePracticeID string
 		obj.SetPracticeID(fernTestValuePracticeID)
 		assert.Equal(t, fernTestValuePracticeID, obj.PracticeID)
@@ -572,11 +572,11 @@ func TestSettersGetPracticeRequest(t *testing.T) {
 
 }
 
-func TestSettersMarkExplicitGetPracticeRequest(t *testing.T) {
+func TestSettersMarkExplicitGetPracticesRequest(t *testing.T) {
 	t.Run("SetPracticeID_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &GetPracticeRequest{}
+		obj := &GetPracticesRequest{}
 		var fernTestValuePracticeID string
 
 		// Act

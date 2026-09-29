@@ -3,6 +3,7 @@
 package practices
 
 import (
+ "github.com/google/uuid"
 	context "context"
 	http "net/http"
 
@@ -32,7 +33,7 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 	}
 }
 
-func (r *RawClient) ListPractices(
+func (r *RawClient) List(
 	ctx context.Context,
 	request *affinity.ListPracticesRequest,
 	opts ...option.RequestOption,
@@ -81,7 +82,7 @@ func (r *RawClient) ListPractices(
 	}, nil
 }
 
-func (r *RawClient) CreatePractice(
+func (r *RawClient) Create(
 	ctx context.Context,
 	request *affinity.CreatePracticeRequest,
 	opts ...option.RequestOption,
@@ -128,9 +129,9 @@ func (r *RawClient) CreatePractice(
 	}, nil
 }
 
-func (r *RawClient) GetPractice(
+func (r *RawClient) Get(
 	ctx context.Context,
-	request *affinity.GetPracticeRequest,
+	request *affinity.GetPracticesRequest,
 	opts ...option.RequestOption,
 ) (*core.Response[*affinity.GetPracticeResponse], error) {
 	options := core.NewRequestOptions(opts...)
@@ -173,7 +174,7 @@ func (r *RawClient) GetPractice(
 	}, nil
 }
 
-func (r *RawClient) UpdatePractice(
+func (r *RawClient) Update(
 	ctx context.Context,
 	request *affinity.UpdatePracticeRequest,
 	opts ...option.RequestOption,
@@ -193,8 +194,8 @@ func (r *RawClient) UpdatePractice(
 		options.ToHeader(),
 	)
 	if request.IdempotencyKey != nil {
-		headers.Add("Idempotency-Key", *request.IdempotencyKey)
-	}
+ headers.Add("Idempotency-Key", *request.IdempotencyKey)
+ } else { headers.Add("Idempotency-Key", uuid.NewString()) } // affinity-sdk-auto-key
 	headers.Add("Content-Type", "application/json")
 	var response *affinity.UpdatePracticeResponse
 	raw, err := r.caller.Call(

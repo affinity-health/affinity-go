@@ -77,7 +77,7 @@ func VerifyRequestCount(
 	require.Equal(t, expected, len(result.Requests))
 }
 
-func TestPracticesListPracticesWithWireMock(
+func TestPracticesListWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -96,19 +96,19 @@ func TestPracticesListPracticesWithWireMock(
 			"prac_01j2y8m6jcc9tt24af5pw9x1bc",
 		),
 	}
-	_, invocationErr := client.Practices.ListPractices(
+	_, invocationErr := client.Practices.List(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPracticesListPracticesWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestPracticesListWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPracticesListPracticesWithWireMock", "GET", "/v1/practices", map[string]interface{}{"endingBefore": "prac_01j2y8m6jcc9tt24af5pw9x1bc", "startingAfter": "prac_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
+	VerifyRequestCount(t, "TestPracticesListWithWireMock", "GET", "/v1/practices", map[string]interface{}{"endingBefore": "prac_01j2y8m6jcc9tt24af5pw9x1bc", "startingAfter": "prac_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
 }
 
-func TestPracticesCreatePracticeWithWireMock(
+func TestPracticesCreateWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -165,19 +165,19 @@ func TestPracticesCreatePracticeWithWireMock(
 			"support@example-practice.com",
 		),
 	}
-	_, invocationErr := client.Practices.CreatePractice(
+	_, invocationErr := client.Practices.Create(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPracticesCreatePracticeWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestPracticesCreateWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPracticesCreatePracticeWithWireMock", "POST", "/v1/practices", nil, 1)
+	VerifyRequestCount(t, "TestPracticesCreateWithWireMock", "POST", "/v1/practices", nil, 1)
 }
 
-func TestPracticesGetPracticeWithWireMock(
+func TestPracticesGetWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -188,22 +188,22 @@ func TestPracticesGetPracticeWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithAPIKey("test-value"),
 	)
-	request := &affinity.GetPracticeRequest{
+	request := &affinity.GetPracticesRequest{
 		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Practices.GetPractice(
+	_, invocationErr := client.Practices.Get(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPracticesGetPracticeWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestPracticesGetWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPracticesGetPracticeWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
+	VerifyRequestCount(t, "TestPracticesGetWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
 }
 
-func TestPracticesUpdatePracticeWithWireMock(
+func TestPracticesUpdateWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -217,14 +217,14 @@ func TestPracticesUpdatePracticeWithWireMock(
 	request := &affinity.UpdatePracticeRequest{
 		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Practices.UpdatePractice(
+	_, invocationErr := client.Practices.Update(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestPracticesUpdatePracticeWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestPracticesUpdateWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPracticesUpdatePracticeWithWireMock", "PATCH", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
+	VerifyRequestCount(t, "TestPracticesUpdateWithWireMock", "PATCH", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
 }

@@ -77,7 +77,7 @@ func VerifyRequestCount(
 	require.Equal(t, expected, len(result.Requests))
 }
 
-func TestTeamRegisterUserWithWireMock(
+func TestTeamRegisterWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -97,19 +97,19 @@ func TestTeamRegisterUserWithWireMock(
 		Role:                affinity.RegisterUserRequestRoleAdministrator,
 		IdentityAttestation: true,
 	}
-	_, invocationErr := client.Team.RegisterUser(
+	_, invocationErr := client.Team.Register(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamRegisterUserWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestTeamRegisterWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamRegisterUserWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/users", nil, 1)
+	VerifyRequestCount(t, "TestTeamRegisterWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/users", nil, 1)
 }
 
-func TestTeamListPracticeTeamInvitationsWithWireMock(
+func TestTeamGetWithWireMock(
 	t *testing.T,
 ) {
 	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
@@ -120,395 +120,17 @@ func TestTeamListPracticeTeamInvitationsWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithAPIKey("test-value"),
 	)
-	request := &affinity.ListPracticeTeamInvitationsRequest{
-		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		StartingAfter: affinity.String(
-			"invite_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-		EndingBefore: affinity.String(
-			"invite_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-	}
-	_, invocationErr := client.Team.ListPracticeTeamInvitations(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamListPracticeTeamInvitationsWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamListPracticeTeamInvitationsWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/invitations", map[string]interface{}{"startingAfter": "invite_01j2y8m6jcc9tt24af5pw9x1bc", "endingBefore": "invite_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
-}
-
-func TestTeamInvitePracticeTeamPersonWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.InvitePracticeTeamPersonRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		ExternalID:     "externalId",
-		Email:          "email",
-		Name:           "name",
-	}
-	_, invocationErr := client.Team.InvitePracticeTeamPerson(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamInvitePracticeTeamPersonWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamInvitePracticeTeamPersonWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/invitations", nil, 1)
-}
-
-func TestTeamGetPracticeTeamWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.GetPracticeTeamRequest{
+	request := &affinity.GetTeamRequest{
 		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
 	}
-	_, invocationErr := client.Team.GetPracticeTeam(
+	_, invocationErr := client.Team.Get(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamGetPracticeTeamWithWireMock"}},
+			http.Header{"X-Test-Id": []string{"TestTeamGetWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamGetPracticeTeamWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team", nil, 1)
-}
-
-func TestTeamListPracticeTeamMembersWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.ListPracticeTeamMembersRequest{
-		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		StartingAfter: affinity.String(
-			"mbr_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-		EndingBefore: affinity.String(
-			"mbr_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-	}
-	_, invocationErr := client.Team.ListPracticeTeamMembers(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamListPracticeTeamMembersWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamListPracticeTeamMembersWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/members", map[string]interface{}{"startingAfter": "mbr_01j2y8m6jcc9tt24af5pw9x1bc", "endingBefore": "mbr_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
-}
-
-func TestTeamListPracticeTeamPrescribersWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.ListPracticeTeamPrescribersRequest{
-		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		StartingAfter: affinity.String(
-			"prov_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-		EndingBefore: affinity.String(
-			"prov_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-	}
-	_, invocationErr := client.Team.ListPracticeTeamPrescribers(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamListPracticeTeamPrescribersWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamListPracticeTeamPrescribersWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/prescribers", map[string]interface{}{"startingAfter": "prov_01j2y8m6jcc9tt24af5pw9x1bc", "endingBefore": "prov_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
-}
-
-func TestTeamGetPracticeTeamMemberWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.GetPracticeTeamMemberRequest{
-		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		MemberID:   "mbr_01j2y8m6jcc9tt24af5pw9x1bc",
-	}
-	_, invocationErr := client.Team.GetPracticeTeamMember(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamGetPracticeTeamMemberWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamGetPracticeTeamMemberWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/members/mbr_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestTeamUpdatePracticeTeamMemberWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.UpdatePracticeTeamMemberRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		MemberID:       "mbr_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-	}
-	_, invocationErr := client.Team.UpdatePracticeTeamMember(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamUpdatePracticeTeamMemberWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamUpdatePracticeTeamMemberWithWireMock", "PATCH", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/members/mbr_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestTeamGetPracticeTeamPrescriberWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.GetPracticeTeamPrescriberRequest{
-		PracticeID:   "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PrescriberID: "prov_01j2y8m6jcc9tt24af5pw9x1bc",
-	}
-	_, invocationErr := client.Team.GetPracticeTeamPrescriber(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamGetPracticeTeamPrescriberWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamGetPracticeTeamPrescriberWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/prescribers/prov_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestTeamUpdatePracticeTeamPrescriberWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.UpdatePracticeTeamPrescriberRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PrescriberID:   "prov_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-	}
-	_, invocationErr := client.Team.UpdatePracticeTeamPrescriber(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamUpdatePracticeTeamPrescriberWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamUpdatePracticeTeamPrescriberWithWireMock", "PATCH", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/prescribers/prov_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestTeamCreatePracticeTeamLicenseWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.CreatePracticeTeamLicenseRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PrescriberID:   "prov_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		State:          "state",
-		LicenseNumber:  "licenseNumber",
-	}
-	_, invocationErr := client.Team.CreatePracticeTeamLicense(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamCreatePracticeTeamLicenseWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamCreatePracticeTeamLicenseWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/prescribers/prov_01j2y8m6jcc9tt24af5pw9x1bc/licenses", nil, 1)
-}
-
-func TestTeamUpdatePracticeTeamLicenseWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.UpdatePracticeTeamLicenseRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		PrescriberID:   "prov_01j2y8m6jcc9tt24af5pw9x1bc",
-		LicenseID:      "lic_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-	}
-	_, invocationErr := client.Team.UpdatePracticeTeamLicense(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamUpdatePracticeTeamLicenseWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamUpdatePracticeTeamLicenseWithWireMock", "PATCH", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/prescribers/prov_01j2y8m6jcc9tt24af5pw9x1bc/licenses/lic_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestTeamGetPracticeTeamInvitationWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.GetPracticeTeamInvitationRequest{
-		PracticeID:   "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		InvitationID: "invite_01j2y8m6jcc9tt24af5pw9x1bc",
-	}
-	_, invocationErr := client.Team.GetPracticeTeamInvitation(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamGetPracticeTeamInvitationWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamGetPracticeTeamInvitationWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/invitations/invite_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestTeamRevokePracticeTeamInvitationWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.RevokePracticeTeamInvitationRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		InvitationID:   "invite_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-	}
-	_, invocationErr := client.Team.RevokePracticeTeamInvitation(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamRevokePracticeTeamInvitationWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamRevokePracticeTeamInvitationWithWireMock", "DELETE", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/invitations/invite_01j2y8m6jcc9tt24af5pw9x1bc", nil, 1)
-}
-
-func TestTeamResendPracticeTeamInvitationWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &affinity.ResendPracticeTeamInvitationRequest{
-		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		InvitationID:   "invite_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-	}
-	_, invocationErr := client.Team.ResendPracticeTeamInvitation(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestTeamResendPracticeTeamInvitationWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestTeamResendPracticeTeamInvitationWithWireMock", "POST", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team/invitations/invite_01j2y8m6jcc9tt24af5pw9x1bc/resend", nil, 1)
+	VerifyRequestCount(t, "TestTeamGetWithWireMock", "GET", "/v1/practices/prac_01j2y8m6jcc9tt24af5pw9x1bc/team", nil, 1)
 }

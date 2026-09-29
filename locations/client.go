@@ -35,12 +35,12 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Requires locations:read on a practice key or an authorized platform key. Lists active and archived locations by name, with cursor pagination. Use status to filter. Location records are shared between Test and Live for the same practice.
-func (c *Client) ListPracticeLocations(
+func (c *Client) List(
 	ctx context.Context,
-	request *affinity.ListPracticeLocationsRequest,
+	request *affinity.ListLocationsRequest,
 	opts ...option.RequestOption,
 ) (*affinity.ListPracticeLocationsResponse, error) {
-	response, err := c.WithRawResponse.ListPracticeLocations(
+	response, err := c.WithRawResponse.List(
 		ctx,
 		request,
 		opts...,
@@ -52,12 +52,12 @@ func (c *Client) ListPracticeLocations(
 }
 
 // Requires locations:write and Idempotency-Key for API keys. Creates an active location with a unique name in this practice. Locations are shared between Test and Live. Use the returned ID for Team location access.
-func (c *Client) CreatePracticeLocation(
+func (c *Client) Create(
 	ctx context.Context,
 	request *affinity.CreatePracticeLocationRequest,
 	opts ...option.RequestOption,
 ) (*affinity.CreatePracticeLocationResponse, error) {
-	response, err := c.WithRawResponse.CreatePracticeLocation(
+	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
 		opts...,
@@ -69,12 +69,12 @@ func (c *Client) CreatePracticeLocation(
 }
 
 // Requires locations:read. Returns one active or archived location in the authorized practice.
-func (c *Client) GetPracticeLocation(
+func (c *Client) Get(
 	ctx context.Context,
-	request *affinity.GetPracticeLocationRequest,
+	request *affinity.GetLocationsRequest,
 	opts ...option.RequestOption,
 ) (*affinity.GetPracticeLocationResponse, error) {
-	response, err := c.WithRawResponse.GetPracticeLocation(
+	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
 		opts...,
@@ -86,12 +86,12 @@ func (c *Client) GetPracticeLocation(
 }
 
 // Requires locations:write and Idempotency-Key for API keys. Updates only supplied fields; null clears optional contact and address fields. Archived locations cannot be updated. Changes apply to both Test and Live.
-func (c *Client) UpdatePracticeLocation(
+func (c *Client) Update(
 	ctx context.Context,
 	request *affinity.UpdatePracticeLocationRequest,
 	opts ...option.RequestOption,
 ) (*affinity.UpdatePracticeLocationResponse, error) {
-	response, err := c.WithRawResponse.UpdatePracticeLocation(
+	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
 		opts...,
@@ -103,12 +103,12 @@ func (c *Client) UpdatePracticeLocation(
 }
 
 // Requires locations:write and Idempotency-Key for API keys. Retains the location and historical associations. Archived locations cannot receive new Team assignments. Repeating archive returns the archived location. Changes apply to both Test and Live.
-func (c *Client) ArchivePracticeLocation(
+func (c *Client) Archive(
 	ctx context.Context,
-	request *affinity.ArchivePracticeLocationRequest,
+	request *affinity.ArchiveLocationsRequest,
 	opts ...option.RequestOption,
 ) (*affinity.ArchivePracticeLocationResponse, error) {
-	response, err := c.WithRawResponse.ArchivePracticeLocation(
+	response, err := c.WithRawResponse.Archive(
 		ctx,
 		request,
 		opts...,

@@ -3,32 +3,34 @@
 package client
 
 import (
+	http "net/http"
+	time "time"
 	account "github.com/affinity-health/affinity-go/account"
 	apikeys "github.com/affinity-health/affinity-go/apikeys"
-	catalog "github.com/affinity-health/affinity-go/catalog"
+	catalogclient "github.com/affinity-health/affinity-go/catalog/client"
 	core "github.com/affinity-health/affinity-go/core"
 	internal "github.com/affinity-health/affinity-go/internal"
 	locations "github.com/affinity-health/affinity-go/locations"
 	option "github.com/affinity-health/affinity-go/option"
-	orders "github.com/affinity-health/affinity-go/orders"
-	patients "github.com/affinity-health/affinity-go/patients"
-	platformpricing "github.com/affinity-health/affinity-go/platformpricing"
+	client "github.com/affinity-health/affinity-go/orders/client"
+	patientsclient "github.com/affinity-health/affinity-go/patients/client"
+	pharmacies "github.com/affinity-health/affinity-go/pharmacies"
 	practices "github.com/affinity-health/affinity-go/practices"
-	team "github.com/affinity-health/affinity-go/team"
-	webhooks "github.com/affinity-health/affinity-go/webhooks"
+	teamclient "github.com/affinity-health/affinity-go/team/client"
+	webhooksclient "github.com/affinity-health/affinity-go/webhooks/client"
 )
 
 type Client struct {
-	Locations       *locations.Client
-	APIKeys         *apikeys.Client
-	Account         *account.Client
-	Catalog         *catalog.Client
-	Orders          *orders.Client
-	Webhooks        *webhooks.Client
-	Team            *team.Client
-	Patients        *patients.Client
-	Practices       *practices.Client
-	PlatformPricing *platformpricing.Client
+	Locations  *locations.Client
+	APIKeys    *apikeys.Client
+	Account    *account.Client
+	Pharmacies *pharmacies.Client
+	Orders     *client.Client
+	Team       *teamclient.Client
+	Practices  *practices.Client
+	Patients   *patientsclient.Client
+	Catalog    *catalogclient.Client
+	Webhooks   *webhooksclient.Client
 
 	options *core.RequestOptions
 	baseURL string
@@ -36,20 +38,22 @@ type Client struct {
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+	version := "2026-09-28"
+	defaults := []option.RequestOption{option.WithAffinityVersion(&version), option.WithMaxAttempts(1), option.WithHTTPClient(&http.Client{Timeout: 60 * time.Second})}
+	options := core.NewRequestOptions(append(defaults, opts...)...)
 	return &Client{
-		Locations:       locations.NewClient(options),
-		APIKeys:         apikeys.NewClient(options),
-		Account:         account.NewClient(options),
-		Catalog:         catalog.NewClient(options),
-		Orders:          orders.NewClient(options),
-		Webhooks:        webhooks.NewClient(options),
-		Team:            team.NewClient(options),
-		Patients:        patients.NewClient(options),
-		Practices:       practices.NewClient(options),
-		PlatformPricing: platformpricing.NewClient(options),
-		options:         options,
-		baseURL:         options.BaseURL,
+		Locations:  locations.NewClient(options),
+		APIKeys:    apikeys.NewClient(options),
+		Account:    account.NewClient(options),
+		Pharmacies: pharmacies.NewClient(options),
+		Orders:     client.NewClient(options),
+		Team:       teamclient.NewClient(options),
+		Practices:  practices.NewClient(options),
+		Patients:   patientsclient.NewClient(options),
+		Catalog:    catalogclient.NewClient(options),
+		Webhooks:   webhooksclient.NewClient(options),
+		options:    options,
+		baseURL:    options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
 				Client:         options.HTTPClient,

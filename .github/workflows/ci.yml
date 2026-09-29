@@ -11,4 +11,4 @@ jobs:
         with:
           go-version: '1.26.1'
       - run: go build ./...
-      - run: go test ./smoke
+      - run: ./tests/with-fixtures.sh go test ./smoke

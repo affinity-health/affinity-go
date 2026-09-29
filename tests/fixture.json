@@ -1,0 +1,1804 @@
+[
+  {
+    "id": "listPracticeLocations",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/locations",
+    "group": "locations",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "object": "list",
+      "hasMore": false,
+      "url": "synthetic"
+    },
+    "item": {
+      "id": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
+      "object": "location",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "name": "synthetic",
+      "timezone": null,
+      "city": null,
+      "country": "synthetic",
+      "line1": null,
+      "line2": null,
+      "phone": null,
+      "postalCode": null,
+      "state": null,
+      "status": "active",
+      "createdAt": "synthetic",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "createPracticeLocation",
+    "verb": "POST",
+    "path": "/v1/practices/{practiceId}/locations",
+    "group": "locations",
+    "paginated": false,
+    "response": {
+      "id": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
+      "object": "location",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "name": "synthetic",
+      "timezone": null,
+      "city": null,
+      "country": "synthetic",
+      "line1": null,
+      "line2": null,
+      "phone": null,
+      "postalCode": null,
+      "state": null,
+      "status": "active",
+      "createdAt": "synthetic",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "getPracticeLocation",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/locations/{locationId}",
+    "group": "locations",
+    "paginated": false,
+    "response": {
+      "id": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
+      "object": "location",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "name": "synthetic",
+      "timezone": null,
+      "city": null,
+      "country": "synthetic",
+      "line1": null,
+      "line2": null,
+      "phone": null,
+      "postalCode": null,
+      "state": null,
+      "status": "active",
+      "createdAt": "synthetic",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "updatePracticeLocation",
+    "verb": "PATCH",
+    "path": "/v1/practices/{practiceId}/locations/{locationId}",
+    "group": "locations",
+    "paginated": false,
+    "response": {
+      "id": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
+      "object": "location",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "name": "synthetic",
+      "timezone": null,
+      "city": null,
+      "country": "synthetic",
+      "line1": null,
+      "line2": null,
+      "phone": null,
+      "postalCode": null,
+      "state": null,
+      "status": "active",
+      "createdAt": "synthetic",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "archivePracticeLocation",
+    "verb": "POST",
+    "path": "/v1/practices/{practiceId}/locations/{locationId}/archive",
+    "group": "locations",
+    "paginated": false,
+    "response": {
+      "id": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
+      "object": "location",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "name": "synthetic",
+      "timezone": null,
+      "city": null,
+      "country": "synthetic",
+      "line1": null,
+      "line2": null,
+      "phone": null,
+      "postalCode": null,
+      "state": null,
+      "status": "active",
+      "createdAt": "synthetic",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "createPlatformPracticeApiKey",
+    "verb": "POST",
+    "path": "/v1/practices/{practiceId}/api-keys",
+    "group": "apiKeys",
+    "paginated": false,
+    "response": {
+      "apiKey": {
+        "allowedIps": [],
+        "createdAt": "synthetic",
+        "expiresAt": null,
+        "id": "pat_a",
+        "keyPrefix": "synthetic",
+        "lastUsedAt": null,
+        "mode": "live",
+        "name": "synthetic",
+        "revokedAt": null,
+        "scopes": [],
+        "status": "active"
+      },
+      "secret": "synthetic",
+      "serviceAccount": {
+        "apiVersion": "2026-09-28",
+        "displayName": "synthetic",
+        "id": "pat_a",
+        "maxScopes": [],
+        "organizationId": "synthetic",
+        "status": "active",
+        "subjectId": "synthetic",
+        "subjectType": "practice"
+      }
+    }
+  },
+  {
+    "id": "getAccount",
+    "verb": "GET",
+    "path": "/v1/account",
+    "group": "account",
+    "paginated": false,
+    "response": {
+      "account": {
+        "allowedReturnUrls": [],
+        "displayName": "synthetic",
+        "id": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+        "object": "account",
+        "slug": "synthetic",
+        "status": "active",
+        "supportEmail": null,
+        "websiteUrl": null
+      },
+      "livemode": false,
+      "scopes": null,
+      "membership": {
+        "permissions": [],
+        "role": "administrator",
+        "roleName": "synthetic",
+        "status": "active"
+      },
+      "operatingMode": "production",
+      "user": {
+        "email": "alex@example.com",
+        "image": null,
+        "name": "synthetic",
+        "userId": "synthetic"
+      }
+    }
+  },
+  {
+    "id": "listCatalogItems",
+    "verb": "GET",
+    "path": "/v1/catalog/items",
+    "group": "catalog.items",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "updatedAt": "synthetic",
+      "url": "/v1/catalog/items"
+    },
+    "item": {
+      "catalogDetails": {
+        "attributes": {},
+        "directions": []
+      },
+      "composition": {
+        "status": "complete",
+        "ingredients": []
+      },
+      "allowedStates": [],
+      "availability": "available",
+      "catalogKind": "synthetic",
+      "fulfillmentInclusions": [],
+      "ordering": {
+        "requiresPrescription": false,
+        "requiresAccompanyingPrescription": false,
+        "shipping": "prescription"
+      },
+      "category": null,
+      "coldShip": false,
+      "pharmacyId": "synthetic",
+      "pharmacyName": "synthetic",
+      "description": "synthetic",
+      "dosageForm": "synthetic",
+      "facilityType": "synthetic",
+      "id": "pat_a",
+      "imageUrl": null,
+      "imageUrls": [],
+      "isOrderable": false,
+      "livemode": false,
+      "name": "synthetic",
+      "object": "catalog_item",
+      "patientSpecificRequired": false,
+      "quantityConstraint": null,
+      "prescriptionRequirements": {
+        "compoundingReason": "not_required",
+        "diagnosis": "not_required",
+        "pharmacyNotes": "not_supported",
+        "refills": "not_supported",
+        "substitution": "not_supported"
+      },
+      "pricing": null,
+      "restrictedStates": [],
+      "route": "synthetic",
+      "shippingOptions": [],
+      "strength": null,
+      "unit": null
+    }
+  },
+  {
+    "id": "listPharmacies",
+    "verb": "GET",
+    "path": "/v1/pharmacies",
+    "group": "pharmacies",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "url": "/v1/pharmacies"
+    },
+    "item": {
+      "access": "invited",
+      "catalogItemCount": 0,
+      "facilityType": "synthetic",
+      "facilityLocations": [],
+      "id": "pharm_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "logoUrl": null,
+      "name": "synthetic",
+      "object": "pharmacy",
+      "prescriptionsLast30Days": 0,
+      "profile": null,
+      "restrictedStates": [],
+      "shippingOptions": [],
+      "supportedStates": []
+    }
+  },
+  {
+    "id": "listShippingOptions",
+    "verb": "GET",
+    "path": "/v1/catalog/items/{catalogItemId}/shipping-options",
+    "group": "catalog.shippingOptions",
+    "paginated": false,
+    "response": []
+  },
+  {
+    "id": "listOrders",
+    "verb": "GET",
+    "path": "/v1/orders",
+    "group": "orders",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "url": "/v1/orders"
+    },
+    "item": {
+      "revision": "synthetic",
+      "otcItems": [],
+      "practiceMedicationTotalCents": null,
+      "externalOrderId": null,
+      "metadata": {},
+      "createdAt": "synthetic",
+      "fulfillments": [],
+      "id": "ord_01j2y8m6jcc9tt24af5pw9x1bc",
+      "lifecycleEvents": [],
+      "livemode": false,
+      "object": "order",
+      "patientExternalId": null,
+      "patientId": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
+      "patientName": "synthetic",
+      "patientState": "synthetic",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "prescriberName": null,
+      "prescriberNpi": null,
+      "review": null,
+      "prescriptions": [],
+      "status": "blocked",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "createOrder",
+    "verb": "POST",
+    "path": "/v1/orders",
+    "group": "orders",
+    "paginated": false,
+    "response": {
+      "revision": "synthetic",
+      "otcItems": [],
+      "externalOrderId": null,
+      "metadata": {},
+      "createdAt": "synthetic",
+      "id": "ord_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "object": "order",
+      "patientId": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "prescriptions": [],
+      "userId": null,
+      "status": "requires_provider_signature"
+    }
+  },
+  {
+    "id": "getOrder",
+    "verb": "GET",
+    "path": "/v1/orders/{orderId}",
+    "group": "orders",
+    "paginated": false,
+    "response": {
+      "revision": "synthetic",
+      "otcItems": [],
+      "practiceMedicationTotalCents": null,
+      "externalOrderId": null,
+      "metadata": {},
+      "createdAt": "synthetic",
+      "fulfillments": [],
+      "id": "ord_01j2y8m6jcc9tt24af5pw9x1bc",
+      "lifecycleEvents": [],
+      "livemode": false,
+      "object": "order",
+      "patientExternalId": null,
+      "patientId": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
+      "patientName": "synthetic",
+      "patientState": "synthetic",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "prescriberName": null,
+      "prescriberNpi": null,
+      "review": null,
+      "prescriptions": [],
+      "status": "blocked",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "cancelOrder",
+    "verb": "POST",
+    "path": "/v1/orders/{orderId}/cancel",
+    "group": "orders",
+    "paginated": false,
+    "response": {
+      "revision": "synthetic",
+      "otcItems": [],
+      "practiceMedicationTotalCents": null,
+      "externalOrderId": null,
+      "metadata": {},
+      "createdAt": "synthetic",
+      "fulfillments": [],
+      "id": "ord_01j2y8m6jcc9tt24af5pw9x1bc",
+      "lifecycleEvents": [],
+      "livemode": false,
+      "object": "order",
+      "patientExternalId": null,
+      "patientId": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
+      "patientName": "synthetic",
+      "patientState": "synthetic",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "prescriberName": null,
+      "prescriberNpi": null,
+      "review": null,
+      "prescriptions": [],
+      "status": "blocked",
+      "updatedAt": "synthetic",
+      "cancellation": {
+        "status": "confirmed",
+        "outcomes": []
+      }
+    }
+  },
+  {
+    "id": "actOnOrderException",
+    "verb": "POST",
+    "path": "/v1/orders/{orderId}/exceptions/{exceptionId}/actions",
+    "group": "orders.exceptions",
+    "paginated": false,
+    "response": {
+      "action": "synthetic",
+      "exceptionId": "fex_01j2y8m6jcc9tt24af5pw9x1bc",
+      "status": "open"
+    }
+  },
+  {
+    "id": "listOrderEvents",
+    "verb": "GET",
+    "path": "/v1/orders/{orderId}/events",
+    "group": "orders.events",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "url": "synthetic"
+    },
+    "item": {
+      "createdAt": "synthetic",
+      "eventType": "synthetic",
+      "id": "evt_01j2y8m6jcc9tt24af5pw9x1bc",
+      "message": "synthetic",
+      "metadata": {},
+      "object": "event"
+    }
+  },
+  {
+    "id": "listWebhookEndpoints",
+    "verb": "GET",
+    "path": "/v1/webhook-endpoints",
+    "group": "webhooks.endpoints",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "url": "/v1/webhook-endpoints"
+    },
+    "item": {
+      "organizationId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "practiceIds": [],
+      "apiVersion": "synthetic",
+      "consecutiveFailures": 0,
+      "createdAt": "synthetic",
+      "description": "synthetic",
+      "id": "whe_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "object": "webhook_endpoint",
+      "payloadStyle": "thin",
+      "status": "active",
+      "subscribedEvents": [],
+      "updatedAt": "synthetic",
+      "url": "synthetic"
+    }
+  },
+  {
+    "id": "createWebhookEndpoint",
+    "verb": "POST",
+    "path": "/v1/webhook-endpoints",
+    "group": "webhooks.endpoints",
+    "paginated": false,
+    "response": {
+      "organizationId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "practiceIds": [],
+      "apiVersion": "synthetic",
+      "consecutiveFailures": 0,
+      "createdAt": "synthetic",
+      "description": "synthetic",
+      "id": "whe_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "object": "webhook_endpoint",
+      "payloadStyle": "thin",
+      "status": "active",
+      "subscribedEvents": [],
+      "updatedAt": "synthetic",
+      "url": "synthetic",
+      "signingSecret": "synthetic"
+    }
+  },
+  {
+    "id": "updateWebhookEndpoint",
+    "verb": "PATCH",
+    "path": "/v1/webhook-endpoints/{endpointId}",
+    "group": "webhooks.endpoints",
+    "paginated": false,
+    "response": {
+      "organizationId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "practiceIds": [],
+      "apiVersion": "synthetic",
+      "consecutiveFailures": 0,
+      "createdAt": "synthetic",
+      "description": "synthetic",
+      "id": "whe_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "object": "webhook_endpoint",
+      "payloadStyle": "thin",
+      "status": "active",
+      "subscribedEvents": [],
+      "updatedAt": "synthetic",
+      "url": "synthetic"
+    }
+  },
+  {
+    "id": "deleteWebhookEndpoint",
+    "verb": "DELETE",
+    "path": "/v1/webhook-endpoints/{endpointId}",
+    "group": "webhooks.endpoints",
+    "paginated": false,
+    "response": {
+      "organizationId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "practiceIds": [],
+      "apiVersion": "synthetic",
+      "consecutiveFailures": 0,
+      "createdAt": "synthetic",
+      "description": "synthetic",
+      "id": "whe_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "object": "webhook_endpoint",
+      "payloadStyle": "thin",
+      "status": "active",
+      "subscribedEvents": [],
+      "updatedAt": "synthetic",
+      "url": "synthetic"
+    }
+  },
+  {
+    "id": "rotateWebhookEndpointSecret",
+    "verb": "POST",
+    "path": "/v1/webhook-endpoints/{endpointId}/rotate-secret",
+    "group": "webhooks.endpoints",
+    "paginated": false,
+    "response": {
+      "organizationId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "practiceIds": [],
+      "apiVersion": "synthetic",
+      "consecutiveFailures": 0,
+      "createdAt": "synthetic",
+      "description": "synthetic",
+      "id": "whe_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "object": "webhook_endpoint",
+      "payloadStyle": "thin",
+      "status": "active",
+      "subscribedEvents": [],
+      "updatedAt": "synthetic",
+      "url": "synthetic",
+      "signingSecret": "synthetic"
+    }
+  },
+  {
+    "id": "testWebhookEndpoint",
+    "verb": "POST",
+    "path": "/v1/webhook-endpoints/{endpointId}/test",
+    "group": "webhooks.endpoints",
+    "paginated": false,
+    "response": {
+      "eventId": "synthetic"
+    }
+  },
+  {
+    "id": "listWebhookEvents",
+    "verb": "GET",
+    "path": "/v1/webhook-events",
+    "group": "webhooks.events",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "url": "/v1/webhook-events"
+    },
+    "item": {
+      "apiVersion": "synthetic",
+      "createdAt": "synthetic",
+      "eventType": "synthetic",
+      "id": "evt_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "object": "webhook_event",
+      "resourceId": "synthetic",
+      "resourceType": "synthetic",
+      "status": "delivered"
+    }
+  },
+  {
+    "id": "getWebhookEvent",
+    "verb": "GET",
+    "path": "/v1/webhook-events/{eventId}",
+    "group": "webhooks.events",
+    "paginated": false,
+    "response": {
+      "apiVersion": "synthetic",
+      "createdAt": "synthetic",
+      "eventType": "synthetic",
+      "id": "evt_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "object": "webhook_event",
+      "resourceId": "synthetic",
+      "resourceType": "synthetic",
+      "status": "delivered",
+      "attempts": [],
+      "deliveries": [],
+      "payload": {}
+    }
+  },
+  {
+    "id": "replayWebhookEvent",
+    "verb": "POST",
+    "path": "/v1/webhook-events/{eventId}/replay",
+    "group": "webhooks.events",
+    "paginated": false,
+    "response": {
+      "apiVersion": "synthetic",
+      "createdAt": "synthetic",
+      "eventType": "synthetic",
+      "id": "evt_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "object": "webhook_event",
+      "resourceId": "synthetic",
+      "resourceType": "synthetic",
+      "status": "delivered",
+      "attempts": [],
+      "deliveries": [],
+      "payload": {}
+    }
+  },
+  {
+    "id": "getOrderTestSimulation",
+    "verb": "GET",
+    "path": "/v1/orders/{orderId}/test-simulation",
+    "group": "orders.testSimulation",
+    "paginated": false,
+    "response": {
+      "mode": "automatic",
+      "scenario": "successful",
+      "pendingAction": null,
+      "lastError": null,
+      "availableActions": [],
+      "scenarioEditable": false
+    }
+  },
+  {
+    "id": "updateOrderTestSimulation",
+    "verb": "PUT",
+    "path": "/v1/orders/{orderId}/test-simulation",
+    "group": "orders.testSimulation",
+    "paginated": false,
+    "response": {
+      "mode": "automatic",
+      "scenario": "successful",
+      "pendingAction": null,
+      "lastError": null,
+      "availableActions": [],
+      "scenarioEditable": false
+    }
+  },
+  {
+    "id": "retrievePrescribingOptions",
+    "verb": "GET",
+    "path": "/v1/catalog/items/{catalogItemId}/prescribing-options",
+    "group": "catalog.prescribingOptions",
+    "paginated": false,
+    "response": {
+      "compoundingReason": {
+        "required": false,
+        "categoryRequired": false,
+        "context": "not_supported",
+        "contextPrompt": null,
+        "choices": []
+      },
+      "compoundingReasonCategoryDefault": null,
+      "compoundingReasonDefault": null,
+      "default": null,
+      "formulationDefault": null,
+      "initial": {},
+      "medication": {
+        "name": "synthetic",
+        "rxnorm": null
+      },
+      "options": {
+        "doseUnits": [],
+        "doses": [],
+        "frequencies": [],
+        "routes": []
+      },
+      "pharmacyDirections": [],
+      "templates": [],
+      "object": "prescribing_options",
+      "catalogItemId": "cat_01j2y8m6jcc9tt24af5pw9x1bc",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "revision": "synthetic",
+      "catalog": {
+        "catalogDetails": {
+          "attributes": {},
+          "directions": []
+        },
+        "composition": {
+          "status": "complete",
+          "ingredients": []
+        },
+        "allowedStates": [],
+        "availability": "available",
+        "catalogKind": "synthetic",
+        "fulfillmentInclusions": [],
+        "ordering": {
+          "requiresPrescription": false,
+          "requiresAccompanyingPrescription": false,
+          "shipping": "prescription"
+        },
+        "category": null,
+        "coldShip": false,
+        "pharmacyId": "synthetic",
+        "pharmacyName": "synthetic",
+        "description": "synthetic",
+        "dosageForm": "synthetic",
+        "facilityType": "synthetic",
+        "id": "pat_a",
+        "imageUrl": null,
+        "imageUrls": [],
+        "isOrderable": false,
+        "livemode": false,
+        "name": "synthetic",
+        "object": "catalog_item",
+        "patientSpecificRequired": false,
+        "quantityConstraint": null,
+        "prescriptionRequirements": {
+          "compoundingReason": "not_required",
+          "diagnosis": "not_required",
+          "pharmacyNotes": "not_supported",
+          "refills": "not_supported",
+          "substitution": "not_supported"
+        },
+        "pricing": null,
+        "restrictedStates": [],
+        "route": "synthetic",
+        "shippingOptions": [],
+        "strength": null,
+        "unit": null
+      },
+      "defaultPresetId": null,
+      "presets": []
+    }
+  },
+  {
+    "id": "previewOrder",
+    "verb": "POST",
+    "path": "/v1/order-previews",
+    "group": "orders",
+    "paginated": false,
+    "response": {
+      "clinicalRequirementsSatisfied": false,
+      "clinicalIssues": [],
+      "clinicalRequirements": [],
+      "otcItems": [],
+      "shippingGroups": [],
+      "totals": {
+        "currency": "USD",
+        "medicationSubtotalCents": null,
+        "supplySubtotalCents": null,
+        "shippingTotalCents": null,
+        "estimatedTotalCents": null
+      },
+      "object": "order_preview",
+      "livemode": false,
+      "prescriptions": [],
+      "issues": [],
+      "status": "complete",
+      "orderInput": null
+    }
+  },
+  {
+    "id": "signOrder",
+    "verb": "POST",
+    "path": "/v1/orders/{orderId}/sign",
+    "group": "orders",
+    "paginated": false,
+    "response": {
+      "orderId": "ord_01j2y8m6jcc9tt24af5pw9x1bc",
+      "prescriptions": [],
+      "signedAt": "synthetic",
+      "status": "ready"
+    }
+  },
+  {
+    "id": "signAndSubmitOrder",
+    "verb": "POST",
+    "path": "/v1/orders/{orderId}/sign-and-submit",
+    "group": "orders",
+    "paginated": false,
+    "response": {
+      "object": "order_sign_and_submission",
+      "orderId": "ord_01j2y8m6jcc9tt24af5pw9x1bc",
+      "signedAt": "synthetic",
+      "status": "submitted",
+      "prescriptions": []
+    }
+  },
+  {
+    "id": "submitOrder",
+    "verb": "POST",
+    "path": "/v1/orders/{orderId}/submit",
+    "group": "orders",
+    "paginated": false,
+    "response": {
+      "object": "order_submission",
+      "orderId": "ord_01j2y8m6jcc9tt24af5pw9x1bc",
+      "status": "submitted"
+    }
+  },
+  {
+    "id": "rejectOrder",
+    "verb": "POST",
+    "path": "/v1/orders/{orderId}/rejection",
+    "group": "orders",
+    "paginated": false,
+    "response": {
+      "orderId": "ord_01j2y8m6jcc9tt24af5pw9x1bc",
+      "rejectedAt": "synthetic",
+      "reason": "synthetic",
+      "status": "rejected"
+    }
+  },
+  {
+    "id": "registerUser",
+    "verb": "POST",
+    "path": "/v1/practices/{practiceId}/users",
+    "group": "team",
+    "paginated": false,
+    "response": {
+      "object": "registered_user",
+      "id": "user_01j2y8m6jcc9tt24af5pw9x1bc",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "memberId": "mbr_01j2y8m6jcc9tt24af5pw9x1bc",
+      "prescriberId": null,
+      "externalId": "synthetic",
+      "livemode": false
+    }
+  },
+  {
+    "id": "listPatientAddresses",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/patients/{patientId}/addresses",
+    "group": "patients.addresses",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "object": "list",
+      "hasMore": false,
+      "url": "synthetic"
+    },
+    "item": {
+      "id": "pat_a",
+      "address": {
+        "city": "synthetic",
+        "line1": "synthetic",
+        "postalCode": "synthetic",
+        "state": "synthetic"
+      },
+      "label": "synthetic",
+      "preferredShipping": false,
+      "recipientName": null,
+      "archivedAt": null
+    }
+  },
+  {
+    "id": "createPatientAddress",
+    "verb": "POST",
+    "path": "/v1/practices/{practiceId}/patients/{patientId}/addresses",
+    "group": "patients.addresses",
+    "paginated": false,
+    "response": {
+      "id": "addr_01j2y8m6jcc9tt24af5pw9x1bc",
+      "address": {
+        "city": "synthetic",
+        "line1": "synthetic",
+        "postalCode": "synthetic",
+        "state": "synthetic"
+      },
+      "label": "synthetic",
+      "preferredShipping": false,
+      "recipientName": null,
+      "archivedAt": null
+    }
+  },
+  {
+    "id": "updatePatientAddress",
+    "verb": "PATCH",
+    "path": "/v1/practices/{practiceId}/patients/{patientId}/addresses/{addressId}",
+    "group": "patients.addresses",
+    "paginated": false,
+    "response": {
+      "id": "addr_01j2y8m6jcc9tt24af5pw9x1bc",
+      "address": {
+        "city": "synthetic",
+        "line1": "synthetic",
+        "postalCode": "synthetic",
+        "state": "synthetic"
+      },
+      "label": "synthetic",
+      "preferredShipping": false,
+      "recipientName": null,
+      "archivedAt": null
+    }
+  },
+  {
+    "id": "archivePatientAddress",
+    "verb": "DELETE",
+    "path": "/v1/practices/{practiceId}/patients/{patientId}/addresses/{addressId}",
+    "group": "patients.addresses",
+    "paginated": false,
+    "response": {
+      "id": "addr_01j2y8m6jcc9tt24af5pw9x1bc",
+      "address": {
+        "city": "synthetic",
+        "line1": "synthetic",
+        "postalCode": "synthetic",
+        "state": "synthetic"
+      },
+      "label": "synthetic",
+      "preferredShipping": false,
+      "recipientName": null,
+      "archivedAt": null
+    }
+  },
+  {
+    "id": "setDefaultPatientAddress",
+    "verb": "PUT",
+    "path": "/v1/practices/{practiceId}/patients/{patientId}/addresses/{addressId}/default",
+    "group": "patients.addresses",
+    "paginated": false,
+    "response": {
+      "id": "addr_01j2y8m6jcc9tt24af5pw9x1bc",
+      "address": {
+        "city": "synthetic",
+        "line1": "synthetic",
+        "postalCode": "synthetic",
+        "state": "synthetic"
+      },
+      "label": "synthetic",
+      "preferredShipping": false,
+      "recipientName": null,
+      "archivedAt": null
+    }
+  },
+  {
+    "id": "invitePracticeTeamPerson",
+    "verb": "POST",
+    "path": "/v1/practices/{practiceId}/team/invitations",
+    "group": "team.invitations",
+    "paginated": false,
+    "response": {
+      "person": {
+        "id": "pat_a",
+        "object": "team_person",
+        "externalId": "synthetic",
+        "email": null,
+        "name": null,
+        "status": "synthetic",
+        "invitation": null,
+        "account": null,
+        "nextActions": []
+      },
+      "delivery": "sent"
+    }
+  },
+  {
+    "id": "listPracticeTeamInvitations",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/team/invitations",
+    "group": "team.invitations",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "url": "synthetic"
+    },
+    "item": {
+      "id": "pat_a",
+      "object": "team_invitation",
+      "email": "alex@example.com",
+      "name": null,
+      "status": "accepted",
+      "roles": [],
+      "locationIds": [],
+      "createdAt": "synthetic",
+      "expiresAt": "synthetic",
+      "acceptedAt": null,
+      "userId": null,
+      "externalId": null,
+      "memberId": null,
+      "prescriberId": null,
+      "person": null
+    }
+  },
+  {
+    "id": "getPracticeTeam",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/team",
+    "group": "team",
+    "paginated": false,
+    "response": {
+      "object": "team",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "members": {
+        "total": 1,
+        "active": 1,
+        "disabled": 1
+      },
+      "invitations": {
+        "pending": 1,
+        "expired": 1
+      },
+      "prescribers": {
+        "total": 1,
+        "active": 1
+      }
+    }
+  },
+  {
+    "id": "listPracticeTeamMembers",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/team/members",
+    "group": "team.members",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "url": "synthetic"
+    },
+    "item": {
+      "id": "mbr_01j2y8m6jcc9tt24af5pw9x1bc",
+      "externalId": null,
+      "name": "synthetic",
+      "email": null,
+      "locationIds": [],
+      "account": {
+        "accountId": "synthetic",
+        "emailVerified": false,
+        "membershipId": "synthetic",
+        "membershipStatus": "synthetic",
+        "roles": [],
+        "prescriberConnection": null
+      },
+      "nextActions": []
+    }
+  },
+  {
+    "id": "listPracticeTeamPrescribers",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/team/prescribers",
+    "group": "team.prescribers",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "url": "synthetic"
+    },
+    "item": {
+      "id": "pat_a",
+      "name": "synthetic",
+      "legalName": "synthetic",
+      "credentials": null,
+      "phone": null,
+      "address": null,
+      "npi": "synthetic",
+      "practiceStatus": "synthetic",
+      "licenses": []
+    }
+  },
+  {
+    "id": "getPracticeTeamMember",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/team/members/{memberId}",
+    "group": "team.members",
+    "paginated": false,
+    "response": {
+      "id": "mbr_01j2y8m6jcc9tt24af5pw9x1bc",
+      "externalId": null,
+      "name": "synthetic",
+      "email": null,
+      "locationIds": [],
+      "account": {
+        "accountId": "synthetic",
+        "emailVerified": false,
+        "membershipId": "synthetic",
+        "membershipStatus": "synthetic",
+        "roles": [],
+        "prescriberConnection": null
+      },
+      "nextActions": []
+    }
+  },
+  {
+    "id": "updatePracticeTeamMember",
+    "verb": "PATCH",
+    "path": "/v1/practices/{practiceId}/team/members/{memberId}",
+    "group": "team.members",
+    "paginated": false,
+    "response": {
+      "id": "mbr_01j2y8m6jcc9tt24af5pw9x1bc",
+      "externalId": null,
+      "name": "synthetic",
+      "email": null,
+      "locationIds": [],
+      "account": {
+        "accountId": "synthetic",
+        "emailVerified": false,
+        "membershipId": "synthetic",
+        "membershipStatus": "synthetic",
+        "roles": [],
+        "prescriberConnection": null
+      },
+      "nextActions": []
+    }
+  },
+  {
+    "id": "getPracticeTeamPrescriber",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/team/prescribers/{prescriberId}",
+    "group": "team.prescribers",
+    "paginated": false,
+    "response": {
+      "id": "prov_01j2y8m6jcc9tt24af5pw9x1bc",
+      "name": "synthetic",
+      "legalName": "synthetic",
+      "credentials": null,
+      "phone": null,
+      "address": null,
+      "npi": "synthetic",
+      "practiceStatus": "synthetic",
+      "licenses": []
+    }
+  },
+  {
+    "id": "updatePracticeTeamPrescriber",
+    "verb": "PATCH",
+    "path": "/v1/practices/{practiceId}/team/prescribers/{prescriberId}",
+    "group": "team.prescribers",
+    "paginated": false,
+    "response": {
+      "id": "prov_01j2y8m6jcc9tt24af5pw9x1bc",
+      "name": "synthetic",
+      "legalName": "synthetic",
+      "credentials": null,
+      "phone": null,
+      "address": null,
+      "npi": "synthetic",
+      "practiceStatus": "synthetic",
+      "licenses": []
+    }
+  },
+  {
+    "id": "createPracticeTeamLicense",
+    "verb": "POST",
+    "path": "/v1/practices/{practiceId}/team/prescribers/{prescriberId}/licenses",
+    "group": "team.prescribers.licenses",
+    "paginated": false,
+    "response": {
+      "id": "lic_01j2y8m6jcc9tt24af5pw9x1bc",
+      "state": "synthetic",
+      "licenseNumber": "synthetic",
+      "expiresAt": null
+    }
+  },
+  {
+    "id": "updatePracticeTeamLicense",
+    "verb": "PATCH",
+    "path": "/v1/practices/{practiceId}/team/prescribers/{prescriberId}/licenses/{licenseId}",
+    "group": "team.prescribers.licenses",
+    "paginated": false,
+    "response": {
+      "id": "lic_01j2y8m6jcc9tt24af5pw9x1bc",
+      "state": "synthetic",
+      "licenseNumber": "synthetic",
+      "expiresAt": null
+    }
+  },
+  {
+    "id": "getPracticeTeamInvitation",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/team/invitations/{invitationId}",
+    "group": "team.invitations",
+    "paginated": false,
+    "response": {
+      "id": "invite_01j2y8m6jcc9tt24af5pw9x1bc",
+      "object": "team_invitation",
+      "email": "alex@example.com",
+      "name": null,
+      "status": "accepted",
+      "roles": [],
+      "locationIds": [],
+      "createdAt": "synthetic",
+      "expiresAt": "synthetic",
+      "acceptedAt": null,
+      "userId": null,
+      "externalId": null,
+      "memberId": null,
+      "prescriberId": null,
+      "person": null
+    }
+  },
+  {
+    "id": "revokePracticeTeamInvitation",
+    "verb": "DELETE",
+    "path": "/v1/practices/{practiceId}/team/invitations/{invitationId}",
+    "group": "team.invitations",
+    "paginated": false,
+    "response": {
+      "id": "invite_01j2y8m6jcc9tt24af5pw9x1bc",
+      "object": "team_invitation",
+      "email": "alex@example.com",
+      "name": null,
+      "status": "accepted",
+      "roles": [],
+      "locationIds": [],
+      "createdAt": "synthetic",
+      "expiresAt": "synthetic",
+      "acceptedAt": null,
+      "userId": null,
+      "externalId": null,
+      "memberId": null,
+      "prescriberId": null,
+      "person": null
+    }
+  },
+  {
+    "id": "resendPracticeTeamInvitation",
+    "verb": "POST",
+    "path": "/v1/practices/{practiceId}/team/invitations/{invitationId}/resend",
+    "group": "team.invitations",
+    "paginated": false,
+    "response": {
+      "invitation": {
+        "id": "pat_a",
+        "object": "team_invitation",
+        "email": "alex@example.com",
+        "name": null,
+        "status": "accepted",
+        "roles": [],
+        "locationIds": [],
+        "createdAt": "synthetic",
+        "expiresAt": "synthetic",
+        "acceptedAt": null,
+        "userId": null,
+        "externalId": null,
+        "memberId": null,
+        "prescriberId": null,
+        "person": null
+      },
+      "delivery": "sent"
+    }
+  },
+  {
+    "id": "getApiAccess",
+    "verb": "GET",
+    "path": "/v1/auth/access",
+    "group": "apiKeys",
+    "paginated": false,
+    "response": {
+      "apiKey": {
+        "id": "key_01j2y8m6jcc9tt24af5pw9x1bc",
+        "keyPrefix": "synthetic",
+        "object": "api_key"
+      },
+      "livemode": false,
+      "object": "api_access",
+      "scopes": [],
+      "serviceAccount": {
+        "apiVersion": "2026-09-28",
+        "id": "sa_01j2y8m6jcc9tt24af5pw9x1bc",
+        "object": "service_account",
+        "subjectId": "synthetic",
+        "subjectType": "synthetic"
+      }
+    }
+  },
+  {
+    "id": "listPractices",
+    "verb": "GET",
+    "path": "/v1/practices",
+    "group": "practices",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "url": "/v1/practices"
+    },
+    "item": {
+      "address": null,
+      "contacts": {
+        "compliance": null,
+        "primary": null
+      },
+      "createdAt": "synthetic",
+      "externalId": null,
+      "id": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "legalName": null,
+      "livemode": false,
+      "metadata": {},
+      "name": "synthetic",
+      "object": "practice",
+      "prescribers": [],
+      "liveEnabled": false,
+      "supportEmail": null,
+      "supportPhone": null,
+      "timezone": null
+    }
+  },
+  {
+    "id": "createPractice",
+    "verb": "POST",
+    "path": "/v1/practices",
+    "group": "practices",
+    "paginated": false,
+    "response": {
+      "address": null,
+      "contacts": {
+        "compliance": null,
+        "primary": null
+      },
+      "createdAt": "synthetic",
+      "externalId": null,
+      "id": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "legalName": null,
+      "livemode": false,
+      "metadata": {},
+      "name": "synthetic",
+      "object": "practice",
+      "prescribers": [],
+      "liveEnabled": false,
+      "supportEmail": null,
+      "supportPhone": null,
+      "timezone": null
+    }
+  },
+  {
+    "id": "getPractice",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}",
+    "group": "practices",
+    "paginated": false,
+    "response": {
+      "address": null,
+      "contacts": {
+        "compliance": null,
+        "primary": null
+      },
+      "createdAt": "synthetic",
+      "externalId": null,
+      "id": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "legalName": null,
+      "livemode": false,
+      "metadata": {},
+      "name": "synthetic",
+      "object": "practice",
+      "prescribers": [],
+      "liveEnabled": false,
+      "supportEmail": null,
+      "supportPhone": null,
+      "timezone": null
+    }
+  },
+  {
+    "id": "updatePractice",
+    "verb": "PATCH",
+    "path": "/v1/practices/{practiceId}",
+    "group": "practices",
+    "paginated": false,
+    "response": {
+      "address": null,
+      "contacts": {
+        "compliance": null,
+        "primary": null
+      },
+      "createdAt": "synthetic",
+      "externalId": null,
+      "id": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "legalName": null,
+      "livemode": false,
+      "metadata": {},
+      "name": "synthetic",
+      "object": "practice",
+      "prescribers": [],
+      "liveEnabled": false,
+      "supportEmail": null,
+      "supportPhone": null,
+      "timezone": null
+    }
+  },
+  {
+    "id": "listPatients",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/patients",
+    "group": "patients",
+    "paginated": true,
+    "response": {
+      "data": [],
+      "hasMore": false,
+      "object": "list",
+      "url": "synthetic"
+    },
+    "item": {
+      "address": null,
+      "defaultShippingAddressId": null,
+      "shippingAddress": null,
+      "allergyReviewStatus": "not_reviewed",
+      "allergySummary": [],
+      "createdAt": "synthetic",
+      "clinicalProfile": {
+        "currentMedications": [],
+        "heightInches": null,
+        "reviewedAt": null,
+        "weightPounds": null
+      },
+      "dateOfBirth": "1990-01-01",
+      "email": null,
+      "externalId": null,
+      "externalIdentities": [],
+      "addresses": [],
+      "encounters": [],
+      "gender": "f",
+      "id": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "location": {
+        "id": "pat_a",
+        "name": "synthetic",
+        "state": null,
+        "status": "active"
+      },
+      "locationId": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
+      "metadata": {},
+      "medicalRecordNumber": null,
+      "measurements": [],
+      "name": {
+        "first": "synthetic",
+        "last": "synthetic",
+        "middle": null,
+        "preferred": null
+      },
+      "object": "patient",
+      "phone": null,
+      "programs": [],
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "status": "active",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "createPatient",
+    "verb": "POST",
+    "path": "/v1/practices/{practiceId}/patients",
+    "group": "patients",
+    "paginated": false,
+    "response": {
+      "address": null,
+      "defaultShippingAddressId": null,
+      "shippingAddress": null,
+      "allergyReviewStatus": "not_reviewed",
+      "allergySummary": [],
+      "createdAt": "synthetic",
+      "clinicalProfile": {
+        "currentMedications": [],
+        "heightInches": null,
+        "reviewedAt": null,
+        "weightPounds": null
+      },
+      "dateOfBirth": "1990-01-01",
+      "email": null,
+      "externalId": null,
+      "externalIdentities": [],
+      "addresses": [],
+      "encounters": [],
+      "gender": "f",
+      "id": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "location": {
+        "id": "pat_a",
+        "name": "synthetic",
+        "state": null,
+        "status": "active"
+      },
+      "locationId": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
+      "metadata": {},
+      "medicalRecordNumber": null,
+      "measurements": [],
+      "name": {
+        "first": "synthetic",
+        "last": "synthetic",
+        "middle": null,
+        "preferred": null
+      },
+      "object": "patient",
+      "phone": null,
+      "programs": [],
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "status": "active",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "getPatient",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/patients/{patientId}",
+    "group": "patients",
+    "paginated": false,
+    "response": {
+      "address": null,
+      "defaultShippingAddressId": null,
+      "shippingAddress": null,
+      "allergyReviewStatus": "not_reviewed",
+      "allergySummary": [],
+      "createdAt": "synthetic",
+      "clinicalProfile": {
+        "currentMedications": [],
+        "heightInches": null,
+        "reviewedAt": null,
+        "weightPounds": null
+      },
+      "dateOfBirth": "1990-01-01",
+      "email": null,
+      "externalId": null,
+      "externalIdentities": [],
+      "addresses": [],
+      "encounters": [],
+      "gender": "f",
+      "id": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "location": {
+        "id": "pat_a",
+        "name": "synthetic",
+        "state": null,
+        "status": "active"
+      },
+      "locationId": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
+      "metadata": {},
+      "medicalRecordNumber": null,
+      "measurements": [],
+      "name": {
+        "first": "synthetic",
+        "last": "synthetic",
+        "middle": null,
+        "preferred": null
+      },
+      "object": "patient",
+      "phone": null,
+      "programs": [],
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "status": "active",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "deletePatient",
+    "verb": "DELETE",
+    "path": "/v1/practices/{practiceId}/patients/{patientId}",
+    "group": "patients",
+    "paginated": false,
+    "response": {
+      "deleted": true,
+      "id": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
+      "object": "patient"
+    }
+  },
+  {
+    "id": "updatePatient",
+    "verb": "PATCH",
+    "path": "/v1/practices/{practiceId}/patients/{patientId}",
+    "group": "patients",
+    "paginated": false,
+    "response": {
+      "address": null,
+      "defaultShippingAddressId": null,
+      "shippingAddress": null,
+      "allergyReviewStatus": "not_reviewed",
+      "allergySummary": [],
+      "createdAt": "synthetic",
+      "clinicalProfile": {
+        "currentMedications": [],
+        "heightInches": null,
+        "reviewedAt": null,
+        "weightPounds": null
+      },
+      "dateOfBirth": "1990-01-01",
+      "email": null,
+      "externalId": null,
+      "externalIdentities": [],
+      "addresses": [],
+      "encounters": [],
+      "gender": "f",
+      "id": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "location": {
+        "id": "pat_a",
+        "name": "synthetic",
+        "state": null,
+        "status": "active"
+      },
+      "locationId": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
+      "metadata": {},
+      "medicalRecordNumber": null,
+      "measurements": [],
+      "name": {
+        "first": "synthetic",
+        "last": "synthetic",
+        "middle": null,
+        "preferred": null
+      },
+      "object": "patient",
+      "phone": null,
+      "programs": [],
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "status": "active",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "getPatientAllergies",
+    "verb": "GET",
+    "path": "/v1/practices/{practiceId}/patients/{patientId}/allergies",
+    "group": "patients.allergies",
+    "paginated": false,
+    "response": {
+      "allergies": [],
+      "reviewStatus": "not_reviewed"
+    }
+  },
+  {
+    "id": "replacePatientAllergies",
+    "verb": "PUT",
+    "path": "/v1/practices/{practiceId}/patients/{patientId}/allergies",
+    "group": "patients.allergies",
+    "paginated": false,
+    "response": {
+      "allergies": [],
+      "reviewStatus": "not_reviewed"
+    }
+  },
+  {
+    "id": "addOrderPrescription",
+    "verb": "POST",
+    "path": "/v1/orders/{orderId}/prescriptions",
+    "group": "orders.prescriptions",
+    "paginated": false,
+    "response": {
+      "revision": "synthetic",
+      "object": "order_draft_update",
+      "externalOrderId": null,
+      "metadata": {},
+      "orderId": "ord_01j2y8m6jcc9tt24af5pw9x1bc",
+      "prescriptionId": "rx_01j2y8m6jcc9tt24af5pw9x1bc",
+      "prescriptions": []
+    }
+  },
+  {
+    "id": "updateOrderPrescription",
+    "verb": "PATCH",
+    "path": "/v1/orders/{orderId}/prescriptions/{prescriptionId}",
+    "group": "orders.prescriptions",
+    "paginated": false,
+    "response": {
+      "revision": "synthetic",
+      "object": "order_draft_update",
+      "externalOrderId": null,
+      "metadata": {},
+      "orderId": "ord_01j2y8m6jcc9tt24af5pw9x1bc",
+      "prescriptionId": "rx_01j2y8m6jcc9tt24af5pw9x1bc",
+      "prescriptions": []
+    }
+  },
+  {
+    "id": "createOrderBatch",
+    "verb": "POST",
+    "path": "/v1/order-batches",
+    "group": "orders.batches",
+    "paginated": false,
+    "response": {
+      "object": "order_batch",
+      "practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+      "userId": null,
+      "livemode": false,
+      "orders": []
+    }
+  },
+  {
+    "id": "platform.public-api.selling-prices.readSellingPrice",
+    "verb": "GET",
+    "path": "/v1/catalog/items/{catalogItemId}/selling-price",
+    "group": "catalog.sellingPrices",
+    "paginated": false,
+    "response": {
+      "amountCents": null,
+      "version": 1,
+      "currency": "USD",
+      "basis": {
+        "kind": "item",
+        "quantity": "1",
+        "unit": "synthetic"
+      },
+      "purchaseAmountCents": 1,
+      "requiresReview": false
+    }
+  },
+  {
+    "id": "platform.public-api.selling-prices.updateSellingPrice",
+    "verb": "PUT",
+    "path": "/v1/catalog/items/{catalogItemId}/selling-price",
+    "group": "catalog.sellingPrices",
+    "paginated": false,
+    "response": {
+      "amountCents": null,
+      "version": 1,
+      "currency": "USD",
+      "basis": {
+        "kind": "item",
+        "quantity": "1",
+        "unit": "synthetic"
+      },
+      "purchaseAmountCents": 1,
+      "requiresReview": false
+    }
+  },
+  {
+    "id": "listWebhookGrants",
+    "verb": "GET",
+    "path": "/v1/webhook-grants",
+    "group": "webhooks.grants",
+    "paginated": true,
+    "response": {
+      "object": "list",
+      "data": [],
+      "hasMore": false,
+      "url": "/v1/webhook-grants"
+    },
+    "item": {
+      "id": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "object": "webhook_grant",
+      "organizationId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "platformId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "scopes": [],
+      "createdAt": "synthetic",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "saveWebhookGrant",
+    "verb": "PUT",
+    "path": "/v1/webhook-grants/{platformId}",
+    "group": "webhooks.grants",
+    "paginated": false,
+    "response": {
+      "id": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "object": "webhook_grant",
+      "organizationId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "platformId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "livemode": false,
+      "scopes": [],
+      "createdAt": "synthetic",
+      "updatedAt": "synthetic"
+    }
+  },
+  {
+    "id": "revokeWebhookGrant",
+    "verb": "DELETE",
+    "path": "/v1/webhook-grants/{platformId}",
+    "group": "webhooks.grants",
+    "paginated": false,
+    "response": {
+      "object": "webhook_grant",
+      "organizationId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "platformId": "acct_01j2y8m6jcc9tt24af5pw9x1bc",
+      "revoked": true
+    }
+  }
+]

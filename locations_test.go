@@ -9,17 +9,17 @@ import (
 	testing "testing"
 )
 
-func TestSettersArchivePracticeLocationRequest(t *testing.T) {
+func TestSettersArchiveLocationsRequest(t *testing.T) {
 	t.Run("SetIdempotencyKey", func(t *testing.T) {
-		obj := &ArchivePracticeLocationRequest{}
-		var fernTestValueIdempotencyKey string
+		obj := &ArchiveLocationsRequest{}
+		var fernTestValueIdempotencyKey *string
 		obj.SetIdempotencyKey(fernTestValueIdempotencyKey)
 		assert.Equal(t, fernTestValueIdempotencyKey, obj.IdempotencyKey)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
 	t.Run("SetPracticeID", func(t *testing.T) {
-		obj := &ArchivePracticeLocationRequest{}
+		obj := &ArchiveLocationsRequest{}
 		var fernTestValuePracticeID string
 		obj.SetPracticeID(fernTestValuePracticeID)
 		assert.Equal(t, fernTestValuePracticeID, obj.PracticeID)
@@ -27,7 +27,7 @@ func TestSettersArchivePracticeLocationRequest(t *testing.T) {
 	})
 
 	t.Run("SetLocationID", func(t *testing.T) {
-		obj := &ArchivePracticeLocationRequest{}
+		obj := &ArchiveLocationsRequest{}
 		var fernTestValueLocationID string
 		obj.SetLocationID(fernTestValueLocationID)
 		assert.Equal(t, fernTestValueLocationID, obj.LocationID)
@@ -36,12 +36,12 @@ func TestSettersArchivePracticeLocationRequest(t *testing.T) {
 
 }
 
-func TestSettersMarkExplicitArchivePracticeLocationRequest(t *testing.T) {
+func TestSettersMarkExplicitArchiveLocationsRequest(t *testing.T) {
 	t.Run("SetIdempotencyKey_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &ArchivePracticeLocationRequest{}
-		var fernTestValueIdempotencyKey string
+		obj := &ArchiveLocationsRequest{}
+		var fernTestValueIdempotencyKey *string
 
 		// Act
 		obj.SetIdempotencyKey(fernTestValueIdempotencyKey)
@@ -71,7 +71,7 @@ func TestSettersMarkExplicitArchivePracticeLocationRequest(t *testing.T) {
 	t.Run("SetPracticeID_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &ArchivePracticeLocationRequest{}
+		obj := &ArchiveLocationsRequest{}
 		var fernTestValuePracticeID string
 
 		// Act
@@ -102,7 +102,7 @@ func TestSettersMarkExplicitArchivePracticeLocationRequest(t *testing.T) {
 	t.Run("SetLocationID_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &ArchivePracticeLocationRequest{}
+		obj := &ArchiveLocationsRequest{}
 		var fernTestValueLocationID string
 
 		// Act
@@ -135,7 +135,7 @@ func TestSettersMarkExplicitArchivePracticeLocationRequest(t *testing.T) {
 func TestSettersCreatePracticeLocationRequest(t *testing.T) {
 	t.Run("SetIdempotencyKey", func(t *testing.T) {
 		obj := &CreatePracticeLocationRequest{}
-		var fernTestValueIdempotencyKey string
+		var fernTestValueIdempotencyKey *string
 		obj.SetIdempotencyKey(fernTestValueIdempotencyKey)
 		assert.Equal(t, fernTestValueIdempotencyKey, obj.IdempotencyKey)
 		assert.NotNil(t, obj.explicitFields)
@@ -228,7 +228,7 @@ func TestSettersMarkExplicitCreatePracticeLocationRequest(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreatePracticeLocationRequest{}
-		var fernTestValueIdempotencyKey string
+		var fernTestValueIdempotencyKey *string
 
 		// Act
 		obj.SetIdempotencyKey(fernTestValueIdempotencyKey)
@@ -567,9 +567,9 @@ func TestSettersMarkExplicitCreatePracticeLocationRequest(t *testing.T) {
 
 }
 
-func TestSettersGetPracticeLocationRequest(t *testing.T) {
+func TestSettersGetLocationsRequest(t *testing.T) {
 	t.Run("SetPracticeID", func(t *testing.T) {
-		obj := &GetPracticeLocationRequest{}
+		obj := &GetLocationsRequest{}
 		var fernTestValuePracticeID string
 		obj.SetPracticeID(fernTestValuePracticeID)
 		assert.Equal(t, fernTestValuePracticeID, obj.PracticeID)
@@ -577,7 +577,7 @@ func TestSettersGetPracticeLocationRequest(t *testing.T) {
 	})
 
 	t.Run("SetLocationID", func(t *testing.T) {
-		obj := &GetPracticeLocationRequest{}
+		obj := &GetLocationsRequest{}
 		var fernTestValueLocationID string
 		obj.SetLocationID(fernTestValueLocationID)
 		assert.Equal(t, fernTestValueLocationID, obj.LocationID)
@@ -586,11 +586,11 @@ func TestSettersGetPracticeLocationRequest(t *testing.T) {
 
 }
 
-func TestSettersMarkExplicitGetPracticeLocationRequest(t *testing.T) {
+func TestSettersMarkExplicitGetLocationsRequest(t *testing.T) {
 	t.Run("SetPracticeID_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &GetPracticeLocationRequest{}
+		obj := &GetLocationsRequest{}
 		var fernTestValuePracticeID string
 
 		// Act
@@ -621,7 +621,7 @@ func TestSettersMarkExplicitGetPracticeLocationRequest(t *testing.T) {
 	t.Run("SetLocationID_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &GetPracticeLocationRequest{}
+		obj := &GetLocationsRequest{}
 		var fernTestValueLocationID string
 
 		// Act
@@ -651,9 +651,9 @@ func TestSettersMarkExplicitGetPracticeLocationRequest(t *testing.T) {
 
 }
 
-func TestSettersListPracticeLocationsRequest(t *testing.T) {
+func TestSettersListLocationsRequest(t *testing.T) {
 	t.Run("SetPracticeID", func(t *testing.T) {
-		obj := &ListPracticeLocationsRequest{}
+		obj := &ListLocationsRequest{}
 		var fernTestValuePracticeID string
 		obj.SetPracticeID(fernTestValuePracticeID)
 		assert.Equal(t, fernTestValuePracticeID, obj.PracticeID)
@@ -661,7 +661,7 @@ func TestSettersListPracticeLocationsRequest(t *testing.T) {
 	})
 
 	t.Run("SetLimit", func(t *testing.T) {
-		obj := &ListPracticeLocationsRequest{}
+		obj := &ListLocationsRequest{}
 		var fernTestValueLimit *int
 		obj.SetLimit(fernTestValueLimit)
 		assert.Equal(t, fernTestValueLimit, obj.Limit)
@@ -669,7 +669,7 @@ func TestSettersListPracticeLocationsRequest(t *testing.T) {
 	})
 
 	t.Run("SetStartingAfter", func(t *testing.T) {
-		obj := &ListPracticeLocationsRequest{}
+		obj := &ListLocationsRequest{}
 		var fernTestValueStartingAfter *string
 		obj.SetStartingAfter(fernTestValueStartingAfter)
 		assert.Equal(t, fernTestValueStartingAfter, obj.StartingAfter)
@@ -677,7 +677,7 @@ func TestSettersListPracticeLocationsRequest(t *testing.T) {
 	})
 
 	t.Run("SetEndingBefore", func(t *testing.T) {
-		obj := &ListPracticeLocationsRequest{}
+		obj := &ListLocationsRequest{}
 		var fernTestValueEndingBefore *string
 		obj.SetEndingBefore(fernTestValueEndingBefore)
 		assert.Equal(t, fernTestValueEndingBefore, obj.EndingBefore)
@@ -685,8 +685,8 @@ func TestSettersListPracticeLocationsRequest(t *testing.T) {
 	})
 
 	t.Run("SetStatus", func(t *testing.T) {
-		obj := &ListPracticeLocationsRequest{}
-		var fernTestValueStatus *ListPracticeLocationsRequestStatus
+		obj := &ListLocationsRequest{}
+		var fernTestValueStatus *ListLocationsRequestStatus
 		obj.SetStatus(fernTestValueStatus)
 		assert.Equal(t, fernTestValueStatus, obj.Status)
 		assert.NotNil(t, obj.explicitFields)
@@ -694,11 +694,11 @@ func TestSettersListPracticeLocationsRequest(t *testing.T) {
 
 }
 
-func TestSettersMarkExplicitListPracticeLocationsRequest(t *testing.T) {
+func TestSettersMarkExplicitListLocationsRequest(t *testing.T) {
 	t.Run("SetPracticeID_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &ListPracticeLocationsRequest{}
+		obj := &ListLocationsRequest{}
 		var fernTestValuePracticeID string
 
 		// Act
@@ -729,7 +729,7 @@ func TestSettersMarkExplicitListPracticeLocationsRequest(t *testing.T) {
 	t.Run("SetLimit_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &ListPracticeLocationsRequest{}
+		obj := &ListLocationsRequest{}
 		var fernTestValueLimit *int
 
 		// Act
@@ -760,7 +760,7 @@ func TestSettersMarkExplicitListPracticeLocationsRequest(t *testing.T) {
 	t.Run("SetStartingAfter_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &ListPracticeLocationsRequest{}
+		obj := &ListLocationsRequest{}
 		var fernTestValueStartingAfter *string
 
 		// Act
@@ -791,7 +791,7 @@ func TestSettersMarkExplicitListPracticeLocationsRequest(t *testing.T) {
 	t.Run("SetEndingBefore_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &ListPracticeLocationsRequest{}
+		obj := &ListLocationsRequest{}
 		var fernTestValueEndingBefore *string
 
 		// Act
@@ -822,8 +822,8 @@ func TestSettersMarkExplicitListPracticeLocationsRequest(t *testing.T) {
 	t.Run("SetStatus_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &ListPracticeLocationsRequest{}
-		var fernTestValueStatus *ListPracticeLocationsRequestStatus
+		obj := &ListLocationsRequest{}
+		var fernTestValueStatus *ListLocationsRequestStatus
 
 		// Act
 		obj.SetStatus(fernTestValueStatus)
@@ -6167,7 +6167,7 @@ func TestSettersMarkExplicitUpdatePracticeLocationResponse(t *testing.T) {
 func TestSettersUpdatePracticeLocationRequest(t *testing.T) {
 	t.Run("SetIdempotencyKey", func(t *testing.T) {
 		obj := &UpdatePracticeLocationRequest{}
-		var fernTestValueIdempotencyKey string
+		var fernTestValueIdempotencyKey *string
 		obj.SetIdempotencyKey(fernTestValueIdempotencyKey)
 		assert.Equal(t, fernTestValueIdempotencyKey, obj.IdempotencyKey)
 		assert.NotNil(t, obj.explicitFields)
@@ -6268,7 +6268,7 @@ func TestSettersMarkExplicitUpdatePracticeLocationRequest(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &UpdatePracticeLocationRequest{}
-		var fernTestValueIdempotencyKey string
+		var fernTestValueIdempotencyKey *string
 
 		// Act
 		obj.SetIdempotencyKey(fernTestValueIdempotencyKey)
@@ -7085,28 +7085,28 @@ func TestEnumGetPracticeLocationResponseStatus(t *testing.T) {
 	})
 }
 
-func TestEnumListPracticeLocationsRequestStatus(t *testing.T) {
+func TestEnumListLocationsRequestStatus(t *testing.T) {
 	t.Run("NewFromString_active", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewListPracticeLocationsRequestStatusFromString("active")
+		val, err := NewListLocationsRequestStatusFromString("active")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListPracticeLocationsRequestStatus("active"), val, "enum value should match expected wire value")
+		assert.Equal(t, ListLocationsRequestStatus("active"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_archived", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewListPracticeLocationsRequestStatusFromString("archived")
+		val, err := NewListLocationsRequestStatusFromString("archived")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListPracticeLocationsRequestStatus("archived"), val, "enum value should match expected wire value")
+		assert.Equal(t, ListLocationsRequestStatus("archived"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
-		_, err := NewListPracticeLocationsRequestStatusFromString("invalid_value_that_does_not_exist")
+		_, err := NewListLocationsRequestStatusFromString("invalid_value_that_does_not_exist")
 		assert.Error(t, err)
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewListPracticeLocationsRequestStatusFromString("active")
+		val, err := NewListLocationsRequestStatusFromString("active")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
