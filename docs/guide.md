@@ -1,11 +1,14 @@
 # Go SDK guide
 
-> **Unreleased SDK update.**
-  These examples match the new SDK implementation in the repository. They are not available in the
-  current published release yet. Release versions and installation updates will follow.
-
-
 Go applications. Put request statements inside a function that returns an error. [Source repository](https://github.com/affinity-health/affinity-go) · [All SDKs](https://docs.joinaffinityai.com/guides/reference/sdks/)
+
+## Install
+
+```sh
+go get github.com/affinity-health/affinity-go@main
+```
+
+For reproducible builds, pin the Git dependency to a commit.
 
 ## Connect
 
