@@ -5,7 +5,7 @@
   current release. Package versions and migration steps will follow approval.
 
 
-Go applications. Put request statements inside a function that returns an error. [Source repository](https://github.com/affinity-health/affinity-go) · [All SDKs](https://docs.joinaffinityai.com/guides/reference/sdks/) · [Shared conventions](https://docs.joinaffinityai.com/guides/reference/sdks/methods/)
+Go applications. Put request statements inside a function that returns an error. [Source repository](https://github.com/affinity-health/affinity-go) · [All SDKs](https://docs.joinaffinityai.com/guides/reference/sdks/)
 
 ## Connect
 
@@ -216,11 +216,14 @@ if err != nil { return err }
 selected, err := api.Practices.Get(ctx, practiceID)
 if err != nil { return err }
 
-endpoints, err := api.Webhooks.Endpoints.List(ctx, affinity.WebhookEndpointListParams{Limit: 20})
+endpoints, err := api.Webhooks.Endpoints.List(
+    ctx,
+    affinity.WebhookEndpointListParams{Limit: 20},
+)
 if err != nil { return err }
 ```
 
 ## More resources
 
 Use the same conventions for addresses, allergies, locations, team members, and nested order resources.
-[Resource directory](https://docs.joinaffinityai.com/guides/reference/sdks/methods/) · [API reference](https://docs.joinaffinityai.com/api/) · [Webhooks](https://docs.joinaffinityai.com/guides/webhooks/)
+[API reference](https://docs.joinaffinityai.com/api/) · [Webhooks](https://docs.joinaffinityai.com/guides/webhooks/)
