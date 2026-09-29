@@ -21,7 +21,7 @@ import (
     affinity "github.com/affinity-health/affinity-go"
 )
 
-api := affinity.New(affinity.WithAPIKey(os.Getenv("AFFINITY_API_KEY")))
+api := affinity.NewClient(os.Getenv("AFFINITY_API_KEY"))
 ctx := context.Background()
 ```
 
@@ -34,26 +34,17 @@ Each section is a separate usage example, not one script to concatenate.
 ```go
 patients, err := api.Patients.List(ctx, affinity.PatientListParams{Limit: 20})
 if err != nil { return err }
+
 patient, err := api.Patients.Get(ctx, patientID)
 if err != nil { return err }
+
 items, err := api.Catalog.Items.List(ctx, affinity.CatalogItemListParams{Limit: 20})
-if err != nil { return err }
-```
-
-For a recoverable update, pass your persisted key without a practice ID. `job` is your application's saved workflow record.
-
-```go
-_, err = api.Patients.Update(ctx, patientID,
-    affinity.PatientUpdateParams{Email: affinity.String("alex@example.com")},
-    affinity.RequestOptions{IdempotencyKey: job.UpdatePatientKey},
-)
 if err != nil { return err }
 ```
 
 ## With a platform key
 
 Pass the target practice with each practice-scoped request. Keep record data separate from request context and idempotency options.
-The update key below comes from your persisted workflow job.
 
 ```go
 patients, err := api.Patients.List(ctx,
@@ -61,11 +52,11 @@ patients, err := api.Patients.List(ctx,
     affinity.RequestOptions{PracticeID: practiceID},
 )
 if err != nil { return err }
+
 _, err = api.Patients.Update(ctx, patientID,
     affinity.PatientUpdateParams{Email: affinity.String("alex@example.com")},
     affinity.RequestOptions{
         PracticeID: practiceID,
-        IdempotencyKey: job.UpdatePatientKey,
     },
 )
 if err != nil { return err }
@@ -78,8 +69,10 @@ A conflicting practice ID produces an error. Scoping never grants access to anot
 
 ```go
 practice := api.ForPractice(practiceID)
+
 patients, err := practice.Patients.List(ctx, affinity.PatientListParams{Limit: 20})
 if err != nil { return err }
+
 items, err := practice.Catalog.Items.List(ctx, affinity.CatalogItemListParams{Limit: 20})
 if err != nil { return err }
 ```
@@ -97,24 +90,25 @@ patient, err := practice.Patients.Create(ctx, affinity.PatientCreateParams{
     DateOfBirth: "1990-01-01",
 })
 if err != nil { return err }
+
 saved, err := practice.Patients.Get(ctx, patient.ID)
 if err != nil { return err }
+
 _, err = practice.Patients.Update(ctx, patient.ID, affinity.PatientUpdateParams{
     Email: affinity.String("alex@example.com"),
 })
 if err != nil { return err }
+
 _, err = practice.Patients.Update(ctx, patient.ID, affinity.PatientUpdateParams{
     Status: affinity.String("archived"),
 })
 if err != nil { return err }
 ```
 
-Archive patients whose records you need to retain. Permanent deletion is available only for patients without order history and requires an explicit key.
+Archive patients whose records you need to retain. Permanent deletion is available only for patients without order history. No explicit idempotency key is needed.
 
 ```go
-_, err = practice.Patients.Delete(ctx, patientID,
-    affinity.RequestOptions{IdempotencyKey: job.DeletePatientKey},
-)
+_, err = practice.Patients.Delete(ctx, patientID)
 if err != nil { return err }
 ```
 
@@ -122,13 +116,14 @@ if err != nil { return err }
 
 `draft` is your application's prepared prescription data, using catalog and prescribing options from this practice.
 An order contains 1–20 complete prescriptions for one patient. This example creates an unsigned draft.
+It shows a platform call without a scoped client: practice context and the persisted key belong together in request options.
 
 `job` is your persisted workflow record. Generate and save a unique key for each action before making its first request.
 
 ```go
-order, err := practice.Orders.Create(ctx,
+order, err := api.Orders.Create(ctx,
     affinity.OrderCreateParams{PatientID: patientID, Prescriptions: draft.Prescriptions},
-    affinity.RequestOptions{IdempotencyKey: job.CreateOrderKey},
+    affinity.RequestOptions{PracticeID: practiceID, IdempotencyKey: job.CreateOrderKey},
 )
 if err != nil { return err }
 ```
@@ -149,6 +144,7 @@ _, err = practice.Orders.Sign(ctx, orderID,
     affinity.RequestOptions{IdempotencyKey: job.SignOrderKey},
 )
 if err != nil { return err }
+
 submission, err := practice.Orders.Submit(ctx, orderID,
     affinity.RequestOptions{IdempotencyKey: job.SubmitOrderKey},
 )
@@ -170,6 +166,7 @@ The iterator fetches pages as you consume records; it does not load the full col
 ```go
 page, err := practice.Patients.List(ctx, affinity.PatientListParams{Limit: 20})
 if err != nil { return err }
+
 if page.HasMore && len(page.Data) > 0 {
     next, err := practice.Patients.List(ctx, affinity.PatientListParams{
         Limit: 20, StartingAfter: page.Data[len(page.Data)-1].ID,
@@ -215,8 +212,10 @@ The webhook list belongs to the platform itself. Access to another organization'
 ```go
 practices, err := api.Practices.List(ctx, affinity.PracticeListParams{Limit: 20})
 if err != nil { return err }
+
 selected, err := api.Practices.Get(ctx, practiceID)
 if err != nil { return err }
+
 endpoints, err := api.Webhooks.Endpoints.List(ctx, affinity.WebhookEndpointListParams{Limit: 20})
 if err != nil { return err }
 ```
