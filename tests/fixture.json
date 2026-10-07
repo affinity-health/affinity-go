@@ -225,12 +225,12 @@
       },
       "category": null,
       "coldShip": false,
-      "pharmacyId": "synthetic",
+      "pharmacyId": "pharm_01j2y8m6jcc9tt24af5pw9x1bc",
       "pharmacyName": "synthetic",
       "description": "synthetic",
       "dosageForm": "synthetic",
       "facilityType": "synthetic",
-      "id": "pat_a",
+      "id": "cat_01j2y8m6jcc9tt24af5pw9x1bc",
       "imageUrl": null,
       "imageUrls": [],
       "isOrderable": false,
@@ -734,12 +734,12 @@
         },
         "category": null,
         "coldShip": false,
-        "pharmacyId": "synthetic",
+        "pharmacyId": "pharm_01j2y8m6jcc9tt24af5pw9x1bc",
         "pharmacyName": "synthetic",
         "description": "synthetic",
         "dosageForm": "synthetic",
         "facilityType": "synthetic",
-        "id": "pat_a",
+        "id": "cat_01j2y8m6jcc9tt24af5pw9x1bc",
         "imageUrl": null,
         "imageUrls": [],
         "isOrderable": false,
@@ -874,7 +874,7 @@
       "url": "synthetic"
     },
     "item": {
-      "id": "pat_a",
+      "id": "addr_01j2y8m6jcc9tt24af5pw9x1bc",
       "address": {
         "city": "synthetic",
         "line1": "synthetic",
@@ -975,7 +975,7 @@
     "paginated": false,
     "response": {
       "person": {
-        "id": "pat_a",
+        "id": "user_01j2y8m6jcc9tt24af5pw9x1bc",
         "object": "team_person",
         "externalId": "synthetic",
         "email": null,
@@ -1001,7 +1001,7 @@
       "url": "synthetic"
     },
     "item": {
-      "id": "pat_a",
+      "id": "invite_01j2y8m6jcc9tt24af5pw9x1bc",
       "object": "team_invitation",
       "email": "alex@example.com",
       "name": null,
@@ -1063,7 +1063,7 @@
       "account": {
         "accountId": "synthetic",
         "emailVerified": false,
-        "membershipId": "synthetic",
+        "membershipId": "mbr_01j2y8m6jcc9tt24af5pw9x1bc",
         "membershipStatus": "synthetic",
         "roles": [],
         "prescriberConnection": null
@@ -1084,7 +1084,7 @@
       "url": "synthetic"
     },
     "item": {
-      "id": "pat_a",
+      "id": "prov_01j2y8m6jcc9tt24af5pw9x1bc",
       "name": "synthetic",
       "legalName": "synthetic",
       "credentials": null,
@@ -1110,7 +1110,7 @@
       "account": {
         "accountId": "synthetic",
         "emailVerified": false,
-        "membershipId": "synthetic",
+        "membershipId": "mbr_01j2y8m6jcc9tt24af5pw9x1bc",
         "membershipStatus": "synthetic",
         "roles": [],
         "prescriberConnection": null
@@ -1133,7 +1133,7 @@
       "account": {
         "accountId": "synthetic",
         "emailVerified": false,
-        "membershipId": "synthetic",
+        "membershipId": "mbr_01j2y8m6jcc9tt24af5pw9x1bc",
         "membershipStatus": "synthetic",
         "roles": [],
         "prescriberConnection": null
@@ -1259,7 +1259,7 @@
     "paginated": false,
     "response": {
       "invitation": {
-        "id": "pat_a",
+        "id": "invite_01j2y8m6jcc9tt24af5pw9x1bc",
         "object": "team_invitation",
         "email": "alex@example.com",
         "name": null,
@@ -1451,7 +1451,7 @@
       "id": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
       "livemode": false,
       "location": {
-        "id": "pat_a",
+        "id": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
         "name": "synthetic",
         "state": null,
         "status": "active"
@@ -1503,7 +1503,7 @@
       "id": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
       "livemode": false,
       "location": {
-        "id": "pat_a",
+        "id": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
         "name": "synthetic",
         "state": null,
         "status": "active"
@@ -1555,7 +1555,7 @@
       "id": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
       "livemode": false,
       "location": {
-        "id": "pat_a",
+        "id": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
         "name": "synthetic",
         "state": null,
         "status": "active"
@@ -1619,7 +1619,7 @@
       "id": "pat_01j2y8m6jcc9tt24af5pw9x1bc",
       "livemode": false,
       "location": {
-        "id": "pat_a",
+        "id": "loc_01j2y8m6jcc9tt24af5pw9x1bc",
         "name": "synthetic",
         "state": null,
         "status": "active"
@@ -1720,6 +1720,8 @@
       "amountCents": null,
       "version": 1,
       "currency": "USD",
+      "affinityPriceCents": null,
+      "affinityBasis": null,
       "basis": {
         "kind": "item",
         "quantity": "1",
@@ -1730,22 +1732,18 @@
     }
   },
   {
-    "id": "platform.public-api.selling-prices.updateSellingPrice",
-    "verb": "PUT",
-    "path": "/v1/catalog/items/{catalogItemId}/selling-price",
-    "group": "catalog.sellingPrices",
+    "id": "platform.public-api.selling-prices.readPresentationPrice",
+    "verb": "GET",
+    "path": "/v1/catalog/items/{catalogItemId}/presentation-price",
+    "group": "catalog.presentationPrices",
     "paginated": false,
     "response": {
       "amountCents": null,
       "version": 1,
       "currency": "USD",
-      "basis": {
-        "kind": "item",
-        "quantity": "1",
-        "unit": "synthetic"
-      },
-      "purchaseAmountCents": 1,
-      "requiresReview": false
+      "affinityPriceCents": null,
+      "affinityBasis": null,
+      "basis": null
     }
   },
   {

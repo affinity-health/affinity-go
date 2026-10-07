@@ -42,7 +42,7 @@ func (r *RawClient) List(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := baseURL + "/v1/webhook-events"
 	queryParams, err := internal.QueryValues(request)
@@ -95,7 +95,7 @@ func (r *RawClient) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/webhook-events/%v",
@@ -144,7 +144,7 @@ func (r *RawClient) Replay(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/webhook-events/%v/replay",

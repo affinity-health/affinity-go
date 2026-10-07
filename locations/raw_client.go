@@ -42,7 +42,7 @@ func (r *RawClient) List(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/practices/%v/locations",
@@ -94,7 +94,7 @@ func (r *RawClient) Create(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/practices/%v/locations",
@@ -144,7 +144,7 @@ func (r *RawClient) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/practices/%v/locations/%v",
@@ -190,7 +190,7 @@ func (r *RawClient) Update(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/practices/%v/locations/%v",
@@ -241,7 +241,7 @@ func (r *RawClient) Archive(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/practices/%v/locations/%v/archive",

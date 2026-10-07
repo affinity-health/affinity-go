@@ -35148,18 +35148,18 @@ func TestEnumCreatePatientRequestAddressesItemAddressCountry(t *testing.T) {
 }
 
 func TestEnumCreatePatientRequestClinicalProfileHeightInchesOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreatePatientRequestClinicalProfileHeightInchesOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreatePatientRequestClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreatePatientRequestClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreatePatientRequestClinicalProfileHeightInchesOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreatePatientRequestClinicalProfileHeightInchesOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreatePatientRequestClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35168,7 +35168,7 @@ func TestEnumCreatePatientRequestClinicalProfileHeightInchesOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreatePatientRequestClinicalProfileHeightInchesOneFromString("Infinity")
+		val, err := NewCreatePatientRequestClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35177,18 +35177,18 @@ func TestEnumCreatePatientRequestClinicalProfileHeightInchesOne(t *testing.T) {
 }
 
 func TestEnumCreatePatientRequestClinicalProfileWeightPoundsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreatePatientRequestClinicalProfileWeightPoundsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreatePatientRequestClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreatePatientRequestClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreatePatientRequestClinicalProfileWeightPoundsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreatePatientRequestClinicalProfileWeightPoundsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreatePatientRequestClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35197,7 +35197,7 @@ func TestEnumCreatePatientRequestClinicalProfileWeightPoundsOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreatePatientRequestClinicalProfileWeightPoundsOneFromString("Infinity")
+		val, err := NewCreatePatientRequestClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35249,18 +35249,18 @@ func TestEnumCreatePatientRequestGender(t *testing.T) {
 }
 
 func TestEnumCreatePatientRequestMeasurementsItemHeightCentimetersOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreatePatientRequestMeasurementsItemHeightCentimetersOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreatePatientRequestMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreatePatientRequestMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreatePatientRequestMeasurementsItemHeightCentimetersOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreatePatientRequestMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreatePatientRequestMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35269,7 +35269,7 @@ func TestEnumCreatePatientRequestMeasurementsItemHeightCentimetersOne(t *testing
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreatePatientRequestMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		val, err := NewCreatePatientRequestMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35278,18 +35278,18 @@ func TestEnumCreatePatientRequestMeasurementsItemHeightCentimetersOne(t *testing
 }
 
 func TestEnumCreatePatientRequestMeasurementsItemWeightKilogramsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreatePatientRequestMeasurementsItemWeightKilogramsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreatePatientRequestMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreatePatientRequestMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreatePatientRequestMeasurementsItemWeightKilogramsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreatePatientRequestMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreatePatientRequestMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35298,7 +35298,7 @@ func TestEnumCreatePatientRequestMeasurementsItemWeightKilogramsOne(t *testing.T
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreatePatientRequestMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		val, err := NewCreatePatientRequestMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35379,18 +35379,18 @@ func TestEnumCreatePatientResponseAllergyReviewStatus(t *testing.T) {
 }
 
 func TestEnumCreatePatientResponseClinicalProfileHeightInchesOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreatePatientResponseClinicalProfileHeightInchesOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreatePatientResponseClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreatePatientResponseClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreatePatientResponseClinicalProfileHeightInchesOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreatePatientResponseClinicalProfileHeightInchesOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreatePatientResponseClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35399,7 +35399,7 @@ func TestEnumCreatePatientResponseClinicalProfileHeightInchesOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreatePatientResponseClinicalProfileHeightInchesOneFromString("Infinity")
+		val, err := NewCreatePatientResponseClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35408,18 +35408,18 @@ func TestEnumCreatePatientResponseClinicalProfileHeightInchesOne(t *testing.T) {
 }
 
 func TestEnumCreatePatientResponseClinicalProfileWeightPoundsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreatePatientResponseClinicalProfileWeightPoundsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreatePatientResponseClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreatePatientResponseClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreatePatientResponseClinicalProfileWeightPoundsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreatePatientResponseClinicalProfileWeightPoundsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreatePatientResponseClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35428,7 +35428,7 @@ func TestEnumCreatePatientResponseClinicalProfileWeightPoundsOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreatePatientResponseClinicalProfileWeightPoundsOneFromString("Infinity")
+		val, err := NewCreatePatientResponseClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35509,18 +35509,18 @@ func TestEnumCreatePatientResponseLocationStatus(t *testing.T) {
 }
 
 func TestEnumCreatePatientResponseMeasurementsItemHeightCentimetersOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreatePatientResponseMeasurementsItemHeightCentimetersOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreatePatientResponseMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreatePatientResponseMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreatePatientResponseMeasurementsItemHeightCentimetersOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreatePatientResponseMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreatePatientResponseMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35529,7 +35529,7 @@ func TestEnumCreatePatientResponseMeasurementsItemHeightCentimetersOne(t *testin
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreatePatientResponseMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		val, err := NewCreatePatientResponseMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35538,18 +35538,18 @@ func TestEnumCreatePatientResponseMeasurementsItemHeightCentimetersOne(t *testin
 }
 
 func TestEnumCreatePatientResponseMeasurementsItemWeightKilogramsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreatePatientResponseMeasurementsItemWeightKilogramsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreatePatientResponseMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreatePatientResponseMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreatePatientResponseMeasurementsItemWeightKilogramsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreatePatientResponseMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreatePatientResponseMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35558,7 +35558,7 @@ func TestEnumCreatePatientResponseMeasurementsItemWeightKilogramsOne(t *testing.
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreatePatientResponseMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		val, err := NewCreatePatientResponseMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35712,18 +35712,18 @@ func TestEnumGetPatientResponseAllergyReviewStatus(t *testing.T) {
 }
 
 func TestEnumGetPatientResponseClinicalProfileHeightInchesOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPatientResponseClinicalProfileHeightInchesOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPatientResponseClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPatientResponseClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPatientResponseClinicalProfileHeightInchesOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPatientResponseClinicalProfileHeightInchesOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPatientResponseClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35732,7 +35732,7 @@ func TestEnumGetPatientResponseClinicalProfileHeightInchesOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPatientResponseClinicalProfileHeightInchesOneFromString("Infinity")
+		val, err := NewGetPatientResponseClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35741,18 +35741,18 @@ func TestEnumGetPatientResponseClinicalProfileHeightInchesOne(t *testing.T) {
 }
 
 func TestEnumGetPatientResponseClinicalProfileWeightPoundsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPatientResponseClinicalProfileWeightPoundsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPatientResponseClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPatientResponseClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPatientResponseClinicalProfileWeightPoundsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPatientResponseClinicalProfileWeightPoundsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPatientResponseClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35761,7 +35761,7 @@ func TestEnumGetPatientResponseClinicalProfileWeightPoundsOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPatientResponseClinicalProfileWeightPoundsOneFromString("Infinity")
+		val, err := NewGetPatientResponseClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35842,18 +35842,18 @@ func TestEnumGetPatientResponseLocationStatus(t *testing.T) {
 }
 
 func TestEnumGetPatientResponseMeasurementsItemHeightCentimetersOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPatientResponseMeasurementsItemHeightCentimetersOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPatientResponseMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPatientResponseMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPatientResponseMeasurementsItemHeightCentimetersOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPatientResponseMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPatientResponseMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35862,7 +35862,7 @@ func TestEnumGetPatientResponseMeasurementsItemHeightCentimetersOne(t *testing.T
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPatientResponseMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		val, err := NewGetPatientResponseMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -35871,18 +35871,18 @@ func TestEnumGetPatientResponseMeasurementsItemHeightCentimetersOne(t *testing.T
 }
 
 func TestEnumGetPatientResponseMeasurementsItemWeightKilogramsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPatientResponseMeasurementsItemWeightKilogramsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPatientResponseMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPatientResponseMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPatientResponseMeasurementsItemWeightKilogramsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPatientResponseMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPatientResponseMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -35891,7 +35891,7 @@ func TestEnumGetPatientResponseMeasurementsItemWeightKilogramsOne(t *testing.T) 
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPatientResponseMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		val, err := NewGetPatientResponseMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36124,18 +36124,18 @@ func TestEnumListPatientsResponseDataItemAllergyReviewStatus(t *testing.T) {
 }
 
 func TestEnumListPatientsResponseDataItemClinicalProfileHeightInchesOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewListPatientsResponseDataItemClinicalProfileHeightInchesOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListPatientsResponseDataItemClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListPatientsResponseDataItemClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ListPatientsResponseDataItemClinicalProfileHeightInchesOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListPatientsResponseDataItemClinicalProfileHeightInchesOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListPatientsResponseDataItemClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36144,7 +36144,7 @@ func TestEnumListPatientsResponseDataItemClinicalProfileHeightInchesOne(t *testi
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewListPatientsResponseDataItemClinicalProfileHeightInchesOneFromString("Infinity")
+		val, err := NewListPatientsResponseDataItemClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36153,18 +36153,18 @@ func TestEnumListPatientsResponseDataItemClinicalProfileHeightInchesOne(t *testi
 }
 
 func TestEnumListPatientsResponseDataItemClinicalProfileWeightPoundsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewListPatientsResponseDataItemClinicalProfileWeightPoundsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListPatientsResponseDataItemClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListPatientsResponseDataItemClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ListPatientsResponseDataItemClinicalProfileWeightPoundsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListPatientsResponseDataItemClinicalProfileWeightPoundsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListPatientsResponseDataItemClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36173,7 +36173,7 @@ func TestEnumListPatientsResponseDataItemClinicalProfileWeightPoundsOne(t *testi
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewListPatientsResponseDataItemClinicalProfileWeightPoundsOneFromString("Infinity")
+		val, err := NewListPatientsResponseDataItemClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36254,18 +36254,18 @@ func TestEnumListPatientsResponseDataItemLocationStatus(t *testing.T) {
 }
 
 func TestEnumListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36274,7 +36274,7 @@ func TestEnumListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne(t 
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		val, err := NewListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36283,18 +36283,18 @@ func TestEnumListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne(t 
 }
 
 func TestEnumListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36303,7 +36303,7 @@ func TestEnumListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne(t *t
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		val, err := NewListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36465,18 +36465,18 @@ func TestEnumUpdatePatientRequestAddressesItemAddressCountry(t *testing.T) {
 }
 
 func TestEnumUpdatePatientRequestClinicalProfileHeightInchesOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewUpdatePatientRequestClinicalProfileHeightInchesOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, UpdatePatientRequestClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewUpdatePatientRequestClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, UpdatePatientRequestClinicalProfileHeightInchesOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewUpdatePatientRequestClinicalProfileHeightInchesOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, UpdatePatientRequestClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36485,7 +36485,7 @@ func TestEnumUpdatePatientRequestClinicalProfileHeightInchesOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewUpdatePatientRequestClinicalProfileHeightInchesOneFromString("Infinity")
+		val, err := NewUpdatePatientRequestClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36494,18 +36494,18 @@ func TestEnumUpdatePatientRequestClinicalProfileHeightInchesOne(t *testing.T) {
 }
 
 func TestEnumUpdatePatientRequestClinicalProfileWeightPoundsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewUpdatePatientRequestClinicalProfileWeightPoundsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, UpdatePatientRequestClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewUpdatePatientRequestClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, UpdatePatientRequestClinicalProfileWeightPoundsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewUpdatePatientRequestClinicalProfileWeightPoundsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, UpdatePatientRequestClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36514,7 +36514,7 @@ func TestEnumUpdatePatientRequestClinicalProfileWeightPoundsOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewUpdatePatientRequestClinicalProfileWeightPoundsOneFromString("Infinity")
+		val, err := NewUpdatePatientRequestClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36566,18 +36566,18 @@ func TestEnumUpdatePatientRequestGender(t *testing.T) {
 }
 
 func TestEnumUpdatePatientRequestMeasurementsItemHeightCentimetersOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewUpdatePatientRequestMeasurementsItemHeightCentimetersOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, UpdatePatientRequestMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewUpdatePatientRequestMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, UpdatePatientRequestMeasurementsItemHeightCentimetersOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewUpdatePatientRequestMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, UpdatePatientRequestMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36586,7 +36586,7 @@ func TestEnumUpdatePatientRequestMeasurementsItemHeightCentimetersOne(t *testing
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewUpdatePatientRequestMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		val, err := NewUpdatePatientRequestMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36595,18 +36595,18 @@ func TestEnumUpdatePatientRequestMeasurementsItemHeightCentimetersOne(t *testing
 }
 
 func TestEnumUpdatePatientRequestMeasurementsItemWeightKilogramsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewUpdatePatientRequestMeasurementsItemWeightKilogramsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, UpdatePatientRequestMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewUpdatePatientRequestMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, UpdatePatientRequestMeasurementsItemWeightKilogramsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewUpdatePatientRequestMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, UpdatePatientRequestMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36615,7 +36615,7 @@ func TestEnumUpdatePatientRequestMeasurementsItemWeightKilogramsOne(t *testing.T
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewUpdatePatientRequestMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		val, err := NewUpdatePatientRequestMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36725,18 +36725,18 @@ func TestEnumUpdatePatientResponseAllergyReviewStatus(t *testing.T) {
 }
 
 func TestEnumUpdatePatientResponseClinicalProfileHeightInchesOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewUpdatePatientResponseClinicalProfileHeightInchesOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, UpdatePatientResponseClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewUpdatePatientResponseClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, UpdatePatientResponseClinicalProfileHeightInchesOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewUpdatePatientResponseClinicalProfileHeightInchesOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, UpdatePatientResponseClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36745,7 +36745,7 @@ func TestEnumUpdatePatientResponseClinicalProfileHeightInchesOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewUpdatePatientResponseClinicalProfileHeightInchesOneFromString("Infinity")
+		val, err := NewUpdatePatientResponseClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36754,18 +36754,18 @@ func TestEnumUpdatePatientResponseClinicalProfileHeightInchesOne(t *testing.T) {
 }
 
 func TestEnumUpdatePatientResponseClinicalProfileWeightPoundsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewUpdatePatientResponseClinicalProfileWeightPoundsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, UpdatePatientResponseClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewUpdatePatientResponseClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, UpdatePatientResponseClinicalProfileWeightPoundsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewUpdatePatientResponseClinicalProfileWeightPoundsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, UpdatePatientResponseClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36774,7 +36774,7 @@ func TestEnumUpdatePatientResponseClinicalProfileWeightPoundsOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewUpdatePatientResponseClinicalProfileWeightPoundsOneFromString("Infinity")
+		val, err := NewUpdatePatientResponseClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36855,18 +36855,18 @@ func TestEnumUpdatePatientResponseLocationStatus(t *testing.T) {
 }
 
 func TestEnumUpdatePatientResponseMeasurementsItemHeightCentimetersOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewUpdatePatientResponseMeasurementsItemHeightCentimetersOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, UpdatePatientResponseMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewUpdatePatientResponseMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, UpdatePatientResponseMeasurementsItemHeightCentimetersOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewUpdatePatientResponseMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, UpdatePatientResponseMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36875,7 +36875,7 @@ func TestEnumUpdatePatientResponseMeasurementsItemHeightCentimetersOne(t *testin
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewUpdatePatientResponseMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		val, err := NewUpdatePatientResponseMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -36884,18 +36884,18 @@ func TestEnumUpdatePatientResponseMeasurementsItemHeightCentimetersOne(t *testin
 }
 
 func TestEnumUpdatePatientResponseMeasurementsItemWeightKilogramsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewUpdatePatientResponseMeasurementsItemWeightKilogramsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, UpdatePatientResponseMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewUpdatePatientResponseMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, UpdatePatientResponseMeasurementsItemWeightKilogramsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewUpdatePatientResponseMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, UpdatePatientResponseMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -36904,7 +36904,7 @@ func TestEnumUpdatePatientResponseMeasurementsItemWeightKilogramsOne(t *testing.
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewUpdatePatientResponseMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		val, err := NewUpdatePatientResponseMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)

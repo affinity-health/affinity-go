@@ -138,7 +138,7 @@ func TestOrdersCreateWithWireMock(
 				Directions:   "directions",
 				MedicationID: "cat_01j2y8m6jcc9tt24af5pw9x1bc",
 				Quantity: &affinity.CreateOrderRequestPrescriptionsItemQuantity{
-					CreateOrderRequestPrescriptionsItemQuantityOne: affinity.CreateOrderRequestPrescriptionsItemQuantityOneInfinity,
+					CreateOrderRequestPrescriptionsItemQuantityOne: affinity.CreateOrderRequestPrescriptionsItemQuantityOneNaN,
 				},
 				QuantityUnit: "quantityUnit",
 				Refills:      1,

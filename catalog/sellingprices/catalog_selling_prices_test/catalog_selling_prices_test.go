@@ -106,31 +106,3 @@ func TestCatalogSellingPricesGetWithWireMock(
 	require.NoError(t, invocationErr, "Client method call should succeed")
 	VerifyRequestCount(t, "TestCatalogSellingPricesGetWithWireMock", "GET", "/v1/catalog/items/cat_01j2y8m6jcc9tt24af5pw9x1bc/selling-price", map[string]interface{}{"practiceId": "prac_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
 }
-
-func TestCatalogSellingPricesUpdateWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
-	)
-	request := &catalog.PlatformPublicAPISellingPricesUpdateSellingPriceRequest{
-		CatalogItemID:  "cat_01j2y8m6jcc9tt24af5pw9x1bc",
-		IdempotencyKey: "Idempotency-Key",
-		BaseVersion:    1,
-	}
-	_, invocationErr := client.Catalog.SellingPrices.Update(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestCatalogSellingPricesUpdateWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestCatalogSellingPricesUpdateWithWireMock", "PUT", "/v1/catalog/items/cat_01j2y8m6jcc9tt24af5pw9x1bc/selling-price", nil, 1)
-}

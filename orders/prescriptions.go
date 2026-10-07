@@ -1213,16 +1213,16 @@ func (a *AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValue) A
 type AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne string
 
 const (
-	AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneInfinity AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne = "Infinity"
 	AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneNaN      AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne = "NaN"
+	AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneInfinity AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne = "Infinity"
 )
 
 func NewAddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneFromString(s string) (AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneInfinity, nil
 	case "NaN":
 		return AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneNaN, nil
+	case "Infinity":
+		return AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneInfinity, nil
 	}
 	var t AddOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1497,16 +1497,16 @@ func (a *AddOrderPrescriptionRequestPrescriptionQuantity) Accept(visitor AddOrde
 type AddOrderPrescriptionRequestPrescriptionQuantityOne string
 
 const (
-	AddOrderPrescriptionRequestPrescriptionQuantityOneInfinity AddOrderPrescriptionRequestPrescriptionQuantityOne = "Infinity"
 	AddOrderPrescriptionRequestPrescriptionQuantityOneNaN      AddOrderPrescriptionRequestPrescriptionQuantityOne = "NaN"
+	AddOrderPrescriptionRequestPrescriptionQuantityOneInfinity AddOrderPrescriptionRequestPrescriptionQuantityOne = "Infinity"
 )
 
 func NewAddOrderPrescriptionRequestPrescriptionQuantityOneFromString(s string) (AddOrderPrescriptionRequestPrescriptionQuantityOne, error) {
 	switch s {
-	case "Infinity":
-		return AddOrderPrescriptionRequestPrescriptionQuantityOneInfinity, nil
 	case "NaN":
 		return AddOrderPrescriptionRequestPrescriptionQuantityOneNaN, nil
+	case "Infinity":
+		return AddOrderPrescriptionRequestPrescriptionQuantityOneInfinity, nil
 	}
 	var t AddOrderPrescriptionRequestPrescriptionQuantityOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -2795,16 +2795,16 @@ func (u *UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValue
 type UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne string
 
 const (
-	UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneInfinity UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne = "Infinity"
 	UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneNaN      UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne = "NaN"
+	UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneInfinity UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne = "Infinity"
 )
 
 func NewUpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneFromString(s string) (UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneInfinity, nil
 	case "NaN":
 		return UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneNaN, nil
+	case "Infinity":
+		return UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOneInfinity, nil
 	}
 	var t UpdateOrderPrescriptionRequestPrescriptionClinicalObservationsItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -3079,16 +3079,16 @@ func (u *UpdateOrderPrescriptionRequestPrescriptionQuantity) Accept(visitor Upda
 type UpdateOrderPrescriptionRequestPrescriptionQuantityOne string
 
 const (
-	UpdateOrderPrescriptionRequestPrescriptionQuantityOneInfinity UpdateOrderPrescriptionRequestPrescriptionQuantityOne = "Infinity"
 	UpdateOrderPrescriptionRequestPrescriptionQuantityOneNaN      UpdateOrderPrescriptionRequestPrescriptionQuantityOne = "NaN"
+	UpdateOrderPrescriptionRequestPrescriptionQuantityOneInfinity UpdateOrderPrescriptionRequestPrescriptionQuantityOne = "Infinity"
 )
 
 func NewUpdateOrderPrescriptionRequestPrescriptionQuantityOneFromString(s string) (UpdateOrderPrescriptionRequestPrescriptionQuantityOne, error) {
 	switch s {
-	case "Infinity":
-		return UpdateOrderPrescriptionRequestPrescriptionQuantityOneInfinity, nil
 	case "NaN":
 		return UpdateOrderPrescriptionRequestPrescriptionQuantityOneNaN, nil
+	case "Infinity":
+		return UpdateOrderPrescriptionRequestPrescriptionQuantityOneInfinity, nil
 	}
 	var t UpdateOrderPrescriptionRequestPrescriptionQuantityOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

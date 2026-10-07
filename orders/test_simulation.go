@@ -37,10 +37,10 @@ func (g *GetTestSimulationRequest) SetOrderID(orderID string) {
 type UpdateOrderTestSimulationRequestAction string
 
 const (
-	UpdateOrderTestSimulationRequestActionAccept              UpdateOrderTestSimulationRequestAction = "accept"
-	UpdateOrderTestSimulationRequestActionProcess             UpdateOrderTestSimulationRequestAction = "process"
 	UpdateOrderTestSimulationRequestActionShip                UpdateOrderTestSimulationRequestAction = "ship"
 	UpdateOrderTestSimulationRequestActionDeliver             UpdateOrderTestSimulationRequestAction = "deliver"
+	UpdateOrderTestSimulationRequestActionAccept              UpdateOrderTestSimulationRequestAction = "accept"
+	UpdateOrderTestSimulationRequestActionProcess             UpdateOrderTestSimulationRequestAction = "process"
 	UpdateOrderTestSimulationRequestActionReject              UpdateOrderTestSimulationRequestAction = "reject"
 	UpdateOrderTestSimulationRequestActionConfirmCancellation UpdateOrderTestSimulationRequestAction = "confirm_cancellation"
 	UpdateOrderTestSimulationRequestActionDeclineCancellation UpdateOrderTestSimulationRequestAction = "decline_cancellation"
@@ -48,14 +48,14 @@ const (
 
 func NewUpdateOrderTestSimulationRequestActionFromString(s string) (UpdateOrderTestSimulationRequestAction, error) {
 	switch s {
-	case "accept":
-		return UpdateOrderTestSimulationRequestActionAccept, nil
-	case "process":
-		return UpdateOrderTestSimulationRequestActionProcess, nil
 	case "ship":
 		return UpdateOrderTestSimulationRequestActionShip, nil
 	case "deliver":
 		return UpdateOrderTestSimulationRequestActionDeliver, nil
+	case "accept":
+		return UpdateOrderTestSimulationRequestActionAccept, nil
+	case "process":
+		return UpdateOrderTestSimulationRequestActionProcess, nil
 	case "reject":
 		return UpdateOrderTestSimulationRequestActionReject, nil
 	case "confirm_cancellation":

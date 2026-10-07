@@ -1848,16 +1848,16 @@ func (c *CreatePatientResponseClinicalProfileHeightInches) Accept(visitor Create
 type CreatePatientResponseClinicalProfileHeightInchesOne string
 
 const (
-	CreatePatientResponseClinicalProfileHeightInchesOneInfinity CreatePatientResponseClinicalProfileHeightInchesOne = "Infinity"
 	CreatePatientResponseClinicalProfileHeightInchesOneNaN      CreatePatientResponseClinicalProfileHeightInchesOne = "NaN"
+	CreatePatientResponseClinicalProfileHeightInchesOneInfinity CreatePatientResponseClinicalProfileHeightInchesOne = "Infinity"
 )
 
 func NewCreatePatientResponseClinicalProfileHeightInchesOneFromString(s string) (CreatePatientResponseClinicalProfileHeightInchesOne, error) {
 	switch s {
-	case "Infinity":
-		return CreatePatientResponseClinicalProfileHeightInchesOneInfinity, nil
 	case "NaN":
 		return CreatePatientResponseClinicalProfileHeightInchesOneNaN, nil
+	case "Infinity":
+		return CreatePatientResponseClinicalProfileHeightInchesOneInfinity, nil
 	}
 	var t CreatePatientResponseClinicalProfileHeightInchesOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1932,16 +1932,16 @@ func (c *CreatePatientResponseClinicalProfileWeightPounds) Accept(visitor Create
 type CreatePatientResponseClinicalProfileWeightPoundsOne string
 
 const (
-	CreatePatientResponseClinicalProfileWeightPoundsOneInfinity CreatePatientResponseClinicalProfileWeightPoundsOne = "Infinity"
 	CreatePatientResponseClinicalProfileWeightPoundsOneNaN      CreatePatientResponseClinicalProfileWeightPoundsOne = "NaN"
+	CreatePatientResponseClinicalProfileWeightPoundsOneInfinity CreatePatientResponseClinicalProfileWeightPoundsOne = "Infinity"
 )
 
 func NewCreatePatientResponseClinicalProfileWeightPoundsOneFromString(s string) (CreatePatientResponseClinicalProfileWeightPoundsOne, error) {
 	switch s {
-	case "Infinity":
-		return CreatePatientResponseClinicalProfileWeightPoundsOneInfinity, nil
 	case "NaN":
 		return CreatePatientResponseClinicalProfileWeightPoundsOneNaN, nil
+	case "Infinity":
+		return CreatePatientResponseClinicalProfileWeightPoundsOneInfinity, nil
 	}
 	var t CreatePatientResponseClinicalProfileWeightPoundsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -2562,16 +2562,16 @@ func (c *CreatePatientResponseMeasurementsItemHeightCentimeters) Accept(visitor 
 type CreatePatientResponseMeasurementsItemHeightCentimetersOne string
 
 const (
-	CreatePatientResponseMeasurementsItemHeightCentimetersOneInfinity CreatePatientResponseMeasurementsItemHeightCentimetersOne = "Infinity"
 	CreatePatientResponseMeasurementsItemHeightCentimetersOneNaN      CreatePatientResponseMeasurementsItemHeightCentimetersOne = "NaN"
+	CreatePatientResponseMeasurementsItemHeightCentimetersOneInfinity CreatePatientResponseMeasurementsItemHeightCentimetersOne = "Infinity"
 )
 
 func NewCreatePatientResponseMeasurementsItemHeightCentimetersOneFromString(s string) (CreatePatientResponseMeasurementsItemHeightCentimetersOne, error) {
 	switch s {
-	case "Infinity":
-		return CreatePatientResponseMeasurementsItemHeightCentimetersOneInfinity, nil
 	case "NaN":
 		return CreatePatientResponseMeasurementsItemHeightCentimetersOneNaN, nil
+	case "Infinity":
+		return CreatePatientResponseMeasurementsItemHeightCentimetersOneInfinity, nil
 	}
 	var t CreatePatientResponseMeasurementsItemHeightCentimetersOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -2646,16 +2646,16 @@ func (c *CreatePatientResponseMeasurementsItemWeightKilograms) Accept(visitor Cr
 type CreatePatientResponseMeasurementsItemWeightKilogramsOne string
 
 const (
-	CreatePatientResponseMeasurementsItemWeightKilogramsOneInfinity CreatePatientResponseMeasurementsItemWeightKilogramsOne = "Infinity"
 	CreatePatientResponseMeasurementsItemWeightKilogramsOneNaN      CreatePatientResponseMeasurementsItemWeightKilogramsOne = "NaN"
+	CreatePatientResponseMeasurementsItemWeightKilogramsOneInfinity CreatePatientResponseMeasurementsItemWeightKilogramsOne = "Infinity"
 )
 
 func NewCreatePatientResponseMeasurementsItemWeightKilogramsOneFromString(s string) (CreatePatientResponseMeasurementsItemWeightKilogramsOne, error) {
 	switch s {
-	case "Infinity":
-		return CreatePatientResponseMeasurementsItemWeightKilogramsOneInfinity, nil
 	case "NaN":
 		return CreatePatientResponseMeasurementsItemWeightKilogramsOneNaN, nil
+	case "Infinity":
+		return CreatePatientResponseMeasurementsItemWeightKilogramsOneInfinity, nil
 	}
 	var t CreatePatientResponseMeasurementsItemWeightKilogramsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -4624,16 +4624,16 @@ func (g *GetPatientResponseClinicalProfileHeightInches) Accept(visitor GetPatien
 type GetPatientResponseClinicalProfileHeightInchesOne string
 
 const (
-	GetPatientResponseClinicalProfileHeightInchesOneInfinity GetPatientResponseClinicalProfileHeightInchesOne = "Infinity"
 	GetPatientResponseClinicalProfileHeightInchesOneNaN      GetPatientResponseClinicalProfileHeightInchesOne = "NaN"
+	GetPatientResponseClinicalProfileHeightInchesOneInfinity GetPatientResponseClinicalProfileHeightInchesOne = "Infinity"
 )
 
 func NewGetPatientResponseClinicalProfileHeightInchesOneFromString(s string) (GetPatientResponseClinicalProfileHeightInchesOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPatientResponseClinicalProfileHeightInchesOneInfinity, nil
 	case "NaN":
 		return GetPatientResponseClinicalProfileHeightInchesOneNaN, nil
+	case "Infinity":
+		return GetPatientResponseClinicalProfileHeightInchesOneInfinity, nil
 	}
 	var t GetPatientResponseClinicalProfileHeightInchesOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -4708,16 +4708,16 @@ func (g *GetPatientResponseClinicalProfileWeightPounds) Accept(visitor GetPatien
 type GetPatientResponseClinicalProfileWeightPoundsOne string
 
 const (
-	GetPatientResponseClinicalProfileWeightPoundsOneInfinity GetPatientResponseClinicalProfileWeightPoundsOne = "Infinity"
 	GetPatientResponseClinicalProfileWeightPoundsOneNaN      GetPatientResponseClinicalProfileWeightPoundsOne = "NaN"
+	GetPatientResponseClinicalProfileWeightPoundsOneInfinity GetPatientResponseClinicalProfileWeightPoundsOne = "Infinity"
 )
 
 func NewGetPatientResponseClinicalProfileWeightPoundsOneFromString(s string) (GetPatientResponseClinicalProfileWeightPoundsOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPatientResponseClinicalProfileWeightPoundsOneInfinity, nil
 	case "NaN":
 		return GetPatientResponseClinicalProfileWeightPoundsOneNaN, nil
+	case "Infinity":
+		return GetPatientResponseClinicalProfileWeightPoundsOneInfinity, nil
 	}
 	var t GetPatientResponseClinicalProfileWeightPoundsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -5338,16 +5338,16 @@ func (g *GetPatientResponseMeasurementsItemHeightCentimeters) Accept(visitor Get
 type GetPatientResponseMeasurementsItemHeightCentimetersOne string
 
 const (
-	GetPatientResponseMeasurementsItemHeightCentimetersOneInfinity GetPatientResponseMeasurementsItemHeightCentimetersOne = "Infinity"
 	GetPatientResponseMeasurementsItemHeightCentimetersOneNaN      GetPatientResponseMeasurementsItemHeightCentimetersOne = "NaN"
+	GetPatientResponseMeasurementsItemHeightCentimetersOneInfinity GetPatientResponseMeasurementsItemHeightCentimetersOne = "Infinity"
 )
 
 func NewGetPatientResponseMeasurementsItemHeightCentimetersOneFromString(s string) (GetPatientResponseMeasurementsItemHeightCentimetersOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPatientResponseMeasurementsItemHeightCentimetersOneInfinity, nil
 	case "NaN":
 		return GetPatientResponseMeasurementsItemHeightCentimetersOneNaN, nil
+	case "Infinity":
+		return GetPatientResponseMeasurementsItemHeightCentimetersOneInfinity, nil
 	}
 	var t GetPatientResponseMeasurementsItemHeightCentimetersOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -5422,16 +5422,16 @@ func (g *GetPatientResponseMeasurementsItemWeightKilograms) Accept(visitor GetPa
 type GetPatientResponseMeasurementsItemWeightKilogramsOne string
 
 const (
-	GetPatientResponseMeasurementsItemWeightKilogramsOneInfinity GetPatientResponseMeasurementsItemWeightKilogramsOne = "Infinity"
 	GetPatientResponseMeasurementsItemWeightKilogramsOneNaN      GetPatientResponseMeasurementsItemWeightKilogramsOne = "NaN"
+	GetPatientResponseMeasurementsItemWeightKilogramsOneInfinity GetPatientResponseMeasurementsItemWeightKilogramsOne = "Infinity"
 )
 
 func NewGetPatientResponseMeasurementsItemWeightKilogramsOneFromString(s string) (GetPatientResponseMeasurementsItemWeightKilogramsOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPatientResponseMeasurementsItemWeightKilogramsOneInfinity, nil
 	case "NaN":
 		return GetPatientResponseMeasurementsItemWeightKilogramsOneNaN, nil
+	case "Infinity":
+		return GetPatientResponseMeasurementsItemWeightKilogramsOneInfinity, nil
 	}
 	var t GetPatientResponseMeasurementsItemWeightKilogramsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -7397,16 +7397,16 @@ func (l *ListPatientsResponseDataItemClinicalProfileHeightInches) Accept(visitor
 type ListPatientsResponseDataItemClinicalProfileHeightInchesOne string
 
 const (
-	ListPatientsResponseDataItemClinicalProfileHeightInchesOneInfinity ListPatientsResponseDataItemClinicalProfileHeightInchesOne = "Infinity"
 	ListPatientsResponseDataItemClinicalProfileHeightInchesOneNaN      ListPatientsResponseDataItemClinicalProfileHeightInchesOne = "NaN"
+	ListPatientsResponseDataItemClinicalProfileHeightInchesOneInfinity ListPatientsResponseDataItemClinicalProfileHeightInchesOne = "Infinity"
 )
 
 func NewListPatientsResponseDataItemClinicalProfileHeightInchesOneFromString(s string) (ListPatientsResponseDataItemClinicalProfileHeightInchesOne, error) {
 	switch s {
-	case "Infinity":
-		return ListPatientsResponseDataItemClinicalProfileHeightInchesOneInfinity, nil
 	case "NaN":
 		return ListPatientsResponseDataItemClinicalProfileHeightInchesOneNaN, nil
+	case "Infinity":
+		return ListPatientsResponseDataItemClinicalProfileHeightInchesOneInfinity, nil
 	}
 	var t ListPatientsResponseDataItemClinicalProfileHeightInchesOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -7481,16 +7481,16 @@ func (l *ListPatientsResponseDataItemClinicalProfileWeightPounds) Accept(visitor
 type ListPatientsResponseDataItemClinicalProfileWeightPoundsOne string
 
 const (
-	ListPatientsResponseDataItemClinicalProfileWeightPoundsOneInfinity ListPatientsResponseDataItemClinicalProfileWeightPoundsOne = "Infinity"
 	ListPatientsResponseDataItemClinicalProfileWeightPoundsOneNaN      ListPatientsResponseDataItemClinicalProfileWeightPoundsOne = "NaN"
+	ListPatientsResponseDataItemClinicalProfileWeightPoundsOneInfinity ListPatientsResponseDataItemClinicalProfileWeightPoundsOne = "Infinity"
 )
 
 func NewListPatientsResponseDataItemClinicalProfileWeightPoundsOneFromString(s string) (ListPatientsResponseDataItemClinicalProfileWeightPoundsOne, error) {
 	switch s {
-	case "Infinity":
-		return ListPatientsResponseDataItemClinicalProfileWeightPoundsOneInfinity, nil
 	case "NaN":
 		return ListPatientsResponseDataItemClinicalProfileWeightPoundsOneNaN, nil
+	case "Infinity":
+		return ListPatientsResponseDataItemClinicalProfileWeightPoundsOneInfinity, nil
 	}
 	var t ListPatientsResponseDataItemClinicalProfileWeightPoundsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -8111,16 +8111,16 @@ func (l *ListPatientsResponseDataItemMeasurementsItemHeightCentimeters) Accept(v
 type ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne string
 
 const (
-	ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneInfinity ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne = "Infinity"
 	ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneNaN      ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne = "NaN"
+	ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneInfinity ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne = "Infinity"
 )
 
 func NewListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneFromString(s string) (ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne, error) {
 	switch s {
-	case "Infinity":
-		return ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneInfinity, nil
 	case "NaN":
 		return ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneNaN, nil
+	case "Infinity":
+		return ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOneInfinity, nil
 	}
 	var t ListPatientsResponseDataItemMeasurementsItemHeightCentimetersOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -8195,16 +8195,16 @@ func (l *ListPatientsResponseDataItemMeasurementsItemWeightKilograms) Accept(vis
 type ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne string
 
 const (
-	ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneInfinity ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne = "Infinity"
 	ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneNaN      ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne = "NaN"
+	ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneInfinity ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne = "Infinity"
 )
 
 func NewListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneFromString(s string) (ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne, error) {
 	switch s {
-	case "Infinity":
-		return ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneInfinity, nil
 	case "NaN":
 		return ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneNaN, nil
+	case "Infinity":
+		return ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOneInfinity, nil
 	}
 	var t ListPatientsResponseDataItemMeasurementsItemWeightKilogramsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -10057,16 +10057,16 @@ func (u *UpdatePatientResponseClinicalProfileHeightInches) Accept(visitor Update
 type UpdatePatientResponseClinicalProfileHeightInchesOne string
 
 const (
-	UpdatePatientResponseClinicalProfileHeightInchesOneInfinity UpdatePatientResponseClinicalProfileHeightInchesOne = "Infinity"
 	UpdatePatientResponseClinicalProfileHeightInchesOneNaN      UpdatePatientResponseClinicalProfileHeightInchesOne = "NaN"
+	UpdatePatientResponseClinicalProfileHeightInchesOneInfinity UpdatePatientResponseClinicalProfileHeightInchesOne = "Infinity"
 )
 
 func NewUpdatePatientResponseClinicalProfileHeightInchesOneFromString(s string) (UpdatePatientResponseClinicalProfileHeightInchesOne, error) {
 	switch s {
-	case "Infinity":
-		return UpdatePatientResponseClinicalProfileHeightInchesOneInfinity, nil
 	case "NaN":
 		return UpdatePatientResponseClinicalProfileHeightInchesOneNaN, nil
+	case "Infinity":
+		return UpdatePatientResponseClinicalProfileHeightInchesOneInfinity, nil
 	}
 	var t UpdatePatientResponseClinicalProfileHeightInchesOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -10141,16 +10141,16 @@ func (u *UpdatePatientResponseClinicalProfileWeightPounds) Accept(visitor Update
 type UpdatePatientResponseClinicalProfileWeightPoundsOne string
 
 const (
-	UpdatePatientResponseClinicalProfileWeightPoundsOneInfinity UpdatePatientResponseClinicalProfileWeightPoundsOne = "Infinity"
 	UpdatePatientResponseClinicalProfileWeightPoundsOneNaN      UpdatePatientResponseClinicalProfileWeightPoundsOne = "NaN"
+	UpdatePatientResponseClinicalProfileWeightPoundsOneInfinity UpdatePatientResponseClinicalProfileWeightPoundsOne = "Infinity"
 )
 
 func NewUpdatePatientResponseClinicalProfileWeightPoundsOneFromString(s string) (UpdatePatientResponseClinicalProfileWeightPoundsOne, error) {
 	switch s {
-	case "Infinity":
-		return UpdatePatientResponseClinicalProfileWeightPoundsOneInfinity, nil
 	case "NaN":
 		return UpdatePatientResponseClinicalProfileWeightPoundsOneNaN, nil
+	case "Infinity":
+		return UpdatePatientResponseClinicalProfileWeightPoundsOneInfinity, nil
 	}
 	var t UpdatePatientResponseClinicalProfileWeightPoundsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -10771,16 +10771,16 @@ func (u *UpdatePatientResponseMeasurementsItemHeightCentimeters) Accept(visitor 
 type UpdatePatientResponseMeasurementsItemHeightCentimetersOne string
 
 const (
-	UpdatePatientResponseMeasurementsItemHeightCentimetersOneInfinity UpdatePatientResponseMeasurementsItemHeightCentimetersOne = "Infinity"
 	UpdatePatientResponseMeasurementsItemHeightCentimetersOneNaN      UpdatePatientResponseMeasurementsItemHeightCentimetersOne = "NaN"
+	UpdatePatientResponseMeasurementsItemHeightCentimetersOneInfinity UpdatePatientResponseMeasurementsItemHeightCentimetersOne = "Infinity"
 )
 
 func NewUpdatePatientResponseMeasurementsItemHeightCentimetersOneFromString(s string) (UpdatePatientResponseMeasurementsItemHeightCentimetersOne, error) {
 	switch s {
-	case "Infinity":
-		return UpdatePatientResponseMeasurementsItemHeightCentimetersOneInfinity, nil
 	case "NaN":
 		return UpdatePatientResponseMeasurementsItemHeightCentimetersOneNaN, nil
+	case "Infinity":
+		return UpdatePatientResponseMeasurementsItemHeightCentimetersOneInfinity, nil
 	}
 	var t UpdatePatientResponseMeasurementsItemHeightCentimetersOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -10855,16 +10855,16 @@ func (u *UpdatePatientResponseMeasurementsItemWeightKilograms) Accept(visitor Up
 type UpdatePatientResponseMeasurementsItemWeightKilogramsOne string
 
 const (
-	UpdatePatientResponseMeasurementsItemWeightKilogramsOneInfinity UpdatePatientResponseMeasurementsItemWeightKilogramsOne = "Infinity"
 	UpdatePatientResponseMeasurementsItemWeightKilogramsOneNaN      UpdatePatientResponseMeasurementsItemWeightKilogramsOne = "NaN"
+	UpdatePatientResponseMeasurementsItemWeightKilogramsOneInfinity UpdatePatientResponseMeasurementsItemWeightKilogramsOne = "Infinity"
 )
 
 func NewUpdatePatientResponseMeasurementsItemWeightKilogramsOneFromString(s string) (UpdatePatientResponseMeasurementsItemWeightKilogramsOne, error) {
 	switch s {
-	case "Infinity":
-		return UpdatePatientResponseMeasurementsItemWeightKilogramsOneInfinity, nil
 	case "NaN":
 		return UpdatePatientResponseMeasurementsItemWeightKilogramsOneNaN, nil
+	case "Infinity":
+		return UpdatePatientResponseMeasurementsItemWeightKilogramsOneInfinity, nil
 	}
 	var t UpdatePatientResponseMeasurementsItemWeightKilogramsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -12079,16 +12079,16 @@ func (c *CreatePatientRequestClinicalProfileHeightInches) Accept(visitor CreateP
 type CreatePatientRequestClinicalProfileHeightInchesOne string
 
 const (
-	CreatePatientRequestClinicalProfileHeightInchesOneInfinity CreatePatientRequestClinicalProfileHeightInchesOne = "Infinity"
 	CreatePatientRequestClinicalProfileHeightInchesOneNaN      CreatePatientRequestClinicalProfileHeightInchesOne = "NaN"
+	CreatePatientRequestClinicalProfileHeightInchesOneInfinity CreatePatientRequestClinicalProfileHeightInchesOne = "Infinity"
 )
 
 func NewCreatePatientRequestClinicalProfileHeightInchesOneFromString(s string) (CreatePatientRequestClinicalProfileHeightInchesOne, error) {
 	switch s {
-	case "Infinity":
-		return CreatePatientRequestClinicalProfileHeightInchesOneInfinity, nil
 	case "NaN":
 		return CreatePatientRequestClinicalProfileHeightInchesOneNaN, nil
+	case "Infinity":
+		return CreatePatientRequestClinicalProfileHeightInchesOneInfinity, nil
 	}
 	var t CreatePatientRequestClinicalProfileHeightInchesOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -12163,16 +12163,16 @@ func (c *CreatePatientRequestClinicalProfileWeightPounds) Accept(visitor CreateP
 type CreatePatientRequestClinicalProfileWeightPoundsOne string
 
 const (
-	CreatePatientRequestClinicalProfileWeightPoundsOneInfinity CreatePatientRequestClinicalProfileWeightPoundsOne = "Infinity"
 	CreatePatientRequestClinicalProfileWeightPoundsOneNaN      CreatePatientRequestClinicalProfileWeightPoundsOne = "NaN"
+	CreatePatientRequestClinicalProfileWeightPoundsOneInfinity CreatePatientRequestClinicalProfileWeightPoundsOne = "Infinity"
 )
 
 func NewCreatePatientRequestClinicalProfileWeightPoundsOneFromString(s string) (CreatePatientRequestClinicalProfileWeightPoundsOne, error) {
 	switch s {
-	case "Infinity":
-		return CreatePatientRequestClinicalProfileWeightPoundsOneInfinity, nil
 	case "NaN":
 		return CreatePatientRequestClinicalProfileWeightPoundsOneNaN, nil
+	case "Infinity":
+		return CreatePatientRequestClinicalProfileWeightPoundsOneInfinity, nil
 	}
 	var t CreatePatientRequestClinicalProfileWeightPoundsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -12639,16 +12639,16 @@ func (c *CreatePatientRequestMeasurementsItemHeightCentimeters) Accept(visitor C
 type CreatePatientRequestMeasurementsItemHeightCentimetersOne string
 
 const (
-	CreatePatientRequestMeasurementsItemHeightCentimetersOneInfinity CreatePatientRequestMeasurementsItemHeightCentimetersOne = "Infinity"
 	CreatePatientRequestMeasurementsItemHeightCentimetersOneNaN      CreatePatientRequestMeasurementsItemHeightCentimetersOne = "NaN"
+	CreatePatientRequestMeasurementsItemHeightCentimetersOneInfinity CreatePatientRequestMeasurementsItemHeightCentimetersOne = "Infinity"
 )
 
 func NewCreatePatientRequestMeasurementsItemHeightCentimetersOneFromString(s string) (CreatePatientRequestMeasurementsItemHeightCentimetersOne, error) {
 	switch s {
-	case "Infinity":
-		return CreatePatientRequestMeasurementsItemHeightCentimetersOneInfinity, nil
 	case "NaN":
 		return CreatePatientRequestMeasurementsItemHeightCentimetersOneNaN, nil
+	case "Infinity":
+		return CreatePatientRequestMeasurementsItemHeightCentimetersOneInfinity, nil
 	}
 	var t CreatePatientRequestMeasurementsItemHeightCentimetersOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -12723,16 +12723,16 @@ func (c *CreatePatientRequestMeasurementsItemWeightKilograms) Accept(visitor Cre
 type CreatePatientRequestMeasurementsItemWeightKilogramsOne string
 
 const (
-	CreatePatientRequestMeasurementsItemWeightKilogramsOneInfinity CreatePatientRequestMeasurementsItemWeightKilogramsOne = "Infinity"
 	CreatePatientRequestMeasurementsItemWeightKilogramsOneNaN      CreatePatientRequestMeasurementsItemWeightKilogramsOne = "NaN"
+	CreatePatientRequestMeasurementsItemWeightKilogramsOneInfinity CreatePatientRequestMeasurementsItemWeightKilogramsOne = "Infinity"
 )
 
 func NewCreatePatientRequestMeasurementsItemWeightKilogramsOneFromString(s string) (CreatePatientRequestMeasurementsItemWeightKilogramsOne, error) {
 	switch s {
-	case "Infinity":
-		return CreatePatientRequestMeasurementsItemWeightKilogramsOneInfinity, nil
 	case "NaN":
 		return CreatePatientRequestMeasurementsItemWeightKilogramsOneNaN, nil
+	case "Infinity":
+		return CreatePatientRequestMeasurementsItemWeightKilogramsOneInfinity, nil
 	}
 	var t CreatePatientRequestMeasurementsItemWeightKilogramsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -13814,16 +13814,16 @@ func (u *UpdatePatientRequestClinicalProfileHeightInches) Accept(visitor UpdateP
 type UpdatePatientRequestClinicalProfileHeightInchesOne string
 
 const (
-	UpdatePatientRequestClinicalProfileHeightInchesOneInfinity UpdatePatientRequestClinicalProfileHeightInchesOne = "Infinity"
 	UpdatePatientRequestClinicalProfileHeightInchesOneNaN      UpdatePatientRequestClinicalProfileHeightInchesOne = "NaN"
+	UpdatePatientRequestClinicalProfileHeightInchesOneInfinity UpdatePatientRequestClinicalProfileHeightInchesOne = "Infinity"
 )
 
 func NewUpdatePatientRequestClinicalProfileHeightInchesOneFromString(s string) (UpdatePatientRequestClinicalProfileHeightInchesOne, error) {
 	switch s {
-	case "Infinity":
-		return UpdatePatientRequestClinicalProfileHeightInchesOneInfinity, nil
 	case "NaN":
 		return UpdatePatientRequestClinicalProfileHeightInchesOneNaN, nil
+	case "Infinity":
+		return UpdatePatientRequestClinicalProfileHeightInchesOneInfinity, nil
 	}
 	var t UpdatePatientRequestClinicalProfileHeightInchesOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -13898,16 +13898,16 @@ func (u *UpdatePatientRequestClinicalProfileWeightPounds) Accept(visitor UpdateP
 type UpdatePatientRequestClinicalProfileWeightPoundsOne string
 
 const (
-	UpdatePatientRequestClinicalProfileWeightPoundsOneInfinity UpdatePatientRequestClinicalProfileWeightPoundsOne = "Infinity"
 	UpdatePatientRequestClinicalProfileWeightPoundsOneNaN      UpdatePatientRequestClinicalProfileWeightPoundsOne = "NaN"
+	UpdatePatientRequestClinicalProfileWeightPoundsOneInfinity UpdatePatientRequestClinicalProfileWeightPoundsOne = "Infinity"
 )
 
 func NewUpdatePatientRequestClinicalProfileWeightPoundsOneFromString(s string) (UpdatePatientRequestClinicalProfileWeightPoundsOne, error) {
 	switch s {
-	case "Infinity":
-		return UpdatePatientRequestClinicalProfileWeightPoundsOneInfinity, nil
 	case "NaN":
 		return UpdatePatientRequestClinicalProfileWeightPoundsOneNaN, nil
+	case "Infinity":
+		return UpdatePatientRequestClinicalProfileWeightPoundsOneInfinity, nil
 	}
 	var t UpdatePatientRequestClinicalProfileWeightPoundsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -14374,16 +14374,16 @@ func (u *UpdatePatientRequestMeasurementsItemHeightCentimeters) Accept(visitor U
 type UpdatePatientRequestMeasurementsItemHeightCentimetersOne string
 
 const (
-	UpdatePatientRequestMeasurementsItemHeightCentimetersOneInfinity UpdatePatientRequestMeasurementsItemHeightCentimetersOne = "Infinity"
 	UpdatePatientRequestMeasurementsItemHeightCentimetersOneNaN      UpdatePatientRequestMeasurementsItemHeightCentimetersOne = "NaN"
+	UpdatePatientRequestMeasurementsItemHeightCentimetersOneInfinity UpdatePatientRequestMeasurementsItemHeightCentimetersOne = "Infinity"
 )
 
 func NewUpdatePatientRequestMeasurementsItemHeightCentimetersOneFromString(s string) (UpdatePatientRequestMeasurementsItemHeightCentimetersOne, error) {
 	switch s {
-	case "Infinity":
-		return UpdatePatientRequestMeasurementsItemHeightCentimetersOneInfinity, nil
 	case "NaN":
 		return UpdatePatientRequestMeasurementsItemHeightCentimetersOneNaN, nil
+	case "Infinity":
+		return UpdatePatientRequestMeasurementsItemHeightCentimetersOneInfinity, nil
 	}
 	var t UpdatePatientRequestMeasurementsItemHeightCentimetersOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -14458,16 +14458,16 @@ func (u *UpdatePatientRequestMeasurementsItemWeightKilograms) Accept(visitor Upd
 type UpdatePatientRequestMeasurementsItemWeightKilogramsOne string
 
 const (
-	UpdatePatientRequestMeasurementsItemWeightKilogramsOneInfinity UpdatePatientRequestMeasurementsItemWeightKilogramsOne = "Infinity"
 	UpdatePatientRequestMeasurementsItemWeightKilogramsOneNaN      UpdatePatientRequestMeasurementsItemWeightKilogramsOne = "NaN"
+	UpdatePatientRequestMeasurementsItemWeightKilogramsOneInfinity UpdatePatientRequestMeasurementsItemWeightKilogramsOne = "Infinity"
 )
 
 func NewUpdatePatientRequestMeasurementsItemWeightKilogramsOneFromString(s string) (UpdatePatientRequestMeasurementsItemWeightKilogramsOne, error) {
 	switch s {
-	case "Infinity":
-		return UpdatePatientRequestMeasurementsItemWeightKilogramsOneInfinity, nil
 	case "NaN":
 		return UpdatePatientRequestMeasurementsItemWeightKilogramsOneNaN, nil
+	case "Infinity":
+		return UpdatePatientRequestMeasurementsItemWeightKilogramsOneInfinity, nil
 	}
 	var t UpdatePatientRequestMeasurementsItemWeightKilogramsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

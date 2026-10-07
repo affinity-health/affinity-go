@@ -930,16 +930,16 @@ func (l *ListPharmaciesResponseDataItemProfileRating) Accept(visitor ListPharmac
 type ListPharmaciesResponseDataItemProfileRatingOne string
 
 const (
-	ListPharmaciesResponseDataItemProfileRatingOneInfinity ListPharmaciesResponseDataItemProfileRatingOne = "Infinity"
 	ListPharmaciesResponseDataItemProfileRatingOneNaN      ListPharmaciesResponseDataItemProfileRatingOne = "NaN"
+	ListPharmaciesResponseDataItemProfileRatingOneInfinity ListPharmaciesResponseDataItemProfileRatingOne = "Infinity"
 )
 
 func NewListPharmaciesResponseDataItemProfileRatingOneFromString(s string) (ListPharmaciesResponseDataItemProfileRatingOne, error) {
 	switch s {
-	case "Infinity":
-		return ListPharmaciesResponseDataItemProfileRatingOneInfinity, nil
 	case "NaN":
 		return ListPharmaciesResponseDataItemProfileRatingOneNaN, nil
+	case "Infinity":
+		return ListPharmaciesResponseDataItemProfileRatingOneInfinity, nil
 	}
 	var t ListPharmaciesResponseDataItemProfileRatingOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

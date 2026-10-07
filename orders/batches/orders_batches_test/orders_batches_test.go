@@ -100,7 +100,7 @@ func TestOrdersBatchesCreateWithWireMock(
 						Directions:   "directions",
 						MedicationID: "cat_01j2y8m6jcc9tt24af5pw9x1bc",
 						Quantity: &orders.CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantity{
-							CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne: orders.CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneInfinity,
+							CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne: orders.CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneNaN,
 						},
 						QuantityUnit: "quantityUnit",
 						Refills:      1,

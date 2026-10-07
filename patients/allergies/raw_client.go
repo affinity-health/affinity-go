@@ -42,7 +42,7 @@ func (r *RawClient) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/practices/%v/patients/%v/allergies",
@@ -95,7 +95,7 @@ func (r *RawClient) Replace(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/practices/%v/patients/%v/allergies",

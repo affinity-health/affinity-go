@@ -98,7 +98,7 @@ func TestOrdersPrescriptionsAddWithWireMock(
 			Directions:   "directions",
 			MedicationID: "cat_01j2y8m6jcc9tt24af5pw9x1bc",
 			Quantity: &orders.AddOrderPrescriptionRequestPrescriptionQuantity{
-				AddOrderPrescriptionRequestPrescriptionQuantityOne: orders.AddOrderPrescriptionRequestPrescriptionQuantityOneInfinity,
+				AddOrderPrescriptionRequestPrescriptionQuantityOne: orders.AddOrderPrescriptionRequestPrescriptionQuantityOneNaN,
 			},
 			QuantityUnit: "quantityUnit",
 			Refills:      1,
@@ -138,7 +138,7 @@ func TestOrdersPrescriptionsUpdateWithWireMock(
 			Directions:   "directions",
 			MedicationID: "cat_01j2y8m6jcc9tt24af5pw9x1bc",
 			Quantity: &orders.UpdateOrderPrescriptionRequestPrescriptionQuantity{
-				UpdateOrderPrescriptionRequestPrescriptionQuantityOne: orders.UpdateOrderPrescriptionRequestPrescriptionQuantityOneInfinity,
+				UpdateOrderPrescriptionRequestPrescriptionQuantityOne: orders.UpdateOrderPrescriptionRequestPrescriptionQuantityOneNaN,
 			},
 			QuantityUnit: "quantityUnit",
 			Refills:      1,

@@ -43,7 +43,7 @@ func (r *RawClient) Create(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/practices/%v/team/prescribers/%v/licenses",
@@ -94,7 +94,7 @@ func (r *RawClient) Update(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/practices/%v/team/prescribers/%v/licenses/%v",

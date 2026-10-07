@@ -5,6 +5,7 @@ package client
 import (
 	items "github.com/affinity-health/affinity-go/catalog/items"
 	prescribingoptions "github.com/affinity-health/affinity-go/catalog/prescribingoptions"
+	presentationprices "github.com/affinity-health/affinity-go/catalog/presentationprices"
 	sellingprices "github.com/affinity-health/affinity-go/catalog/sellingprices"
 	shippingoptions "github.com/affinity-health/affinity-go/catalog/shippingoptions"
 	core "github.com/affinity-health/affinity-go/core"
@@ -16,6 +17,7 @@ type Client struct {
 	ShippingOptions    *shippingoptions.Client
 	PrescribingOptions *prescribingoptions.Client
 	SellingPrices      *sellingprices.Client
+	PresentationPrices *presentationprices.Client
 
 	options *core.RequestOptions
 	baseURL string
@@ -28,6 +30,7 @@ func NewClient(options *core.RequestOptions) *Client {
 		ShippingOptions:    shippingoptions.NewClient(options),
 		PrescribingOptions: prescribingoptions.NewClient(options),
 		SellingPrices:      sellingprices.NewClient(options),
+		PresentationPrices: presentationprices.NewClient(options),
 		options:            options,
 		baseURL:            options.BaseURL,
 		caller: internal.NewCaller(

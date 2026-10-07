@@ -537,16 +537,16 @@ func (g *GetPracticeTeamResponseInvitationsExpired) Accept(visitor GetPracticeTe
 type GetPracticeTeamResponseInvitationsExpiredOne string
 
 const (
-	GetPracticeTeamResponseInvitationsExpiredOneInfinity GetPracticeTeamResponseInvitationsExpiredOne = "Infinity"
 	GetPracticeTeamResponseInvitationsExpiredOneNaN      GetPracticeTeamResponseInvitationsExpiredOne = "NaN"
+	GetPracticeTeamResponseInvitationsExpiredOneInfinity GetPracticeTeamResponseInvitationsExpiredOne = "Infinity"
 )
 
 func NewGetPracticeTeamResponseInvitationsExpiredOneFromString(s string) (GetPracticeTeamResponseInvitationsExpiredOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPracticeTeamResponseInvitationsExpiredOneInfinity, nil
 	case "NaN":
 		return GetPracticeTeamResponseInvitationsExpiredOneNaN, nil
+	case "Infinity":
+		return GetPracticeTeamResponseInvitationsExpiredOneInfinity, nil
 	}
 	var t GetPracticeTeamResponseInvitationsExpiredOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -621,16 +621,16 @@ func (g *GetPracticeTeamResponseInvitationsPending) Accept(visitor GetPracticeTe
 type GetPracticeTeamResponseInvitationsPendingOne string
 
 const (
-	GetPracticeTeamResponseInvitationsPendingOneInfinity GetPracticeTeamResponseInvitationsPendingOne = "Infinity"
 	GetPracticeTeamResponseInvitationsPendingOneNaN      GetPracticeTeamResponseInvitationsPendingOne = "NaN"
+	GetPracticeTeamResponseInvitationsPendingOneInfinity GetPracticeTeamResponseInvitationsPendingOne = "Infinity"
 )
 
 func NewGetPracticeTeamResponseInvitationsPendingOneFromString(s string) (GetPracticeTeamResponseInvitationsPendingOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPracticeTeamResponseInvitationsPendingOneInfinity, nil
 	case "NaN":
 		return GetPracticeTeamResponseInvitationsPendingOneNaN, nil
+	case "Infinity":
+		return GetPracticeTeamResponseInvitationsPendingOneInfinity, nil
 	}
 	var t GetPracticeTeamResponseInvitationsPendingOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -821,16 +821,16 @@ func (g *GetPracticeTeamResponseMembersActive) Accept(visitor GetPracticeTeamRes
 type GetPracticeTeamResponseMembersActiveOne string
 
 const (
-	GetPracticeTeamResponseMembersActiveOneInfinity GetPracticeTeamResponseMembersActiveOne = "Infinity"
 	GetPracticeTeamResponseMembersActiveOneNaN      GetPracticeTeamResponseMembersActiveOne = "NaN"
+	GetPracticeTeamResponseMembersActiveOneInfinity GetPracticeTeamResponseMembersActiveOne = "Infinity"
 )
 
 func NewGetPracticeTeamResponseMembersActiveOneFromString(s string) (GetPracticeTeamResponseMembersActiveOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPracticeTeamResponseMembersActiveOneInfinity, nil
 	case "NaN":
 		return GetPracticeTeamResponseMembersActiveOneNaN, nil
+	case "Infinity":
+		return GetPracticeTeamResponseMembersActiveOneInfinity, nil
 	}
 	var t GetPracticeTeamResponseMembersActiveOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -905,16 +905,16 @@ func (g *GetPracticeTeamResponseMembersDisabled) Accept(visitor GetPracticeTeamR
 type GetPracticeTeamResponseMembersDisabledOne string
 
 const (
-	GetPracticeTeamResponseMembersDisabledOneInfinity GetPracticeTeamResponseMembersDisabledOne = "Infinity"
 	GetPracticeTeamResponseMembersDisabledOneNaN      GetPracticeTeamResponseMembersDisabledOne = "NaN"
+	GetPracticeTeamResponseMembersDisabledOneInfinity GetPracticeTeamResponseMembersDisabledOne = "Infinity"
 )
 
 func NewGetPracticeTeamResponseMembersDisabledOneFromString(s string) (GetPracticeTeamResponseMembersDisabledOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPracticeTeamResponseMembersDisabledOneInfinity, nil
 	case "NaN":
 		return GetPracticeTeamResponseMembersDisabledOneNaN, nil
+	case "Infinity":
+		return GetPracticeTeamResponseMembersDisabledOneInfinity, nil
 	}
 	var t GetPracticeTeamResponseMembersDisabledOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -989,16 +989,16 @@ func (g *GetPracticeTeamResponseMembersTotal) Accept(visitor GetPracticeTeamResp
 type GetPracticeTeamResponseMembersTotalOne string
 
 const (
-	GetPracticeTeamResponseMembersTotalOneInfinity GetPracticeTeamResponseMembersTotalOne = "Infinity"
 	GetPracticeTeamResponseMembersTotalOneNaN      GetPracticeTeamResponseMembersTotalOne = "NaN"
+	GetPracticeTeamResponseMembersTotalOneInfinity GetPracticeTeamResponseMembersTotalOne = "Infinity"
 )
 
 func NewGetPracticeTeamResponseMembersTotalOneFromString(s string) (GetPracticeTeamResponseMembersTotalOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPracticeTeamResponseMembersTotalOneInfinity, nil
 	case "NaN":
 		return GetPracticeTeamResponseMembersTotalOneNaN, nil
+	case "Infinity":
+		return GetPracticeTeamResponseMembersTotalOneInfinity, nil
 	}
 	var t GetPracticeTeamResponseMembersTotalOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1192,16 +1192,16 @@ func (g *GetPracticeTeamResponsePrescribersActive) Accept(visitor GetPracticeTea
 type GetPracticeTeamResponsePrescribersActiveOne string
 
 const (
-	GetPracticeTeamResponsePrescribersActiveOneInfinity GetPracticeTeamResponsePrescribersActiveOne = "Infinity"
 	GetPracticeTeamResponsePrescribersActiveOneNaN      GetPracticeTeamResponsePrescribersActiveOne = "NaN"
+	GetPracticeTeamResponsePrescribersActiveOneInfinity GetPracticeTeamResponsePrescribersActiveOne = "Infinity"
 )
 
 func NewGetPracticeTeamResponsePrescribersActiveOneFromString(s string) (GetPracticeTeamResponsePrescribersActiveOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPracticeTeamResponsePrescribersActiveOneInfinity, nil
 	case "NaN":
 		return GetPracticeTeamResponsePrescribersActiveOneNaN, nil
+	case "Infinity":
+		return GetPracticeTeamResponsePrescribersActiveOneInfinity, nil
 	}
 	var t GetPracticeTeamResponsePrescribersActiveOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1276,16 +1276,16 @@ func (g *GetPracticeTeamResponsePrescribersTotal) Accept(visitor GetPracticeTeam
 type GetPracticeTeamResponsePrescribersTotalOne string
 
 const (
-	GetPracticeTeamResponsePrescribersTotalOneInfinity GetPracticeTeamResponsePrescribersTotalOne = "Infinity"
 	GetPracticeTeamResponsePrescribersTotalOneNaN      GetPracticeTeamResponsePrescribersTotalOne = "NaN"
+	GetPracticeTeamResponsePrescribersTotalOneInfinity GetPracticeTeamResponsePrescribersTotalOne = "Infinity"
 )
 
 func NewGetPracticeTeamResponsePrescribersTotalOneFromString(s string) (GetPracticeTeamResponsePrescribersTotalOne, error) {
 	switch s {
-	case "Infinity":
-		return GetPracticeTeamResponsePrescribersTotalOneInfinity, nil
 	case "NaN":
 		return GetPracticeTeamResponsePrescribersTotalOneNaN, nil
+	case "Infinity":
+		return GetPracticeTeamResponsePrescribersTotalOneInfinity, nil
 	}
 	var t GetPracticeTeamResponsePrescribersTotalOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

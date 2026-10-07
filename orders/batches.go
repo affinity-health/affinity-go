@@ -1509,16 +1509,16 @@ func (c *CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInches) Ac
 type CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOne string
 
 const (
-	CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneInfinity CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOne = "Infinity"
 	CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneNaN      CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOne = "NaN"
+	CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneInfinity CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOne = "Infinity"
 )
 
 func NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneFromString(s string) (CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneInfinity, nil
 	case "NaN":
 		return CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneNaN, nil
+	case "Infinity":
+		return CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneInfinity, nil
 	}
 	var t CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1593,16 +1593,16 @@ func (c *CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPounds) Ac
 type CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOne string
 
 const (
-	CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneInfinity CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOne = "Infinity"
 	CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneNaN      CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOne = "NaN"
+	CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneInfinity CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOne = "Infinity"
 )
 
 func NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneFromString(s string) (CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneInfinity, nil
 	case "NaN":
 		return CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneNaN, nil
+	case "Infinity":
+		return CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneInfinity, nil
 	}
 	var t CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -2069,16 +2069,16 @@ func (c *CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimete
 type CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOne string
 
 const (
-	CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneInfinity CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOne = "Infinity"
 	CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneNaN      CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOne = "NaN"
+	CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneInfinity CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOne = "Infinity"
 )
 
 func NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneFromString(s string) (CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneInfinity, nil
 	case "NaN":
 		return CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneNaN, nil
+	case "Infinity":
+		return CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneInfinity, nil
 	}
 	var t CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -2153,16 +2153,16 @@ func (c *CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilograms
 type CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOne string
 
 const (
-	CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneInfinity CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOne = "Infinity"
 	CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneNaN      CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOne = "NaN"
+	CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneInfinity CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOne = "Infinity"
 )
 
 func NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneFromString(s string) (CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneInfinity, nil
 	case "NaN":
 		return CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneNaN, nil
+	case "Infinity":
+		return CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneInfinity, nil
 	}
 	var t CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -3361,16 +3361,16 @@ func (c *CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsI
 type CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOne string
 
 const (
-	CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneInfinity CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 	CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneNaN      CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOne = "NaN"
+	CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneInfinity CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 )
 
 func NewCreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneFromString(s string) (CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	case "NaN":
 		return CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneNaN, nil
+	case "Infinity":
+		return CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	}
 	var t CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -3645,16 +3645,16 @@ func (c *CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantity) Accept(visi
 type CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne string
 
 const (
-	CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneInfinity CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne = "Infinity"
 	CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneNaN      CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne = "NaN"
+	CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneInfinity CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne = "Infinity"
 )
 
 func NewCreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneFromString(s string) (CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneInfinity, nil
 	case "NaN":
 		return CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneNaN, nil
+	case "Infinity":
+		return CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneInfinity, nil
 	}
 	var t CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

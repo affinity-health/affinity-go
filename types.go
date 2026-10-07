@@ -162,13 +162,13 @@ var (
 
 type AddOrderPrescriptionResponse struct {
 	// Opaque revision of the complete order prescription set. Send the revision you reviewed as expectedRevision; never replace it automatically after a conflict.
-	Revision        string                                           `json:"revision" url:"revision"`
-	Object          AddOrderPrescriptionResponseObject               `json:"object" url:"object"`
-	ExternalOrderID *string                                          `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
-	Metadata        *AddOrderPrescriptionResponseMetadata            `json:"metadata" url:"metadata"`
-	OrderID         string                                           `json:"orderId" url:"orderId"`
-	PrescriptionID  string                                           `json:"prescriptionId" url:"prescriptionId"`
-	Prescriptions   []*AddOrderPrescriptionResponsePrescriptionsItem `json:"prescriptions" url:"prescriptions"`
+	Revision        string                                                `json:"revision" url:"revision"`
+	Object          AddOrderPrescriptionResponseObject                    `json:"object" url:"object"`
+	ExternalOrderID *string                                               `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
+	Metadata        map[string]*AddOrderPrescriptionResponseMetadataValue `json:"metadata" url:"metadata"`
+	OrderID         string                                                `json:"orderId" url:"orderId"`
+	PrescriptionID  string                                                `json:"prescriptionId" url:"prescriptionId"`
+	Prescriptions   []*AddOrderPrescriptionResponsePrescriptionsItem      `json:"prescriptions" url:"prescriptions"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -198,7 +198,7 @@ func (a *AddOrderPrescriptionResponse) GetExternalOrderID() *string {
 	return a.ExternalOrderID
 }
 
-func (a *AddOrderPrescriptionResponse) GetMetadata() *AddOrderPrescriptionResponseMetadata {
+func (a *AddOrderPrescriptionResponse) GetMetadata() map[string]*AddOrderPrescriptionResponseMetadataValue {
 	if a == nil {
 		return nil
 	}
@@ -263,7 +263,7 @@ func (a *AddOrderPrescriptionResponse) SetExternalOrderID(externalOrderID *strin
 
 // SetMetadata sets the Metadata field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (a *AddOrderPrescriptionResponse) SetMetadata(metadata *AddOrderPrescriptionResponseMetadata) {
+func (a *AddOrderPrescriptionResponse) SetMetadata(metadata map[string]*AddOrderPrescriptionResponseMetadataValue) {
 	a.Metadata = metadata
 	a.require(addOrderPrescriptionResponseFieldMetadata)
 }
@@ -331,69 +331,87 @@ func (a *AddOrderPrescriptionResponse) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-type AddOrderPrescriptionResponseMetadata struct {
+type AddOrderPrescriptionResponseMetadataValue struct {
+	String  string
+	Double  float64
+	Boolean bool
 
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	typ string
 }
 
-func (a *AddOrderPrescriptionResponseMetadata) GetExtraProperties() map[string]interface{} {
+func (a *AddOrderPrescriptionResponseMetadataValue) GetString() string {
 	if a == nil {
+		return ""
+	}
+	return a.String
+}
+
+func (a *AddOrderPrescriptionResponseMetadataValue) GetDouble() float64 {
+	if a == nil {
+		return 0
+	}
+	return a.Double
+}
+
+func (a *AddOrderPrescriptionResponseMetadataValue) GetBoolean() bool {
+	if a == nil {
+		return false
+	}
+	return a.Boolean
+}
+
+func (a *AddOrderPrescriptionResponseMetadataValue) UnmarshalJSON(data []byte) error {
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		a.typ = "String"
+		a.String = valueString
 		return nil
 	}
-	return a.extraProperties
+	var valueDouble float64
+	if err := json.Unmarshal(data, &valueDouble); err == nil {
+		a.typ = "Double"
+		a.Double = valueDouble
+		return nil
+	}
+	var valueBoolean bool
+	if err := json.Unmarshal(data, &valueBoolean); err == nil {
+		a.typ = "Boolean"
+		a.Boolean = valueBoolean
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
 }
 
-func (a *AddOrderPrescriptionResponseMetadata) require(field *big.Int) {
-	if a.explicitFields == nil {
-		a.explicitFields = big.NewInt(0)
+func (a AddOrderPrescriptionResponseMetadataValue) MarshalJSON() ([]byte, error) {
+	if a.typ == "String" || a.String != "" {
+		return json.Marshal(a.String)
 	}
-	a.explicitFields.Or(a.explicitFields, field)
+	if a.typ == "Double" || a.Double != 0 {
+		return json.Marshal(a.Double)
+	}
+	if a.typ == "Boolean" || a.Boolean != false {
+		return json.Marshal(a.Boolean)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
-func (a *AddOrderPrescriptionResponseMetadata) UnmarshalJSON(data []byte) error {
-	type unmarshaler AddOrderPrescriptionResponseMetadata
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*a = AddOrderPrescriptionResponseMetadata(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *a)
-	if err != nil {
-		return err
-	}
-	a.extraProperties = extraProperties
-	a.rawJSON = json.RawMessage(data)
-	return nil
+type AddOrderPrescriptionResponseMetadataValueVisitor interface {
+	VisitString(string) error
+	VisitDouble(float64) error
+	VisitBoolean(bool) error
 }
 
-func (a *AddOrderPrescriptionResponseMetadata) MarshalJSON() ([]byte, error) {
-	type embed AddOrderPrescriptionResponseMetadata
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*a),
+func (a *AddOrderPrescriptionResponseMetadataValue) Accept(visitor AddOrderPrescriptionResponseMetadataValueVisitor) error {
+	if a.typ == "String" || a.String != "" {
+		return visitor.VisitString(a.String)
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (a *AddOrderPrescriptionResponseMetadata) String() string {
-	if a == nil {
-		return "<nil>"
+	if a.typ == "Double" || a.Double != 0 {
+		return visitor.VisitDouble(a.Double)
 	}
-	if len(a.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
-			return value
-		}
+	if a.typ == "Boolean" || a.Boolean != false {
+		return visitor.VisitBoolean(a.Boolean)
 	}
-	if value, err := internal.StringifyJSON(a); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", a)
+	return fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
 type AddOrderPrescriptionResponseObject string
@@ -1044,19 +1062,19 @@ var (
 
 type CreateOrderBatchResponseOrdersItem struct {
 	// Opaque revision of the complete order prescription set. Send the revision you reviewed as expectedRevision; never replace it automatically after a conflict.
-	Revision        string                                                 `json:"revision" url:"revision"`
-	OtcItems        []*CreateOrderBatchResponseOrdersItemOtcItemsItem      `json:"otcItems" url:"otcItems"`
-	ExternalOrderID *string                                                `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
-	Metadata        *CreateOrderBatchResponseOrdersItemMetadata            `json:"metadata" url:"metadata"`
-	CreatedAt       string                                                 `json:"createdAt" url:"createdAt"`
-	ID              string                                                 `json:"id" url:"id"`
-	Livemode        bool                                                   `json:"livemode" url:"livemode"`
-	Object          CreateOrderBatchResponseOrdersItemObject               `json:"object" url:"object"`
-	PatientID       string                                                 `json:"patientId" url:"patientId"`
-	PracticeID      string                                                 `json:"practiceId" url:"practiceId"`
-	Prescriptions   []*CreateOrderBatchResponseOrdersItemPrescriptionsItem `json:"prescriptions" url:"prescriptions"`
-	UserID          *string                                                `json:"userId,omitempty" url:"userId,omitempty"`
-	Status          CreateOrderBatchResponseOrdersItemStatus               `json:"status" url:"status"`
+	Revision        string                                                      `json:"revision" url:"revision"`
+	OtcItems        []*CreateOrderBatchResponseOrdersItemOtcItemsItem           `json:"otcItems" url:"otcItems"`
+	ExternalOrderID *string                                                     `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
+	Metadata        map[string]*CreateOrderBatchResponseOrdersItemMetadataValue `json:"metadata" url:"metadata"`
+	CreatedAt       string                                                      `json:"createdAt" url:"createdAt"`
+	ID              string                                                      `json:"id" url:"id"`
+	Livemode        bool                                                        `json:"livemode" url:"livemode"`
+	Object          CreateOrderBatchResponseOrdersItemObject                    `json:"object" url:"object"`
+	PatientID       string                                                      `json:"patientId" url:"patientId"`
+	PracticeID      string                                                      `json:"practiceId" url:"practiceId"`
+	Prescriptions   []*CreateOrderBatchResponseOrdersItemPrescriptionsItem      `json:"prescriptions" url:"prescriptions"`
+	UserID          *string                                                     `json:"userId,omitempty" url:"userId,omitempty"`
+	Status          CreateOrderBatchResponseOrdersItemStatus                    `json:"status" url:"status"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1086,7 +1104,7 @@ func (c *CreateOrderBatchResponseOrdersItem) GetExternalOrderID() *string {
 	return c.ExternalOrderID
 }
 
-func (c *CreateOrderBatchResponseOrdersItem) GetMetadata() *CreateOrderBatchResponseOrdersItemMetadata {
+func (c *CreateOrderBatchResponseOrdersItem) GetMetadata() map[string]*CreateOrderBatchResponseOrdersItemMetadataValue {
 	if c == nil {
 		return nil
 	}
@@ -1193,7 +1211,7 @@ func (c *CreateOrderBatchResponseOrdersItem) SetExternalOrderID(externalOrderID 
 
 // SetMetadata sets the Metadata field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateOrderBatchResponseOrdersItem) SetMetadata(metadata *CreateOrderBatchResponseOrdersItemMetadata) {
+func (c *CreateOrderBatchResponseOrdersItem) SetMetadata(metadata map[string]*CreateOrderBatchResponseOrdersItemMetadataValue) {
 	c.Metadata = metadata
 	c.require(createOrderBatchResponseOrdersItemFieldMetadata)
 }
@@ -1303,69 +1321,87 @@ func (c *CreateOrderBatchResponseOrdersItem) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-type CreateOrderBatchResponseOrdersItemMetadata struct {
+type CreateOrderBatchResponseOrdersItemMetadataValue struct {
+	String  string
+	Double  float64
+	Boolean bool
 
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	typ string
 }
 
-func (c *CreateOrderBatchResponseOrdersItemMetadata) GetExtraProperties() map[string]interface{} {
+func (c *CreateOrderBatchResponseOrdersItemMetadataValue) GetString() string {
 	if c == nil {
+		return ""
+	}
+	return c.String
+}
+
+func (c *CreateOrderBatchResponseOrdersItemMetadataValue) GetDouble() float64 {
+	if c == nil {
+		return 0
+	}
+	return c.Double
+}
+
+func (c *CreateOrderBatchResponseOrdersItemMetadataValue) GetBoolean() bool {
+	if c == nil {
+		return false
+	}
+	return c.Boolean
+}
+
+func (c *CreateOrderBatchResponseOrdersItemMetadataValue) UnmarshalJSON(data []byte) error {
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		c.typ = "String"
+		c.String = valueString
 		return nil
 	}
-	return c.extraProperties
+	var valueDouble float64
+	if err := json.Unmarshal(data, &valueDouble); err == nil {
+		c.typ = "Double"
+		c.Double = valueDouble
+		return nil
+	}
+	var valueBoolean bool
+	if err := json.Unmarshal(data, &valueBoolean); err == nil {
+		c.typ = "Boolean"
+		c.Boolean = valueBoolean
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
 }
 
-func (c *CreateOrderBatchResponseOrdersItemMetadata) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+func (c CreateOrderBatchResponseOrdersItemMetadataValue) MarshalJSON() ([]byte, error) {
+	if c.typ == "String" || c.String != "" {
+		return json.Marshal(c.String)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	if c.typ == "Double" || c.Double != 0 {
+		return json.Marshal(c.Double)
+	}
+	if c.typ == "Boolean" || c.Boolean != false {
+		return json.Marshal(c.Boolean)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
-func (c *CreateOrderBatchResponseOrdersItemMetadata) UnmarshalJSON(data []byte) error {
-	type unmarshaler CreateOrderBatchResponseOrdersItemMetadata
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CreateOrderBatchResponseOrdersItemMetadata(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
+type CreateOrderBatchResponseOrdersItemMetadataValueVisitor interface {
+	VisitString(string) error
+	VisitDouble(float64) error
+	VisitBoolean(bool) error
 }
 
-func (c *CreateOrderBatchResponseOrdersItemMetadata) MarshalJSON() ([]byte, error) {
-	type embed CreateOrderBatchResponseOrdersItemMetadata
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
+func (c *CreateOrderBatchResponseOrdersItemMetadataValue) Accept(visitor CreateOrderBatchResponseOrdersItemMetadataValueVisitor) error {
+	if c.typ == "String" || c.String != "" {
+		return visitor.VisitString(c.String)
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (c *CreateOrderBatchResponseOrdersItemMetadata) String() string {
-	if c == nil {
-		return "<nil>"
+	if c.typ == "Double" || c.Double != 0 {
+		return visitor.VisitDouble(c.Double)
 	}
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
+	if c.typ == "Boolean" || c.Boolean != false {
+		return visitor.VisitBoolean(c.Boolean)
 	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
+	return fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
 type CreateOrderBatchResponseOrdersItemObject string
@@ -1895,16 +1931,16 @@ func (c *CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantity) Accept(vis
 type CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOne string
 
 const (
-	CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOneInfinity CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOne = "Infinity"
 	CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOneNaN      CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOne = "NaN"
+	CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOneInfinity CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOne = "Infinity"
 )
 
 func NewCreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOneFromString(s string) (CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOneInfinity, nil
 	case "NaN":
 		return CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOneNaN, nil
+	case "Infinity":
+		return CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOneInfinity, nil
 	}
 	var t CreateOrderBatchResponseOrdersItemPrescriptionsItemQuantityOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -3311,31 +3347,16 @@ func (g *GetOrderTestSimulationResponse) String() string {
 type GetOrderTestSimulationResponseAvailableActionsItem string
 
 const (
-	GetOrderTestSimulationResponseAvailableActionsItemAccept              GetOrderTestSimulationResponseAvailableActionsItem = "accept"
-	GetOrderTestSimulationResponseAvailableActionsItemProcess             GetOrderTestSimulationResponseAvailableActionsItem = "process"
-	GetOrderTestSimulationResponseAvailableActionsItemShip                GetOrderTestSimulationResponseAvailableActionsItem = "ship"
-	GetOrderTestSimulationResponseAvailableActionsItemDeliver             GetOrderTestSimulationResponseAvailableActionsItem = "deliver"
-	GetOrderTestSimulationResponseAvailableActionsItemReject              GetOrderTestSimulationResponseAvailableActionsItem = "reject"
-	GetOrderTestSimulationResponseAvailableActionsItemConfirmCancellation GetOrderTestSimulationResponseAvailableActionsItem = "confirm_cancellation"
-	GetOrderTestSimulationResponseAvailableActionsItemDeclineCancellation GetOrderTestSimulationResponseAvailableActionsItem = "decline_cancellation"
+	GetOrderTestSimulationResponseAvailableActionsItemShip    GetOrderTestSimulationResponseAvailableActionsItem = "ship"
+	GetOrderTestSimulationResponseAvailableActionsItemDeliver GetOrderTestSimulationResponseAvailableActionsItem = "deliver"
 )
 
 func NewGetOrderTestSimulationResponseAvailableActionsItemFromString(s string) (GetOrderTestSimulationResponseAvailableActionsItem, error) {
 	switch s {
-	case "accept":
-		return GetOrderTestSimulationResponseAvailableActionsItemAccept, nil
-	case "process":
-		return GetOrderTestSimulationResponseAvailableActionsItemProcess, nil
 	case "ship":
 		return GetOrderTestSimulationResponseAvailableActionsItemShip, nil
 	case "deliver":
 		return GetOrderTestSimulationResponseAvailableActionsItemDeliver, nil
-	case "reject":
-		return GetOrderTestSimulationResponseAvailableActionsItemReject, nil
-	case "confirm_cancellation":
-		return GetOrderTestSimulationResponseAvailableActionsItemConfirmCancellation, nil
-	case "decline_cancellation":
-		return GetOrderTestSimulationResponseAvailableActionsItemDeclineCancellation, nil
 	}
 	var t GetOrderTestSimulationResponseAvailableActionsItem
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -8071,16 +8092,16 @@ func (g *GetWebhookEventResponseAttemptsItemDurationMs) Accept(visitor GetWebhoo
 type GetWebhookEventResponseAttemptsItemDurationMsOne string
 
 const (
-	GetWebhookEventResponseAttemptsItemDurationMsOneInfinity GetWebhookEventResponseAttemptsItemDurationMsOne = "Infinity"
 	GetWebhookEventResponseAttemptsItemDurationMsOneNaN      GetWebhookEventResponseAttemptsItemDurationMsOne = "NaN"
+	GetWebhookEventResponseAttemptsItemDurationMsOneInfinity GetWebhookEventResponseAttemptsItemDurationMsOne = "Infinity"
 )
 
 func NewGetWebhookEventResponseAttemptsItemDurationMsOneFromString(s string) (GetWebhookEventResponseAttemptsItemDurationMsOne, error) {
 	switch s {
-	case "Infinity":
-		return GetWebhookEventResponseAttemptsItemDurationMsOneInfinity, nil
 	case "NaN":
 		return GetWebhookEventResponseAttemptsItemDurationMsOneNaN, nil
+	case "Infinity":
+		return GetWebhookEventResponseAttemptsItemDurationMsOneInfinity, nil
 	}
 	var t GetWebhookEventResponseAttemptsItemDurationMsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -8155,16 +8176,16 @@ func (g *GetWebhookEventResponseAttemptsItemResponseStatus) Accept(visitor GetWe
 type GetWebhookEventResponseAttemptsItemResponseStatusOne string
 
 const (
-	GetWebhookEventResponseAttemptsItemResponseStatusOneInfinity GetWebhookEventResponseAttemptsItemResponseStatusOne = "Infinity"
 	GetWebhookEventResponseAttemptsItemResponseStatusOneNaN      GetWebhookEventResponseAttemptsItemResponseStatusOne = "NaN"
+	GetWebhookEventResponseAttemptsItemResponseStatusOneInfinity GetWebhookEventResponseAttemptsItemResponseStatusOne = "Infinity"
 )
 
 func NewGetWebhookEventResponseAttemptsItemResponseStatusOneFromString(s string) (GetWebhookEventResponseAttemptsItemResponseStatusOne, error) {
 	switch s {
-	case "Infinity":
-		return GetWebhookEventResponseAttemptsItemResponseStatusOneInfinity, nil
 	case "NaN":
 		return GetWebhookEventResponseAttemptsItemResponseStatusOneNaN, nil
+	case "Infinity":
+		return GetWebhookEventResponseAttemptsItemResponseStatusOneInfinity, nil
 	}
 	var t GetWebhookEventResponseAttemptsItemResponseStatusOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -8444,16 +8465,16 @@ func (g *GetWebhookEventResponseDeliveriesItemAutomaticAttemptCount) Accept(visi
 type GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne string
 
 const (
-	GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneInfinity GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne = "Infinity"
 	GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneNaN      GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne = "NaN"
+	GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneInfinity GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne = "Infinity"
 )
 
 func NewGetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneFromString(s string) (GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne, error) {
 	switch s {
-	case "Infinity":
-		return GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneInfinity, nil
 	case "NaN":
 		return GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneNaN, nil
+	case "Infinity":
+		return GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneInfinity, nil
 	}
 	var t GetWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -10797,19 +10818,29 @@ func (l ListCatalogItemsResponseDataItemAvailability) Ptr() *ListCatalogItemsRes
 }
 
 var (
-	listCatalogItemsResponseDataItemCatalogDetailsFieldAttributes = big.NewInt(1 << 0)
-	listCatalogItemsResponseDataItemCatalogDetailsFieldDirections = big.NewInt(1 << 1)
+	listCatalogItemsResponseDataItemCatalogDetailsFieldPackageComponents = big.NewInt(1 << 0)
+	listCatalogItemsResponseDataItemCatalogDetailsFieldAttributes        = big.NewInt(1 << 1)
+	listCatalogItemsResponseDataItemCatalogDetailsFieldDirections        = big.NewInt(1 << 2)
 )
 
 type ListCatalogItemsResponseDataItemCatalogDetails struct {
-	Attributes map[string]*ListCatalogItemsResponseDataItemCatalogDetailsAttributesValue `json:"attributes" url:"attributes"`
-	Directions []*ListCatalogItemsResponseDataItemCatalogDetailsDirectionsItem           `json:"directions" url:"directions"`
+	// Confirmed physical containers and contents. Empty or absent means container count cannot be inferred from dispense quantity.
+	PackageComponents []*ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem    `json:"packageComponents,omitempty" url:"packageComponents,omitempty"`
+	Attributes        map[string]*ListCatalogItemsResponseDataItemCatalogDetailsAttributesValue `json:"attributes" url:"attributes"`
+	Directions        []*ListCatalogItemsResponseDataItemCatalogDetailsDirectionsItem           `json:"directions" url:"directions"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetails) GetPackageComponents() []*ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem {
+	if l == nil {
+		return nil
+	}
+	return l.PackageComponents
 }
 
 func (l *ListCatalogItemsResponseDataItemCatalogDetails) GetAttributes() map[string]*ListCatalogItemsResponseDataItemCatalogDetailsAttributesValue {
@@ -10838,6 +10869,13 @@ func (l *ListCatalogItemsResponseDataItemCatalogDetails) require(field *big.Int)
 		l.explicitFields = big.NewInt(0)
 	}
 	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetPackageComponents sets the PackageComponents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogItemsResponseDataItemCatalogDetails) SetPackageComponents(packageComponents []*ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) {
+	l.PackageComponents = packageComponents
+	l.require(listCatalogItemsResponseDataItemCatalogDetailsFieldPackageComponents)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -11077,6 +11115,277 @@ func NewListCatalogItemsResponseDataItemCatalogDetailsDirectionsItemKindFromStri
 }
 
 func (l ListCatalogItemsResponseDataItemCatalogDetailsDirectionsItemKind) Ptr() *ListCatalogItemsResponseDataItemCatalogDetailsDirectionsItemKind {
+	return &l
+}
+
+var (
+	listCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemFieldContainer            = big.NewInt(1 << 0)
+	listCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemFieldContainerCount       = big.NewInt(1 << 1)
+	listCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemFieldContentsPerContainer = big.NewInt(1 << 2)
+)
+
+type ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem struct {
+	Container            string                                                                                   `json:"container" url:"container"`
+	ContainerCount       int                                                                                      `json:"containerCount" url:"containerCount"`
+	ContentsPerContainer *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer `json:"contentsPerContainer" url:"contentsPerContainer"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) GetContainer() string {
+	if l == nil {
+		return ""
+	}
+	return l.Container
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) GetContainerCount() int {
+	if l == nil {
+		return 0
+	}
+	return l.ContainerCount
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) GetContentsPerContainer() *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer {
+	if l == nil {
+		return nil
+	}
+	return l.ContentsPerContainer
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
+	return l.extraProperties
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetContainer sets the Container field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) SetContainer(container string) {
+	l.Container = container
+	l.require(listCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemFieldContainer)
+}
+
+// SetContainerCount sets the ContainerCount field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) SetContainerCount(containerCount int) {
+	l.ContainerCount = containerCount
+	l.require(listCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemFieldContainerCount)
+}
+
+// SetContentsPerContainer sets the ContentsPerContainer field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) SetContentsPerContainer(contentsPerContainer *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer) {
+	l.ContentsPerContainer = contentsPerContainer
+	l.require(listCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemFieldContentsPerContainer)
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) MarshalJSON() ([]byte, error) {
+	type embed ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItem) String() string {
+	if l == nil {
+		return "<nil>"
+	}
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+var (
+	listCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerFieldValue = big.NewInt(1 << 0)
+	listCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerFieldUnit  = big.NewInt(1 << 1)
+)
+
+type ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer struct {
+	Value string                                                                                      `json:"value" url:"value"`
+	Unit  ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit `json:"unit" url:"unit"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer) GetValue() string {
+	if l == nil {
+		return ""
+	}
+	return l.Value
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer) GetUnit() ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit {
+	if l == nil {
+		return ""
+	}
+	return l.Unit
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
+	return l.extraProperties
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetValue sets the Value field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer) SetValue(value string) {
+	l.Value = value
+	l.require(listCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerFieldValue)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer) SetUnit(unit ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit) {
+	l.Unit = unit
+	l.require(listCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerFieldUnit)
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer) MarshalJSON() ([]byte, error) {
+	type embed ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (l *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainer) String() string {
+	if l == nil {
+		return "<nil>"
+	}
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit string
+
+const (
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitMg        ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "mg"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitG         ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "g"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitUg        ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "ug"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitML        ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "mL"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitL         ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "L"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitIu        ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "[IU]"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitTablet    ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "tablet"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitCapsule   ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "capsule"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitTroche    ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "troche"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitActuation ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "actuation"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitPatch     ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "patch"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitPackage   ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "package"
+	ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitContainer ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "container"
+)
+
+func NewListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitFromString(s string) (ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit, error) {
+	switch s {
+	case "mg":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitMg, nil
+	case "g":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitG, nil
+	case "ug":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitUg, nil
+	case "mL":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitML, nil
+	case "L":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitL, nil
+	case "[IU]":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitIu, nil
+	case "tablet":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitTablet, nil
+	case "capsule":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitCapsule, nil
+	case "troche":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitTroche, nil
+	case "actuation":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitActuation, nil
+	case "patch":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitPatch, nil
+	case "package":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitPackage, nil
+	case "container":
+		return ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnitContainer, nil
+	}
+	var t ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit) Ptr() *ListCatalogItemsResponseDataItemCatalogDetailsPackageComponentsItemContentsPerContainerUnit {
 	return &l
 }
 
@@ -12515,16 +12824,16 @@ func (l *ListCatalogItemsResponseDataItemMedicationGroupOfferCount) Accept(visit
 type ListCatalogItemsResponseDataItemMedicationGroupOfferCountOne string
 
 const (
-	ListCatalogItemsResponseDataItemMedicationGroupOfferCountOneInfinity ListCatalogItemsResponseDataItemMedicationGroupOfferCountOne = "Infinity"
 	ListCatalogItemsResponseDataItemMedicationGroupOfferCountOneNaN      ListCatalogItemsResponseDataItemMedicationGroupOfferCountOne = "NaN"
+	ListCatalogItemsResponseDataItemMedicationGroupOfferCountOneInfinity ListCatalogItemsResponseDataItemMedicationGroupOfferCountOne = "Infinity"
 )
 
 func NewListCatalogItemsResponseDataItemMedicationGroupOfferCountOneFromString(s string) (ListCatalogItemsResponseDataItemMedicationGroupOfferCountOne, error) {
 	switch s {
-	case "Infinity":
-		return ListCatalogItemsResponseDataItemMedicationGroupOfferCountOneInfinity, nil
 	case "NaN":
 		return ListCatalogItemsResponseDataItemMedicationGroupOfferCountOneNaN, nil
+	case "Infinity":
+		return ListCatalogItemsResponseDataItemMedicationGroupOfferCountOneInfinity, nil
 	}
 	var t ListCatalogItemsResponseDataItemMedicationGroupOfferCountOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -12599,16 +12908,16 @@ func (l *ListCatalogItemsResponseDataItemMedicationGroupPharmacyCount) Accept(vi
 type ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOne string
 
 const (
-	ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOneInfinity ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOne = "Infinity"
 	ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOneNaN      ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOne = "NaN"
+	ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOneInfinity ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOne = "Infinity"
 )
 
 func NewListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOneFromString(s string) (ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOne, error) {
 	switch s {
-	case "Infinity":
-		return ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOneInfinity, nil
 	case "NaN":
 		return ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOneNaN, nil
+	case "Infinity":
+		return ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOneInfinity, nil
 	}
 	var t ListCatalogItemsResponseDataItemMedicationGroupPharmacyCountOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -13344,16 +13653,16 @@ func (l *ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantiti
 type ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOne string
 
 const (
-	ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOneInfinity ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOne = "Infinity"
 	ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOneNaN      ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOne = "NaN"
+	ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOneInfinity ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOne = "Infinity"
 )
 
 func NewListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOneFromString(s string) (ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOneInfinity, nil
 	case "NaN":
 		return ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOneNaN, nil
+	case "Infinity":
+		return ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOneInfinity, nil
 	}
 	var t ListCatalogItemsResponseDataItemPrescriptionRequirementsAllowedQuantitiesItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -13667,16 +13976,16 @@ func (l *ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantity
 type ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOne string
 
 const (
-	ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOneInfinity ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOne = "Infinity"
 	ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOneNaN      ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOne = "NaN"
+	ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOneInfinity ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOne = "Infinity"
 )
 
 func NewListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOneFromString(s string) (ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOne, error) {
 	switch s {
-	case "Infinity":
-		return ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOneInfinity, nil
 	case "NaN":
 		return ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOneNaN, nil
+	case "Infinity":
+		return ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOneInfinity, nil
 	}
 	var t ListCatalogItemsResponseDataItemPrescriptionRequirementsDefaultQuantityValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -13974,16 +14283,16 @@ func (l *ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncreme
 type ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOne string
 
 const (
-	ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOneInfinity ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOne = "Infinity"
 	ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOneNaN      ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOne = "NaN"
+	ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOneInfinity ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOne = "Infinity"
 )
 
 func NewListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOneFromString(s string) (ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOne, error) {
 	switch s {
-	case "Infinity":
-		return ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOneInfinity, nil
 	case "NaN":
 		return ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOneNaN, nil
+	case "Infinity":
+		return ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOneInfinity, nil
 	}
 	var t ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMaxOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -14058,16 +14367,16 @@ func (l *ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncreme
 type ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOne string
 
 const (
-	ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOneInfinity ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOne = "Infinity"
 	ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOneNaN      ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOne = "NaN"
+	ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOneInfinity ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOne = "Infinity"
 )
 
 func NewListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOneFromString(s string) (ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOne, error) {
 	switch s {
-	case "Infinity":
-		return ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOneInfinity, nil
 	case "NaN":
 		return ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOneNaN, nil
+	case "Infinity":
+		return ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOneInfinity, nil
 	}
 	var t ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementMinOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -14142,16 +14451,16 @@ func (l *ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncreme
 type ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOne string
 
 const (
-	ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOneInfinity ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOne = "Infinity"
 	ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOneNaN      ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOne = "NaN"
+	ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOneInfinity ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOne = "Infinity"
 )
 
 func NewListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOneFromString(s string) (ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOne, error) {
 	switch s {
-	case "Infinity":
-		return ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOneInfinity, nil
 	case "NaN":
 		return ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOneNaN, nil
+	case "Infinity":
+		return ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOneInfinity, nil
 	}
 	var t ListCatalogItemsResponseDataItemPrescriptionRequirementsQuantityIncrementValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -14488,13 +14797,15 @@ func (l *ListCatalogItemsResponseDataItemPricingBasis) validate() error {
 }
 
 var (
-	listCatalogItemsResponseDataItemPricingBasisItemFieldQuantity = big.NewInt(1 << 0)
-	listCatalogItemsResponseDataItemPricingBasisItemFieldUnit     = big.NewInt(1 << 1)
+	listCatalogItemsResponseDataItemPricingBasisItemFieldQuantity       = big.NewInt(1 << 0)
+	listCatalogItemsResponseDataItemPricingBasisItemFieldUnit           = big.NewInt(1 << 1)
+	listCatalogItemsResponseDataItemPricingBasisItemFieldQuantityPrices = big.NewInt(1 << 2)
 )
 
 type ListCatalogItemsResponseDataItemPricingBasisItem struct {
-	Quantity ListCatalogItemsResponseDataItemPricingBasisItemQuantity `json:"quantity" url:"quantity"`
-	Unit     string                                                   `json:"unit" url:"unit"`
+	Quantity       ListCatalogItemsResponseDataItemPricingBasisItemQuantity              `json:"quantity" url:"quantity"`
+	Unit           string                                                                `json:"unit" url:"unit"`
+	QuantityPrices []*ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem `json:"quantityPrices,omitempty" url:"quantityPrices,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -14515,6 +14826,13 @@ func (l *ListCatalogItemsResponseDataItemPricingBasisItem) GetUnit() string {
 		return ""
 	}
 	return l.Unit
+}
+
+func (l *ListCatalogItemsResponseDataItemPricingBasisItem) GetQuantityPrices() []*ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem {
+	if l == nil {
+		return nil
+	}
+	return l.QuantityPrices
 }
 
 func (l *ListCatalogItemsResponseDataItemPricingBasisItem) GetExtraProperties() map[string]interface{} {
@@ -14543,6 +14861,13 @@ func (l *ListCatalogItemsResponseDataItemPricingBasisItem) SetQuantity(quantity 
 func (l *ListCatalogItemsResponseDataItemPricingBasisItem) SetUnit(unit string) {
 	l.Unit = unit
 	l.require(listCatalogItemsResponseDataItemPricingBasisItemFieldUnit)
+}
+
+// SetQuantityPrices sets the QuantityPrices field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogItemsResponseDataItemPricingBasisItem) SetQuantityPrices(quantityPrices []*ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem) {
+	l.QuantityPrices = quantityPrices
+	l.require(listCatalogItemsResponseDataItemPricingBasisItemFieldQuantityPrices)
 }
 
 func (l *ListCatalogItemsResponseDataItemPricingBasisItem) UnmarshalJSON(data []byte) error {
@@ -14604,6 +14929,106 @@ func NewListCatalogItemsResponseDataItemPricingBasisItemQuantityFromString(s str
 
 func (l ListCatalogItemsResponseDataItemPricingBasisItemQuantity) Ptr() *ListCatalogItemsResponseDataItemPricingBasisItemQuantity {
 	return &l
+}
+
+var (
+	listCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItemFieldQuantity    = big.NewInt(1 << 0)
+	listCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItemFieldAmountCents = big.NewInt(1 << 1)
+)
+
+type ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem struct {
+	Quantity    string `json:"quantity" url:"quantity"`
+	AmountCents int    `json:"amountCents" url:"amountCents"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem) GetQuantity() string {
+	if l == nil {
+		return ""
+	}
+	return l.Quantity
+}
+
+func (l *ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem) GetAmountCents() int {
+	if l == nil {
+		return 0
+	}
+	return l.AmountCents
+}
+
+func (l *ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
+	return l.extraProperties
+}
+
+func (l *ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem) SetQuantity(quantity string) {
+	l.Quantity = quantity
+	l.require(listCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItemFieldQuantity)
+}
+
+// SetAmountCents sets the AmountCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem) SetAmountCents(amountCents int) {
+	l.AmountCents = amountCents
+	l.require(listCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItemFieldAmountCents)
+}
+
+func (l *ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem) MarshalJSON() ([]byte, error) {
+	type embed ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (l *ListCatalogItemsResponseDataItemPricingBasisItemQuantityPricesItem) String() string {
+	if l == nil {
+		return "<nil>"
+	}
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
 }
 
 var (
@@ -22266,21 +22691,1416 @@ func (l ListWebhookGrantsResponseURL) Ptr() *ListWebhookGrantsResponseURL {
 }
 
 var (
+	platformPublicAPISellingPricesReadPresentationPriceResponseFieldAmountCents        = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadPresentationPriceResponseFieldVersion            = big.NewInt(1 << 1)
+	platformPublicAPISellingPricesReadPresentationPriceResponseFieldCurrency           = big.NewInt(1 << 2)
+	platformPublicAPISellingPricesReadPresentationPriceResponseFieldAffinityPriceCents = big.NewInt(1 << 3)
+	platformPublicAPISellingPricesReadPresentationPriceResponseFieldAffinityBasis      = big.NewInt(1 << 4)
+	platformPublicAPISellingPricesReadPresentationPriceResponseFieldBasis              = big.NewInt(1 << 5)
+)
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponse struct {
+	AmountCents        *int                                                                      `json:"amountCents,omitempty" url:"amountCents,omitempty"`
+	Version            int                                                                       `json:"version" url:"version"`
+	Currency           PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrency       `json:"currency" url:"currency"`
+	AffinityPriceCents *int                                                                      `json:"affinityPriceCents,omitempty" url:"affinityPriceCents,omitempty"`
+	AffinityBasis      *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis `json:"affinityBasis,omitempty" url:"affinityBasis,omitempty"`
+	Basis              *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis         `json:"basis,omitempty" url:"basis,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) GetAmountCents() *int {
+	if p == nil {
+		return nil
+	}
+	return p.AmountCents
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) GetVersion() int {
+	if p == nil {
+		return 0
+	}
+	return p.Version
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) GetCurrency() PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrency {
+	if p == nil {
+		return ""
+	}
+	return p.Currency
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) GetAffinityPriceCents() *int {
+	if p == nil {
+		return nil
+	}
+	return p.AffinityPriceCents
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) GetAffinityBasis() *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis {
+	if p == nil {
+		return nil
+	}
+	return p.AffinityBasis
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) GetBasis() *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis {
+	if p == nil {
+		return nil
+	}
+	return p.Basis
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetAmountCents sets the AmountCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) SetAmountCents(amountCents *int) {
+	p.AmountCents = amountCents
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseFieldAmountCents)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) SetVersion(version int) {
+	p.Version = version
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseFieldVersion)
+}
+
+// SetCurrency sets the Currency field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) SetCurrency(currency PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrency) {
+	p.Currency = currency
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseFieldCurrency)
+}
+
+// SetAffinityPriceCents sets the AffinityPriceCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) SetAffinityPriceCents(affinityPriceCents *int) {
+	p.AffinityPriceCents = affinityPriceCents
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseFieldAffinityPriceCents)
+}
+
+// SetAffinityBasis sets the AffinityBasis field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) SetAffinityBasis(affinityBasis *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis) {
+	p.AffinityBasis = affinityBasis
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseFieldAffinityBasis)
+}
+
+// SetBasis sets the Basis field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) SetBasis(basis *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis) {
+	p.Basis = basis
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseFieldBasis)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadPresentationPriceResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadPresentationPriceResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadPresentationPriceResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis struct {
+	Kind    string
+	Item    *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem
+	Package *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage
+	Unit    *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit
+
+	rawJSON json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis) GetKind() string {
+	if p == nil {
+		return ""
+	}
+	return p.Kind
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis) GetItem() *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem {
+	if p == nil {
+		return nil
+	}
+	return p.Item
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis) GetPackage() *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage {
+	if p == nil {
+		return nil
+	}
+	return p.Package
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis) GetUnit() *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit {
+	if p == nil {
+		return nil
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Kind string `json:"kind"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	p.Kind = unmarshaler.Kind
+	if unmarshaler.Kind == "" {
+		return fmt.Errorf("%T did not include discriminant kind", p)
+	}
+	switch unmarshaler.Kind {
+	case "item":
+		value := new(PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Item = value
+	case "package":
+		value := new(PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Package = value
+	case "unit":
+		value := new(PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Unit = value
+	}
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis) MarshalJSON() ([]byte, error) {
+	if err := p.validate(); err != nil {
+		return nil, err
+	}
+	if p.Item != nil {
+		return internal.MarshalJSONWithExtraProperty(p.Item, "kind", "item")
+	}
+	if p.Package != nil {
+		return internal.MarshalJSONWithExtraProperty(p.Package, "kind", "package")
+	}
+	if p.Unit != nil {
+		return internal.MarshalJSONWithExtraProperty(p.Unit, "kind", "unit")
+	}
+	if len(p.rawJSON) > 0 {
+		return p.rawJSON, nil
+	}
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", p)
+}
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisVisitor interface {
+	VisitItem(*PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) error
+	VisitPackage(*PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage) error
+	VisitUnit(*PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit) error
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis) Accept(visitor PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisVisitor) error {
+	if p.Item != nil {
+		return visitor.VisitItem(p.Item)
+	}
+	if p.Package != nil {
+		return visitor.VisitPackage(p.Package)
+	}
+	if p.Unit != nil {
+		return visitor.VisitUnit(p.Unit)
+	}
+	return fmt.Errorf("type %T does not define a non-empty union type", p)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasis) validate() error {
+	if p == nil {
+		return fmt.Errorf("type %T is nil", p)
+	}
+	var fields []string
+	if p.Item != nil {
+		fields = append(fields, "item")
+	}
+	if p.Package != nil {
+		fields = append(fields, "package")
+	}
+	if p.Unit != nil {
+		fields = append(fields, "unit")
+	}
+	if len(fields) == 0 {
+		if p.Kind != "" {
+			if len(p.rawJSON) > 0 {
+				return nil
+			}
+			return fmt.Errorf("type %T defines a discriminant set to %q but the field is not set", p, p.Kind)
+		}
+		return fmt.Errorf("type %T is empty", p)
+	}
+	if len(fields) > 1 {
+		return fmt.Errorf("type %T defines values for %s, but only one value is allowed", p, fields)
+	}
+	if p.Kind != "" {
+		field := fields[0]
+		if p.Kind != field {
+			return fmt.Errorf(
+				"type %T defines a discriminant set to %q, but it does not match the %T field; either remove or update the discriminant to match",
+				p,
+				p.Kind,
+				p,
+			)
+		}
+	}
+	return nil
+}
+
+var (
+	platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemFieldQuantity       = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemFieldUnit           = big.NewInt(1 << 1)
+	platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemFieldQuantityPrices = big.NewInt(1 << 2)
+)
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem struct {
+	Quantity       PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantity              `json:"quantity" url:"quantity"`
+	Unit           string                                                                                            `json:"unit" url:"unit"`
+	QuantityPrices []*PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem `json:"quantityPrices,omitempty" url:"quantityPrices,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) GetQuantity() PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantity {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) GetUnit() string {
+	if p == nil {
+		return ""
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) GetQuantityPrices() []*PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem {
+	if p == nil {
+		return nil
+	}
+	return p.QuantityPrices
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) SetQuantity(quantity PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantity) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemFieldQuantity)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) SetUnit(unit string) {
+	p.Unit = unit
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemFieldUnit)
+}
+
+// SetQuantityPrices sets the QuantityPrices field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) SetQuantityPrices(quantityPrices []*PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem) {
+	p.QuantityPrices = quantityPrices
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemFieldQuantityPrices)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItem) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantity string
+
+const (
+	PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityOne PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantity = "1"
+)
+
+func NewPlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityFromString(s string) (PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantity, error) {
+	switch s {
+	case "1":
+		return PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityOne, nil
+	}
+	var t PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantity
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantity) Ptr() *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantity {
+	return &p
+}
+
+var (
+	platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItemFieldQuantity    = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItemFieldAmountCents = big.NewInt(1 << 1)
+)
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem struct {
+	Quantity    string `json:"quantity" url:"quantity"`
+	AmountCents int    `json:"amountCents" url:"amountCents"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem) GetQuantity() string {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem) GetAmountCents() int {
+	if p == nil {
+		return 0
+	}
+	return p.AmountCents
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem) SetQuantity(quantity string) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItemFieldQuantity)
+}
+
+// SetAmountCents sets the AmountCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem) SetAmountCents(amountCents int) {
+	p.AmountCents = amountCents
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItemFieldAmountCents)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisItemQuantityPricesItem) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackageFieldQuantity = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackageFieldUnit     = big.NewInt(1 << 1)
+)
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage struct {
+	Quantity string `json:"quantity" url:"quantity"`
+	Unit     string `json:"unit" url:"unit"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage) GetQuantity() string {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage) GetUnit() string {
+	if p == nil {
+		return ""
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage) SetQuantity(quantity string) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackageFieldQuantity)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage) SetUnit(unit string) {
+	p.Unit = unit
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackageFieldUnit)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisPackage) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitFieldQuantity = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitFieldUnit     = big.NewInt(1 << 1)
+)
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit struct {
+	Quantity PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantity `json:"quantity" url:"quantity"`
+	Unit     string                                                                               `json:"unit" url:"unit"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit) GetQuantity() PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantity {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit) GetUnit() string {
+	if p == nil {
+		return ""
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit) SetQuantity(quantity PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantity) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitFieldQuantity)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit) SetUnit(unit string) {
+	p.Unit = unit
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitFieldUnit)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnit) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantity string
+
+const (
+	PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantityOne PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantity = "1"
+)
+
+func NewPlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantityFromString(s string) (PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantity, error) {
+	switch s {
+	case "1":
+		return PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantityOne, nil
+	}
+	var t PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantity
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantity) Ptr() *PlatformPublicAPISellingPricesReadPresentationPriceResponseAffinityBasisUnitQuantity {
+	return &p
+}
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis struct {
+	Kind    string
+	Item    *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem
+	Package *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage
+	Unit    *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit
+
+	rawJSON json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis) GetKind() string {
+	if p == nil {
+		return ""
+	}
+	return p.Kind
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis) GetItem() *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem {
+	if p == nil {
+		return nil
+	}
+	return p.Item
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis) GetPackage() *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage {
+	if p == nil {
+		return nil
+	}
+	return p.Package
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis) GetUnit() *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit {
+	if p == nil {
+		return nil
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Kind string `json:"kind"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	p.Kind = unmarshaler.Kind
+	if unmarshaler.Kind == "" {
+		return fmt.Errorf("%T did not include discriminant kind", p)
+	}
+	switch unmarshaler.Kind {
+	case "item":
+		value := new(PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Item = value
+	case "package":
+		value := new(PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Package = value
+	case "unit":
+		value := new(PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Unit = value
+	}
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis) MarshalJSON() ([]byte, error) {
+	if err := p.validate(); err != nil {
+		return nil, err
+	}
+	if p.Item != nil {
+		return internal.MarshalJSONWithExtraProperty(p.Item, "kind", "item")
+	}
+	if p.Package != nil {
+		return internal.MarshalJSONWithExtraProperty(p.Package, "kind", "package")
+	}
+	if p.Unit != nil {
+		return internal.MarshalJSONWithExtraProperty(p.Unit, "kind", "unit")
+	}
+	if len(p.rawJSON) > 0 {
+		return p.rawJSON, nil
+	}
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", p)
+}
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisVisitor interface {
+	VisitItem(*PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) error
+	VisitPackage(*PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage) error
+	VisitUnit(*PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit) error
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis) Accept(visitor PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisVisitor) error {
+	if p.Item != nil {
+		return visitor.VisitItem(p.Item)
+	}
+	if p.Package != nil {
+		return visitor.VisitPackage(p.Package)
+	}
+	if p.Unit != nil {
+		return visitor.VisitUnit(p.Unit)
+	}
+	return fmt.Errorf("type %T does not define a non-empty union type", p)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasis) validate() error {
+	if p == nil {
+		return fmt.Errorf("type %T is nil", p)
+	}
+	var fields []string
+	if p.Item != nil {
+		fields = append(fields, "item")
+	}
+	if p.Package != nil {
+		fields = append(fields, "package")
+	}
+	if p.Unit != nil {
+		fields = append(fields, "unit")
+	}
+	if len(fields) == 0 {
+		if p.Kind != "" {
+			if len(p.rawJSON) > 0 {
+				return nil
+			}
+			return fmt.Errorf("type %T defines a discriminant set to %q but the field is not set", p, p.Kind)
+		}
+		return fmt.Errorf("type %T is empty", p)
+	}
+	if len(fields) > 1 {
+		return fmt.Errorf("type %T defines values for %s, but only one value is allowed", p, fields)
+	}
+	if p.Kind != "" {
+		field := fields[0]
+		if p.Kind != field {
+			return fmt.Errorf(
+				"type %T defines a discriminant set to %q, but it does not match the %T field; either remove or update the discriminant to match",
+				p,
+				p.Kind,
+				p,
+			)
+		}
+	}
+	return nil
+}
+
+var (
+	platformPublicAPISellingPricesReadPresentationPriceResponseBasisItemFieldQuantity       = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadPresentationPriceResponseBasisItemFieldUnit           = big.NewInt(1 << 1)
+	platformPublicAPISellingPricesReadPresentationPriceResponseBasisItemFieldQuantityPrices = big.NewInt(1 << 2)
+)
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem struct {
+	Quantity       PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantity              `json:"quantity" url:"quantity"`
+	Unit           string                                                                                    `json:"unit" url:"unit"`
+	QuantityPrices []*PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem `json:"quantityPrices,omitempty" url:"quantityPrices,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) GetQuantity() PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantity {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) GetUnit() string {
+	if p == nil {
+		return ""
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) GetQuantityPrices() []*PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem {
+	if p == nil {
+		return nil
+	}
+	return p.QuantityPrices
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) SetQuantity(quantity PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantity) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseBasisItemFieldQuantity)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) SetUnit(unit string) {
+	p.Unit = unit
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseBasisItemFieldUnit)
+}
+
+// SetQuantityPrices sets the QuantityPrices field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) SetQuantityPrices(quantityPrices []*PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem) {
+	p.QuantityPrices = quantityPrices
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseBasisItemFieldQuantityPrices)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItem) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantity string
+
+const (
+	PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityOne PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantity = "1"
+)
+
+func NewPlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityFromString(s string) (PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantity, error) {
+	switch s {
+	case "1":
+		return PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityOne, nil
+	}
+	var t PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantity
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantity) Ptr() *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantity {
+	return &p
+}
+
+var (
+	platformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItemFieldQuantity    = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItemFieldAmountCents = big.NewInt(1 << 1)
+)
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem struct {
+	Quantity    string `json:"quantity" url:"quantity"`
+	AmountCents int    `json:"amountCents" url:"amountCents"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem) GetQuantity() string {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem) GetAmountCents() int {
+	if p == nil {
+		return 0
+	}
+	return p.AmountCents
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem) SetQuantity(quantity string) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItemFieldQuantity)
+}
+
+// SetAmountCents sets the AmountCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem) SetAmountCents(amountCents int) {
+	p.AmountCents = amountCents
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItemFieldAmountCents)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisItemQuantityPricesItem) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	platformPublicAPISellingPricesReadPresentationPriceResponseBasisPackageFieldQuantity = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadPresentationPriceResponseBasisPackageFieldUnit     = big.NewInt(1 << 1)
+)
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage struct {
+	Quantity string `json:"quantity" url:"quantity"`
+	Unit     string `json:"unit" url:"unit"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage) GetQuantity() string {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage) GetUnit() string {
+	if p == nil {
+		return ""
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage) SetQuantity(quantity string) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseBasisPackageFieldQuantity)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage) SetUnit(unit string) {
+	p.Unit = unit
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseBasisPackageFieldUnit)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisPackage) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	platformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitFieldQuantity = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitFieldUnit     = big.NewInt(1 << 1)
+)
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit struct {
+	Quantity PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantity `json:"quantity" url:"quantity"`
+	Unit     string                                                                       `json:"unit" url:"unit"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit) GetQuantity() PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantity {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit) GetUnit() string {
+	if p == nil {
+		return ""
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit) SetQuantity(quantity PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantity) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitFieldQuantity)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit) SetUnit(unit string) {
+	p.Unit = unit
+	p.require(platformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitFieldUnit)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnit) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantity string
+
+const (
+	PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantityOne PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantity = "1"
+)
+
+func NewPlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantityFromString(s string) (PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantity, error) {
+	switch s {
+	case "1":
+		return PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantityOne, nil
+	}
+	var t PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantity
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantity) Ptr() *PlatformPublicAPISellingPricesReadPresentationPriceResponseBasisUnitQuantity {
+	return &p
+}
+
+type PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrency string
+
+const (
+	PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrencyUsd PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrency = "USD"
+)
+
+func NewPlatformPublicAPISellingPricesReadPresentationPriceResponseCurrencyFromString(s string) (PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrency, error) {
+	switch s {
+	case "USD":
+		return PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrencyUsd, nil
+	}
+	var t PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrency
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrency) Ptr() *PlatformPublicAPISellingPricesReadPresentationPriceResponseCurrency {
+	return &p
+}
+
+var (
 	platformPublicAPISellingPricesReadSellingPriceResponseFieldAmountCents         = big.NewInt(1 << 0)
 	platformPublicAPISellingPricesReadSellingPriceResponseFieldVersion             = big.NewInt(1 << 1)
 	platformPublicAPISellingPricesReadSellingPriceResponseFieldCurrency            = big.NewInt(1 << 2)
-	platformPublicAPISellingPricesReadSellingPriceResponseFieldBasis               = big.NewInt(1 << 3)
-	platformPublicAPISellingPricesReadSellingPriceResponseFieldPurchaseAmountCents = big.NewInt(1 << 4)
-	platformPublicAPISellingPricesReadSellingPriceResponseFieldRequiresReview      = big.NewInt(1 << 5)
+	platformPublicAPISellingPricesReadSellingPriceResponseFieldAffinityPriceCents  = big.NewInt(1 << 3)
+	platformPublicAPISellingPricesReadSellingPriceResponseFieldAffinityBasis       = big.NewInt(1 << 4)
+	platformPublicAPISellingPricesReadSellingPriceResponseFieldBasis               = big.NewInt(1 << 5)
+	platformPublicAPISellingPricesReadSellingPriceResponseFieldPurchaseAmountCents = big.NewInt(1 << 6)
+	platformPublicAPISellingPricesReadSellingPriceResponseFieldRequiresReview      = big.NewInt(1 << 7)
 )
 
 type PlatformPublicAPISellingPricesReadSellingPriceResponse struct {
-	AmountCents         *int                                                           `json:"amountCents,omitempty" url:"amountCents,omitempty"`
-	Version             int                                                            `json:"version" url:"version"`
-	Currency            PlatformPublicAPISellingPricesReadSellingPriceResponseCurrency `json:"currency" url:"currency"`
-	Basis               *PlatformPublicAPISellingPricesReadSellingPriceResponseBasis   `json:"basis" url:"basis"`
-	PurchaseAmountCents int                                                            `json:"purchaseAmountCents" url:"purchaseAmountCents"`
-	RequiresReview      bool                                                           `json:"requiresReview" url:"requiresReview"`
+	AmountCents         *int                                                                 `json:"amountCents,omitempty" url:"amountCents,omitempty"`
+	Version             int                                                                  `json:"version" url:"version"`
+	Currency            PlatformPublicAPISellingPricesReadSellingPriceResponseCurrency       `json:"currency" url:"currency"`
+	AffinityPriceCents  *int                                                                 `json:"affinityPriceCents,omitempty" url:"affinityPriceCents,omitempty"`
+	AffinityBasis       *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis `json:"affinityBasis,omitempty" url:"affinityBasis,omitempty"`
+	Basis               *PlatformPublicAPISellingPricesReadSellingPriceResponseBasis         `json:"basis" url:"basis"`
+	PurchaseAmountCents int                                                                  `json:"purchaseAmountCents" url:"purchaseAmountCents"`
+	RequiresReview      bool                                                                 `json:"requiresReview" url:"requiresReview"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -22308,6 +24128,20 @@ func (p *PlatformPublicAPISellingPricesReadSellingPriceResponse) GetCurrency() P
 		return ""
 	}
 	return p.Currency
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponse) GetAffinityPriceCents() *int {
+	if p == nil {
+		return nil
+	}
+	return p.AffinityPriceCents
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponse) GetAffinityBasis() *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis {
+	if p == nil {
+		return nil
+	}
+	return p.AffinityBasis
 }
 
 func (p *PlatformPublicAPISellingPricesReadSellingPriceResponse) GetBasis() *PlatformPublicAPISellingPricesReadSellingPriceResponseBasis {
@@ -22364,6 +24198,20 @@ func (p *PlatformPublicAPISellingPricesReadSellingPriceResponse) SetVersion(vers
 func (p *PlatformPublicAPISellingPricesReadSellingPriceResponse) SetCurrency(currency PlatformPublicAPISellingPricesReadSellingPriceResponseCurrency) {
 	p.Currency = currency
 	p.require(platformPublicAPISellingPricesReadSellingPriceResponseFieldCurrency)
+}
+
+// SetAffinityPriceCents sets the AffinityPriceCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponse) SetAffinityPriceCents(affinityPriceCents *int) {
+	p.AffinityPriceCents = affinityPriceCents
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseFieldAffinityPriceCents)
+}
+
+// SetAffinityBasis sets the AffinityBasis field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponse) SetAffinityBasis(affinityBasis *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis) {
+	p.AffinityBasis = affinityBasis
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseFieldAffinityBasis)
 }
 
 // SetBasis sets the Basis field and marks it as non-optional;
@@ -22427,6 +24275,610 @@ func (p *PlatformPublicAPISellingPricesReadSellingPriceResponse) String() string
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
+}
+
+type PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis struct {
+	Kind    string
+	Item    *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem
+	Package *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage
+	Unit    *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit
+
+	rawJSON json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis) GetKind() string {
+	if p == nil {
+		return ""
+	}
+	return p.Kind
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis) GetItem() *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem {
+	if p == nil {
+		return nil
+	}
+	return p.Item
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis) GetPackage() *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage {
+	if p == nil {
+		return nil
+	}
+	return p.Package
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis) GetUnit() *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit {
+	if p == nil {
+		return nil
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Kind string `json:"kind"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	p.Kind = unmarshaler.Kind
+	if unmarshaler.Kind == "" {
+		return fmt.Errorf("%T did not include discriminant kind", p)
+	}
+	switch unmarshaler.Kind {
+	case "item":
+		value := new(PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Item = value
+	case "package":
+		value := new(PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Package = value
+	case "unit":
+		value := new(PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Unit = value
+	}
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis) MarshalJSON() ([]byte, error) {
+	if err := p.validate(); err != nil {
+		return nil, err
+	}
+	if p.Item != nil {
+		return internal.MarshalJSONWithExtraProperty(p.Item, "kind", "item")
+	}
+	if p.Package != nil {
+		return internal.MarshalJSONWithExtraProperty(p.Package, "kind", "package")
+	}
+	if p.Unit != nil {
+		return internal.MarshalJSONWithExtraProperty(p.Unit, "kind", "unit")
+	}
+	if len(p.rawJSON) > 0 {
+		return p.rawJSON, nil
+	}
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", p)
+}
+
+type PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisVisitor interface {
+	VisitItem(*PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) error
+	VisitPackage(*PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage) error
+	VisitUnit(*PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit) error
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis) Accept(visitor PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisVisitor) error {
+	if p.Item != nil {
+		return visitor.VisitItem(p.Item)
+	}
+	if p.Package != nil {
+		return visitor.VisitPackage(p.Package)
+	}
+	if p.Unit != nil {
+		return visitor.VisitUnit(p.Unit)
+	}
+	return fmt.Errorf("type %T does not define a non-empty union type", p)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasis) validate() error {
+	if p == nil {
+		return fmt.Errorf("type %T is nil", p)
+	}
+	var fields []string
+	if p.Item != nil {
+		fields = append(fields, "item")
+	}
+	if p.Package != nil {
+		fields = append(fields, "package")
+	}
+	if p.Unit != nil {
+		fields = append(fields, "unit")
+	}
+	if len(fields) == 0 {
+		if p.Kind != "" {
+			if len(p.rawJSON) > 0 {
+				return nil
+			}
+			return fmt.Errorf("type %T defines a discriminant set to %q but the field is not set", p, p.Kind)
+		}
+		return fmt.Errorf("type %T is empty", p)
+	}
+	if len(fields) > 1 {
+		return fmt.Errorf("type %T defines values for %s, but only one value is allowed", p, fields)
+	}
+	if p.Kind != "" {
+		field := fields[0]
+		if p.Kind != field {
+			return fmt.Errorf(
+				"type %T defines a discriminant set to %q, but it does not match the %T field; either remove or update the discriminant to match",
+				p,
+				p.Kind,
+				p,
+			)
+		}
+	}
+	return nil
+}
+
+var (
+	platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemFieldQuantity       = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemFieldUnit           = big.NewInt(1 << 1)
+	platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemFieldQuantityPrices = big.NewInt(1 << 2)
+)
+
+type PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem struct {
+	Quantity       PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantity              `json:"quantity" url:"quantity"`
+	Unit           string                                                                                       `json:"unit" url:"unit"`
+	QuantityPrices []*PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem `json:"quantityPrices,omitempty" url:"quantityPrices,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) GetQuantity() PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantity {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) GetUnit() string {
+	if p == nil {
+		return ""
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) GetQuantityPrices() []*PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem {
+	if p == nil {
+		return nil
+	}
+	return p.QuantityPrices
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) SetQuantity(quantity PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantity) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemFieldQuantity)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) SetUnit(unit string) {
+	p.Unit = unit
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemFieldUnit)
+}
+
+// SetQuantityPrices sets the QuantityPrices field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) SetQuantityPrices(quantityPrices []*PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem) {
+	p.QuantityPrices = quantityPrices
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemFieldQuantityPrices)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItem) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantity string
+
+const (
+	PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityOne PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantity = "1"
+)
+
+func NewPlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityFromString(s string) (PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantity, error) {
+	switch s {
+	case "1":
+		return PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityOne, nil
+	}
+	var t PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantity
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantity) Ptr() *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantity {
+	return &p
+}
+
+var (
+	platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItemFieldQuantity    = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItemFieldAmountCents = big.NewInt(1 << 1)
+)
+
+type PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem struct {
+	Quantity    string `json:"quantity" url:"quantity"`
+	AmountCents int    `json:"amountCents" url:"amountCents"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem) GetQuantity() string {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem) GetAmountCents() int {
+	if p == nil {
+		return 0
+	}
+	return p.AmountCents
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem) SetQuantity(quantity string) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItemFieldQuantity)
+}
+
+// SetAmountCents sets the AmountCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem) SetAmountCents(amountCents int) {
+	p.AmountCents = amountCents
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItemFieldAmountCents)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisItemQuantityPricesItem) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackageFieldQuantity = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackageFieldUnit     = big.NewInt(1 << 1)
+)
+
+type PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage struct {
+	Quantity string `json:"quantity" url:"quantity"`
+	Unit     string `json:"unit" url:"unit"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage) GetQuantity() string {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage) GetUnit() string {
+	if p == nil {
+		return ""
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage) SetQuantity(quantity string) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackageFieldQuantity)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage) SetUnit(unit string) {
+	p.Unit = unit
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackageFieldUnit)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisPackage) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
+	platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitFieldQuantity = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitFieldUnit     = big.NewInt(1 << 1)
+)
+
+type PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit struct {
+	Quantity PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantity `json:"quantity" url:"quantity"`
+	Unit     string                                                                          `json:"unit" url:"unit"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit) GetQuantity() PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantity {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit) GetUnit() string {
+	if p == nil {
+		return ""
+	}
+	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit) SetQuantity(quantity PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantity) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitFieldQuantity)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit) SetUnit(unit string) {
+	p.Unit = unit
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitFieldUnit)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnit) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantity string
+
+const (
+	PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantityOne PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantity = "1"
+)
+
+func NewPlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantityFromString(s string) (PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantity, error) {
+	switch s {
+	case "1":
+		return PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantityOne, nil
+	}
+	var t PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantity
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantity) Ptr() *PlatformPublicAPISellingPricesReadSellingPriceResponseAffinityBasisUnitQuantity {
+	return &p
 }
 
 type PlatformPublicAPISellingPricesReadSellingPriceResponseBasis struct {
@@ -22580,13 +25032,15 @@ func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasis) validate()
 }
 
 var (
-	platformPublicAPISellingPricesReadSellingPriceResponseBasisItemFieldQuantity = big.NewInt(1 << 0)
-	platformPublicAPISellingPricesReadSellingPriceResponseBasisItemFieldUnit     = big.NewInt(1 << 1)
+	platformPublicAPISellingPricesReadSellingPriceResponseBasisItemFieldQuantity       = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadSellingPriceResponseBasisItemFieldUnit           = big.NewInt(1 << 1)
+	platformPublicAPISellingPricesReadSellingPriceResponseBasisItemFieldQuantityPrices = big.NewInt(1 << 2)
 )
 
 type PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItem struct {
-	Quantity PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantity `json:"quantity" url:"quantity"`
-	Unit     string                                                                  `json:"unit" url:"unit"`
+	Quantity       PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantity              `json:"quantity" url:"quantity"`
+	Unit           string                                                                               `json:"unit" url:"unit"`
+	QuantityPrices []*PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem `json:"quantityPrices,omitempty" url:"quantityPrices,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -22607,6 +25061,13 @@ func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItem) GetUni
 		return ""
 	}
 	return p.Unit
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItem) GetQuantityPrices() []*PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem {
+	if p == nil {
+		return nil
+	}
+	return p.QuantityPrices
 }
 
 func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItem) GetExtraProperties() map[string]interface{} {
@@ -22635,6 +25096,13 @@ func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItem) SetQua
 func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItem) SetUnit(unit string) {
 	p.Unit = unit
 	p.require(platformPublicAPISellingPricesReadSellingPriceResponseBasisItemFieldUnit)
+}
+
+// SetQuantityPrices sets the QuantityPrices field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItem) SetQuantityPrices(quantityPrices []*PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem) {
+	p.QuantityPrices = quantityPrices
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseBasisItemFieldQuantityPrices)
 }
 
 func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItem) UnmarshalJSON(data []byte) error {
@@ -22696,6 +25164,106 @@ func NewPlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityF
 
 func (p PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantity) Ptr() *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantity {
 	return &p
+}
+
+var (
+	platformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItemFieldQuantity    = big.NewInt(1 << 0)
+	platformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItemFieldAmountCents = big.NewInt(1 << 1)
+)
+
+type PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem struct {
+	Quantity    string `json:"quantity" url:"quantity"`
+	AmountCents int    `json:"amountCents" url:"amountCents"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem) GetQuantity() string {
+	if p == nil {
+		return ""
+	}
+	return p.Quantity
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem) GetAmountCents() int {
+	if p == nil {
+		return 0
+	}
+	return p.AmountCents
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem) SetQuantity(quantity string) {
+	p.Quantity = quantity
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItemFieldQuantity)
+}
+
+// SetAmountCents sets the AmountCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem) SetAmountCents(amountCents int) {
+	p.AmountCents = amountCents
+	p.require(platformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItemFieldAmountCents)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem) MarshalJSON() ([]byte, error) {
+	type embed PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PlatformPublicAPISellingPricesReadSellingPriceResponseBasisItemQuantityPricesItem) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
 }
 
 var (
@@ -22933,677 +25501,6 @@ func NewPlatformPublicAPISellingPricesReadSellingPriceResponseCurrencyFromString
 }
 
 func (p PlatformPublicAPISellingPricesReadSellingPriceResponseCurrency) Ptr() *PlatformPublicAPISellingPricesReadSellingPriceResponseCurrency {
-	return &p
-}
-
-var (
-	platformPublicAPISellingPricesUpdateSellingPriceResponseFieldAmountCents         = big.NewInt(1 << 0)
-	platformPublicAPISellingPricesUpdateSellingPriceResponseFieldVersion             = big.NewInt(1 << 1)
-	platformPublicAPISellingPricesUpdateSellingPriceResponseFieldCurrency            = big.NewInt(1 << 2)
-	platformPublicAPISellingPricesUpdateSellingPriceResponseFieldBasis               = big.NewInt(1 << 3)
-	platformPublicAPISellingPricesUpdateSellingPriceResponseFieldPurchaseAmountCents = big.NewInt(1 << 4)
-	platformPublicAPISellingPricesUpdateSellingPriceResponseFieldRequiresReview      = big.NewInt(1 << 5)
-)
-
-type PlatformPublicAPISellingPricesUpdateSellingPriceResponse struct {
-	AmountCents         *int                                                             `json:"amountCents,omitempty" url:"amountCents,omitempty"`
-	Version             int                                                              `json:"version" url:"version"`
-	Currency            PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrency `json:"currency" url:"currency"`
-	Basis               *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis   `json:"basis" url:"basis"`
-	PurchaseAmountCents int                                                              `json:"purchaseAmountCents" url:"purchaseAmountCents"`
-	RequiresReview      bool                                                             `json:"requiresReview" url:"requiresReview"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) GetAmountCents() *int {
-	if p == nil {
-		return nil
-	}
-	return p.AmountCents
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) GetVersion() int {
-	if p == nil {
-		return 0
-	}
-	return p.Version
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) GetCurrency() PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrency {
-	if p == nil {
-		return ""
-	}
-	return p.Currency
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) GetBasis() *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis {
-	if p == nil {
-		return nil
-	}
-	return p.Basis
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) GetPurchaseAmountCents() int {
-	if p == nil {
-		return 0
-	}
-	return p.PurchaseAmountCents
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) GetRequiresReview() bool {
-	if p == nil {
-		return false
-	}
-	return p.RequiresReview
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) GetExtraProperties() map[string]interface{} {
-	if p == nil {
-		return nil
-	}
-	return p.extraProperties
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
-	}
-	p.explicitFields.Or(p.explicitFields, field)
-}
-
-// SetAmountCents sets the AmountCents field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) SetAmountCents(amountCents *int) {
-	p.AmountCents = amountCents
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseFieldAmountCents)
-}
-
-// SetVersion sets the Version field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) SetVersion(version int) {
-	p.Version = version
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseFieldVersion)
-}
-
-// SetCurrency sets the Currency field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) SetCurrency(currency PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrency) {
-	p.Currency = currency
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseFieldCurrency)
-}
-
-// SetBasis sets the Basis field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) SetBasis(basis *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis) {
-	p.Basis = basis
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseFieldBasis)
-}
-
-// SetPurchaseAmountCents sets the PurchaseAmountCents field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) SetPurchaseAmountCents(purchaseAmountCents int) {
-	p.PurchaseAmountCents = purchaseAmountCents
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseFieldPurchaseAmountCents)
-}
-
-// SetRequiresReview sets the RequiresReview field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) SetRequiresReview(requiresReview bool) {
-	p.RequiresReview = requiresReview
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseFieldRequiresReview)
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler PlatformPublicAPISellingPricesUpdateSellingPriceResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*p = PlatformPublicAPISellingPricesUpdateSellingPriceResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *p)
-	if err != nil {
-		return err
-	}
-	p.extraProperties = extraProperties
-	p.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) MarshalJSON() ([]byte, error) {
-	type embed PlatformPublicAPISellingPricesUpdateSellingPriceResponse
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*p),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponse) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	if len(p.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(p); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", p)
-}
-
-type PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis struct {
-	Kind    string
-	Item    *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem
-	Package *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage
-	Unit    *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit
-
-	rawJSON json.RawMessage
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis) GetKind() string {
-	if p == nil {
-		return ""
-	}
-	return p.Kind
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis) GetItem() *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem {
-	if p == nil {
-		return nil
-	}
-	return p.Item
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis) GetPackage() *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage {
-	if p == nil {
-		return nil
-	}
-	return p.Package
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis) GetUnit() *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit {
-	if p == nil {
-		return nil
-	}
-	return p.Unit
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis) UnmarshalJSON(data []byte) error {
-	var unmarshaler struct {
-		Kind string `json:"kind"`
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	p.Kind = unmarshaler.Kind
-	if unmarshaler.Kind == "" {
-		return fmt.Errorf("%T did not include discriminant kind", p)
-	}
-	switch unmarshaler.Kind {
-	case "item":
-		value := new(PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Item = value
-	case "package":
-		value := new(PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Package = value
-	case "unit":
-		value := new(PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Unit = value
-	}
-	p.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (p PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis) MarshalJSON() ([]byte, error) {
-	if err := p.validate(); err != nil {
-		return nil, err
-	}
-	if p.Item != nil {
-		return internal.MarshalJSONWithExtraProperty(p.Item, "kind", "item")
-	}
-	if p.Package != nil {
-		return internal.MarshalJSONWithExtraProperty(p.Package, "kind", "package")
-	}
-	if p.Unit != nil {
-		return internal.MarshalJSONWithExtraProperty(p.Unit, "kind", "unit")
-	}
-	if len(p.rawJSON) > 0 {
-		return p.rawJSON, nil
-	}
-	return nil, fmt.Errorf("type %T does not define a non-empty union type", p)
-}
-
-type PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisVisitor interface {
-	VisitItem(*PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem) error
-	VisitPackage(*PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage) error
-	VisitUnit(*PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit) error
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis) Accept(visitor PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisVisitor) error {
-	if p.Item != nil {
-		return visitor.VisitItem(p.Item)
-	}
-	if p.Package != nil {
-		return visitor.VisitPackage(p.Package)
-	}
-	if p.Unit != nil {
-		return visitor.VisitUnit(p.Unit)
-	}
-	return fmt.Errorf("type %T does not define a non-empty union type", p)
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasis) validate() error {
-	if p == nil {
-		return fmt.Errorf("type %T is nil", p)
-	}
-	var fields []string
-	if p.Item != nil {
-		fields = append(fields, "item")
-	}
-	if p.Package != nil {
-		fields = append(fields, "package")
-	}
-	if p.Unit != nil {
-		fields = append(fields, "unit")
-	}
-	if len(fields) == 0 {
-		if p.Kind != "" {
-			if len(p.rawJSON) > 0 {
-				return nil
-			}
-			return fmt.Errorf("type %T defines a discriminant set to %q but the field is not set", p, p.Kind)
-		}
-		return fmt.Errorf("type %T is empty", p)
-	}
-	if len(fields) > 1 {
-		return fmt.Errorf("type %T defines values for %s, but only one value is allowed", p, fields)
-	}
-	if p.Kind != "" {
-		field := fields[0]
-		if p.Kind != field {
-			return fmt.Errorf(
-				"type %T defines a discriminant set to %q, but it does not match the %T field; either remove or update the discriminant to match",
-				p,
-				p.Kind,
-				p,
-			)
-		}
-	}
-	return nil
-}
-
-var (
-	platformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemFieldQuantity = big.NewInt(1 << 0)
-	platformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemFieldUnit     = big.NewInt(1 << 1)
-)
-
-type PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem struct {
-	Quantity PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantity `json:"quantity" url:"quantity"`
-	Unit     string                                                                    `json:"unit" url:"unit"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem) GetQuantity() PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantity {
-	if p == nil {
-		return ""
-	}
-	return p.Quantity
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem) GetUnit() string {
-	if p == nil {
-		return ""
-	}
-	return p.Unit
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem) GetExtraProperties() map[string]interface{} {
-	if p == nil {
-		return nil
-	}
-	return p.extraProperties
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
-	}
-	p.explicitFields.Or(p.explicitFields, field)
-}
-
-// SetQuantity sets the Quantity field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem) SetQuantity(quantity PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantity) {
-	p.Quantity = quantity
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemFieldQuantity)
-}
-
-// SetUnit sets the Unit field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem) SetUnit(unit string) {
-	p.Unit = unit
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemFieldUnit)
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem) UnmarshalJSON(data []byte) error {
-	type unmarshaler PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*p = PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *p)
-	if err != nil {
-		return err
-	}
-	p.extraProperties = extraProperties
-	p.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem) MarshalJSON() ([]byte, error) {
-	type embed PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*p),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItem) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	if len(p.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(p); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", p)
-}
-
-type PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantity string
-
-const (
-	PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantityOne PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantity = "1"
-)
-
-func NewPlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantityFromString(s string) (PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantity, error) {
-	switch s {
-	case "1":
-		return PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantityOne, nil
-	}
-	var t PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantity
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (p PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantity) Ptr() *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisItemQuantity {
-	return &p
-}
-
-var (
-	platformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackageFieldQuantity = big.NewInt(1 << 0)
-	platformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackageFieldUnit     = big.NewInt(1 << 1)
-)
-
-type PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage struct {
-	Quantity string `json:"quantity" url:"quantity"`
-	Unit     string `json:"unit" url:"unit"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage) GetQuantity() string {
-	if p == nil {
-		return ""
-	}
-	return p.Quantity
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage) GetUnit() string {
-	if p == nil {
-		return ""
-	}
-	return p.Unit
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage) GetExtraProperties() map[string]interface{} {
-	if p == nil {
-		return nil
-	}
-	return p.extraProperties
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
-	}
-	p.explicitFields.Or(p.explicitFields, field)
-}
-
-// SetQuantity sets the Quantity field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage) SetQuantity(quantity string) {
-	p.Quantity = quantity
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackageFieldQuantity)
-}
-
-// SetUnit sets the Unit field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage) SetUnit(unit string) {
-	p.Unit = unit
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackageFieldUnit)
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage) UnmarshalJSON(data []byte) error {
-	type unmarshaler PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*p = PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *p)
-	if err != nil {
-		return err
-	}
-	p.extraProperties = extraProperties
-	p.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage) MarshalJSON() ([]byte, error) {
-	type embed PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*p),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisPackage) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	if len(p.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(p); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", p)
-}
-
-var (
-	platformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitFieldQuantity = big.NewInt(1 << 0)
-	platformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitFieldUnit     = big.NewInt(1 << 1)
-)
-
-type PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit struct {
-	Quantity PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantity `json:"quantity" url:"quantity"`
-	Unit     string                                                                    `json:"unit" url:"unit"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit) GetQuantity() PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantity {
-	if p == nil {
-		return ""
-	}
-	return p.Quantity
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit) GetUnit() string {
-	if p == nil {
-		return ""
-	}
-	return p.Unit
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit) GetExtraProperties() map[string]interface{} {
-	if p == nil {
-		return nil
-	}
-	return p.extraProperties
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
-	}
-	p.explicitFields.Or(p.explicitFields, field)
-}
-
-// SetQuantity sets the Quantity field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit) SetQuantity(quantity PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantity) {
-	p.Quantity = quantity
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitFieldQuantity)
-}
-
-// SetUnit sets the Unit field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit) SetUnit(unit string) {
-	p.Unit = unit
-	p.require(platformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitFieldUnit)
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit) UnmarshalJSON(data []byte) error {
-	type unmarshaler PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*p = PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *p)
-	if err != nil {
-		return err
-	}
-	p.extraProperties = extraProperties
-	p.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit) MarshalJSON() ([]byte, error) {
-	type embed PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*p),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (p *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnit) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	if len(p.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(p); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", p)
-}
-
-type PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantity string
-
-const (
-	PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantityOne PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantity = "1"
-)
-
-func NewPlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantityFromString(s string) (PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantity, error) {
-	switch s {
-	case "1":
-		return PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantityOne, nil
-	}
-	var t PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantity
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (p PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantity) Ptr() *PlatformPublicAPISellingPricesUpdateSellingPriceResponseBasisUnitQuantity {
-	return &p
-}
-
-type PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrency string
-
-const (
-	PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrencyUsd PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrency = "USD"
-)
-
-func NewPlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrencyFromString(s string) (PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrency, error) {
-	switch s {
-	case "USD":
-		return PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrencyUsd, nil
-	}
-	var t PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrency
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (p PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrency) Ptr() *PlatformPublicAPISellingPricesUpdateSellingPriceResponseCurrency {
 	return &p
 }
 
@@ -25047,16 +26944,16 @@ func (r *ReplayWebhookEventResponseAttemptsItemDurationMs) Accept(visitor Replay
 type ReplayWebhookEventResponseAttemptsItemDurationMsOne string
 
 const (
-	ReplayWebhookEventResponseAttemptsItemDurationMsOneInfinity ReplayWebhookEventResponseAttemptsItemDurationMsOne = "Infinity"
 	ReplayWebhookEventResponseAttemptsItemDurationMsOneNaN      ReplayWebhookEventResponseAttemptsItemDurationMsOne = "NaN"
+	ReplayWebhookEventResponseAttemptsItemDurationMsOneInfinity ReplayWebhookEventResponseAttemptsItemDurationMsOne = "Infinity"
 )
 
 func NewReplayWebhookEventResponseAttemptsItemDurationMsOneFromString(s string) (ReplayWebhookEventResponseAttemptsItemDurationMsOne, error) {
 	switch s {
-	case "Infinity":
-		return ReplayWebhookEventResponseAttemptsItemDurationMsOneInfinity, nil
 	case "NaN":
 		return ReplayWebhookEventResponseAttemptsItemDurationMsOneNaN, nil
+	case "Infinity":
+		return ReplayWebhookEventResponseAttemptsItemDurationMsOneInfinity, nil
 	}
 	var t ReplayWebhookEventResponseAttemptsItemDurationMsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -25131,16 +27028,16 @@ func (r *ReplayWebhookEventResponseAttemptsItemResponseStatus) Accept(visitor Re
 type ReplayWebhookEventResponseAttemptsItemResponseStatusOne string
 
 const (
-	ReplayWebhookEventResponseAttemptsItemResponseStatusOneInfinity ReplayWebhookEventResponseAttemptsItemResponseStatusOne = "Infinity"
 	ReplayWebhookEventResponseAttemptsItemResponseStatusOneNaN      ReplayWebhookEventResponseAttemptsItemResponseStatusOne = "NaN"
+	ReplayWebhookEventResponseAttemptsItemResponseStatusOneInfinity ReplayWebhookEventResponseAttemptsItemResponseStatusOne = "Infinity"
 )
 
 func NewReplayWebhookEventResponseAttemptsItemResponseStatusOneFromString(s string) (ReplayWebhookEventResponseAttemptsItemResponseStatusOne, error) {
 	switch s {
-	case "Infinity":
-		return ReplayWebhookEventResponseAttemptsItemResponseStatusOneInfinity, nil
 	case "NaN":
 		return ReplayWebhookEventResponseAttemptsItemResponseStatusOneNaN, nil
+	case "Infinity":
+		return ReplayWebhookEventResponseAttemptsItemResponseStatusOneInfinity, nil
 	}
 	var t ReplayWebhookEventResponseAttemptsItemResponseStatusOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -25420,16 +27317,16 @@ func (r *ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCount) Accept(v
 type ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne string
 
 const (
-	ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneInfinity ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne = "Infinity"
 	ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneNaN      ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne = "NaN"
+	ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneInfinity ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne = "Infinity"
 )
 
 func NewReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneFromString(s string) (ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne, error) {
 	switch s {
-	case "Infinity":
-		return ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneInfinity, nil
 	case "NaN":
 		return ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneNaN, nil
+	case "Infinity":
+		return ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOneInfinity, nil
 	}
 	var t ReplayWebhookEventResponseDeliveriesItemAutomaticAttemptCountOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -28454,19 +30351,29 @@ func (r RetrievePrescribingOptionsResponseCatalogAvailability) Ptr() *RetrievePr
 }
 
 var (
-	retrievePrescribingOptionsResponseCatalogCatalogDetailsFieldAttributes = big.NewInt(1 << 0)
-	retrievePrescribingOptionsResponseCatalogCatalogDetailsFieldDirections = big.NewInt(1 << 1)
+	retrievePrescribingOptionsResponseCatalogCatalogDetailsFieldPackageComponents = big.NewInt(1 << 0)
+	retrievePrescribingOptionsResponseCatalogCatalogDetailsFieldAttributes        = big.NewInt(1 << 1)
+	retrievePrescribingOptionsResponseCatalogCatalogDetailsFieldDirections        = big.NewInt(1 << 2)
 )
 
 type RetrievePrescribingOptionsResponseCatalogCatalogDetails struct {
-	Attributes map[string]*RetrievePrescribingOptionsResponseCatalogCatalogDetailsAttributesValue `json:"attributes" url:"attributes"`
-	Directions []*RetrievePrescribingOptionsResponseCatalogCatalogDetailsDirectionsItem           `json:"directions" url:"directions"`
+	// Confirmed physical containers and contents. Empty or absent means container count cannot be inferred from dispense quantity.
+	PackageComponents []*RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem    `json:"packageComponents,omitempty" url:"packageComponents,omitempty"`
+	Attributes        map[string]*RetrievePrescribingOptionsResponseCatalogCatalogDetailsAttributesValue `json:"attributes" url:"attributes"`
+	Directions        []*RetrievePrescribingOptionsResponseCatalogCatalogDetailsDirectionsItem           `json:"directions" url:"directions"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetails) GetPackageComponents() []*RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem {
+	if r == nil {
+		return nil
+	}
+	return r.PackageComponents
 }
 
 func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetails) GetAttributes() map[string]*RetrievePrescribingOptionsResponseCatalogCatalogDetailsAttributesValue {
@@ -28495,6 +30402,13 @@ func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetails) require(field 
 		r.explicitFields = big.NewInt(0)
 	}
 	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetPackageComponents sets the PackageComponents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetails) SetPackageComponents(packageComponents []*RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) {
+	r.PackageComponents = packageComponents
+	r.require(retrievePrescribingOptionsResponseCatalogCatalogDetailsFieldPackageComponents)
 }
 
 // SetAttributes sets the Attributes field and marks it as non-optional;
@@ -28734,6 +30648,277 @@ func NewRetrievePrescribingOptionsResponseCatalogCatalogDetailsDirectionsItemKin
 }
 
 func (r RetrievePrescribingOptionsResponseCatalogCatalogDetailsDirectionsItemKind) Ptr() *RetrievePrescribingOptionsResponseCatalogCatalogDetailsDirectionsItemKind {
+	return &r
+}
+
+var (
+	retrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemFieldContainer            = big.NewInt(1 << 0)
+	retrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemFieldContainerCount       = big.NewInt(1 << 1)
+	retrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemFieldContentsPerContainer = big.NewInt(1 << 2)
+)
+
+type RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem struct {
+	Container            string                                                                                            `json:"container" url:"container"`
+	ContainerCount       int                                                                                               `json:"containerCount" url:"containerCount"`
+	ContentsPerContainer *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer `json:"contentsPerContainer" url:"contentsPerContainer"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) GetContainer() string {
+	if r == nil {
+		return ""
+	}
+	return r.Container
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) GetContainerCount() int {
+	if r == nil {
+		return 0
+	}
+	return r.ContainerCount
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) GetContentsPerContainer() *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer {
+	if r == nil {
+		return nil
+	}
+	return r.ContentsPerContainer
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
+	return r.extraProperties
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetContainer sets the Container field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) SetContainer(container string) {
+	r.Container = container
+	r.require(retrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemFieldContainer)
+}
+
+// SetContainerCount sets the ContainerCount field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) SetContainerCount(containerCount int) {
+	r.ContainerCount = containerCount
+	r.require(retrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemFieldContainerCount)
+}
+
+// SetContentsPerContainer sets the ContentsPerContainer field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) SetContentsPerContainer(contentsPerContainer *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer) {
+	r.ContentsPerContainer = contentsPerContainer
+	r.require(retrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemFieldContentsPerContainer)
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) MarshalJSON() ([]byte, error) {
+	type embed RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItem) String() string {
+	if r == nil {
+		return "<nil>"
+	}
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+var (
+	retrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerFieldValue = big.NewInt(1 << 0)
+	retrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerFieldUnit  = big.NewInt(1 << 1)
+)
+
+type RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer struct {
+	Value string                                                                                               `json:"value" url:"value"`
+	Unit  RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit `json:"unit" url:"unit"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer) GetValue() string {
+	if r == nil {
+		return ""
+	}
+	return r.Value
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer) GetUnit() RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit {
+	if r == nil {
+		return ""
+	}
+	return r.Unit
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
+	return r.extraProperties
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetValue sets the Value field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer) SetValue(value string) {
+	r.Value = value
+	r.require(retrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerFieldValue)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer) SetUnit(unit RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit) {
+	r.Unit = unit
+	r.require(retrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerFieldUnit)
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer) MarshalJSON() ([]byte, error) {
+	type embed RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainer) String() string {
+	if r == nil {
+		return "<nil>"
+	}
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit string
+
+const (
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitMg        RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "mg"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitG         RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "g"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitUg        RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "ug"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitML        RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "mL"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitL         RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "L"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitIu        RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "[IU]"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitTablet    RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "tablet"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitCapsule   RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "capsule"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitTroche    RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "troche"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitActuation RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "actuation"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitPatch     RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "patch"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitPackage   RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "package"
+	RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitContainer RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit = "container"
+)
+
+func NewRetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitFromString(s string) (RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit, error) {
+	switch s {
+	case "mg":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitMg, nil
+	case "g":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitG, nil
+	case "ug":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitUg, nil
+	case "mL":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitML, nil
+	case "L":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitL, nil
+	case "[IU]":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitIu, nil
+	case "tablet":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitTablet, nil
+	case "capsule":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitCapsule, nil
+	case "troche":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitTroche, nil
+	case "actuation":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitActuation, nil
+	case "patch":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitPatch, nil
+	case "package":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitPackage, nil
+	case "container":
+		return RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnitContainer, nil
+	}
+	var t RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (r RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit) Ptr() *RetrievePrescribingOptionsResponseCatalogCatalogDetailsPackageComponentsItemContentsPerContainerUnit {
 	return &r
 }
 
@@ -30172,16 +32357,16 @@ func (r *RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCount) Acc
 type RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOne string
 
 const (
-	RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOneInfinity RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOne = "Infinity"
 	RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOneNaN      RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOne = "NaN"
+	RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOneInfinity RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOne = "Infinity"
 )
 
 func NewRetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOneFromString(s string) (RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOne, error) {
 	switch s {
-	case "Infinity":
-		return RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOneInfinity, nil
 	case "NaN":
 		return RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOneNaN, nil
+	case "Infinity":
+		return RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOneInfinity, nil
 	}
 	var t RetrievePrescribingOptionsResponseCatalogMedicationGroupOfferCountOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -30256,16 +32441,16 @@ func (r *RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCount) 
 type RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOne string
 
 const (
-	RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOneInfinity RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOne = "Infinity"
 	RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOneNaN      RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOne = "NaN"
+	RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOneInfinity RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOne = "Infinity"
 )
 
 func NewRetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOneFromString(s string) (RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOne, error) {
 	switch s {
-	case "Infinity":
-		return RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOneInfinity, nil
 	case "NaN":
 		return RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOneNaN, nil
+	case "Infinity":
+		return RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOneInfinity, nil
 	}
 	var t RetrievePrescribingOptionsResponseCatalogMedicationGroupPharmacyCountOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -31001,16 +33186,16 @@ func (r *RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowe
 type RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOne string
 
 const (
-	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOneInfinity RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOne = "Infinity"
 	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOneNaN      RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOne = "NaN"
+	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOneInfinity RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOne = "Infinity"
 )
 
 func NewRetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOneFromString(s string) (RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOneInfinity, nil
 	case "NaN":
 		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOneNaN, nil
+	case "Infinity":
+		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOneInfinity, nil
 	}
 	var t RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsAllowedQuantitiesItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -31324,16 +33509,16 @@ func (r *RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaul
 type RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOne string
 
 const (
-	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOneInfinity RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOne = "Infinity"
 	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOneNaN      RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOne = "NaN"
+	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOneInfinity RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOne = "Infinity"
 )
 
 func NewRetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOneFromString(s string) (RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOne, error) {
 	switch s {
-	case "Infinity":
-		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOneInfinity, nil
 	case "NaN":
 		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOneNaN, nil
+	case "Infinity":
+		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOneInfinity, nil
 	}
 	var t RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsDefaultQuantityValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -31631,16 +33816,16 @@ func (r *RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuanti
 type RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOne string
 
 const (
-	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOneInfinity RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOne = "Infinity"
 	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOneNaN      RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOne = "NaN"
+	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOneInfinity RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOne = "Infinity"
 )
 
 func NewRetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOneFromString(s string) (RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOne, error) {
 	switch s {
-	case "Infinity":
-		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOneInfinity, nil
 	case "NaN":
 		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOneNaN, nil
+	case "Infinity":
+		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOneInfinity, nil
 	}
 	var t RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMaxOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -31715,16 +33900,16 @@ func (r *RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuanti
 type RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOne string
 
 const (
-	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOneInfinity RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOne = "Infinity"
 	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOneNaN      RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOne = "NaN"
+	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOneInfinity RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOne = "Infinity"
 )
 
 func NewRetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOneFromString(s string) (RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOne, error) {
 	switch s {
-	case "Infinity":
-		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOneInfinity, nil
 	case "NaN":
 		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOneNaN, nil
+	case "Infinity":
+		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOneInfinity, nil
 	}
 	var t RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementMinOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -31799,16 +33984,16 @@ func (r *RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuanti
 type RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOne string
 
 const (
-	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOneInfinity RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOne = "Infinity"
 	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOneNaN      RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOne = "NaN"
+	RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOneInfinity RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOne = "Infinity"
 )
 
 func NewRetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOneFromString(s string) (RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOne, error) {
 	switch s {
-	case "Infinity":
-		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOneInfinity, nil
 	case "NaN":
 		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOneNaN, nil
+	case "Infinity":
+		return RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOneInfinity, nil
 	}
 	var t RetrievePrescribingOptionsResponseCatalogPrescriptionRequirementsQuantityIncrementValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -32145,13 +34330,15 @@ func (r *RetrievePrescribingOptionsResponseCatalogPricingBasis) validate() error
 }
 
 var (
-	retrievePrescribingOptionsResponseCatalogPricingBasisItemFieldQuantity = big.NewInt(1 << 0)
-	retrievePrescribingOptionsResponseCatalogPricingBasisItemFieldUnit     = big.NewInt(1 << 1)
+	retrievePrescribingOptionsResponseCatalogPricingBasisItemFieldQuantity       = big.NewInt(1 << 0)
+	retrievePrescribingOptionsResponseCatalogPricingBasisItemFieldUnit           = big.NewInt(1 << 1)
+	retrievePrescribingOptionsResponseCatalogPricingBasisItemFieldQuantityPrices = big.NewInt(1 << 2)
 )
 
 type RetrievePrescribingOptionsResponseCatalogPricingBasisItem struct {
-	Quantity RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantity `json:"quantity" url:"quantity"`
-	Unit     string                                                            `json:"unit" url:"unit"`
+	Quantity       RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantity              `json:"quantity" url:"quantity"`
+	Unit           string                                                                         `json:"unit" url:"unit"`
+	QuantityPrices []*RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem `json:"quantityPrices,omitempty" url:"quantityPrices,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -32172,6 +34359,13 @@ func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItem) GetUnit() st
 		return ""
 	}
 	return r.Unit
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItem) GetQuantityPrices() []*RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem {
+	if r == nil {
+		return nil
+	}
+	return r.QuantityPrices
 }
 
 func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItem) GetExtraProperties() map[string]interface{} {
@@ -32200,6 +34394,13 @@ func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItem) SetQuantity(
 func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItem) SetUnit(unit string) {
 	r.Unit = unit
 	r.require(retrievePrescribingOptionsResponseCatalogPricingBasisItemFieldUnit)
+}
+
+// SetQuantityPrices sets the QuantityPrices field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItem) SetQuantityPrices(quantityPrices []*RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem) {
+	r.QuantityPrices = quantityPrices
+	r.require(retrievePrescribingOptionsResponseCatalogPricingBasisItemFieldQuantityPrices)
 }
 
 func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItem) UnmarshalJSON(data []byte) error {
@@ -32261,6 +34462,106 @@ func NewRetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityFromStr
 
 func (r RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantity) Ptr() *RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantity {
 	return &r
+}
+
+var (
+	retrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItemFieldQuantity    = big.NewInt(1 << 0)
+	retrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItemFieldAmountCents = big.NewInt(1 << 1)
+)
+
+type RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem struct {
+	Quantity    string `json:"quantity" url:"quantity"`
+	AmountCents int    `json:"amountCents" url:"amountCents"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem) GetQuantity() string {
+	if r == nil {
+		return ""
+	}
+	return r.Quantity
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem) GetAmountCents() int {
+	if r == nil {
+		return 0
+	}
+	return r.AmountCents
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
+	return r.extraProperties
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem) SetQuantity(quantity string) {
+	r.Quantity = quantity
+	r.require(retrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItemFieldQuantity)
+}
+
+// SetAmountCents sets the AmountCents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem) SetAmountCents(amountCents int) {
+	r.AmountCents = amountCents
+	r.require(retrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItemFieldAmountCents)
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem) MarshalJSON() ([]byte, error) {
+	type embed RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (r *RetrievePrescribingOptionsResponseCatalogPricingBasisItemQuantityPricesItem) String() string {
+	if r == nil {
+		return "<nil>"
+	}
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
 }
 
 var (
@@ -40158,13 +42459,13 @@ var (
 
 type UpdateOrderPrescriptionResponse struct {
 	// Opaque revision of the complete order prescription set. Send the revision you reviewed as expectedRevision; never replace it automatically after a conflict.
-	Revision        string                                              `json:"revision" url:"revision"`
-	Object          UpdateOrderPrescriptionResponseObject               `json:"object" url:"object"`
-	ExternalOrderID *string                                             `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
-	Metadata        *UpdateOrderPrescriptionResponseMetadata            `json:"metadata" url:"metadata"`
-	OrderID         string                                              `json:"orderId" url:"orderId"`
-	PrescriptionID  string                                              `json:"prescriptionId" url:"prescriptionId"`
-	Prescriptions   []*UpdateOrderPrescriptionResponsePrescriptionsItem `json:"prescriptions" url:"prescriptions"`
+	Revision        string                                                   `json:"revision" url:"revision"`
+	Object          UpdateOrderPrescriptionResponseObject                    `json:"object" url:"object"`
+	ExternalOrderID *string                                                  `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
+	Metadata        map[string]*UpdateOrderPrescriptionResponseMetadataValue `json:"metadata" url:"metadata"`
+	OrderID         string                                                   `json:"orderId" url:"orderId"`
+	PrescriptionID  string                                                   `json:"prescriptionId" url:"prescriptionId"`
+	Prescriptions   []*UpdateOrderPrescriptionResponsePrescriptionsItem      `json:"prescriptions" url:"prescriptions"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -40194,7 +42495,7 @@ func (u *UpdateOrderPrescriptionResponse) GetExternalOrderID() *string {
 	return u.ExternalOrderID
 }
 
-func (u *UpdateOrderPrescriptionResponse) GetMetadata() *UpdateOrderPrescriptionResponseMetadata {
+func (u *UpdateOrderPrescriptionResponse) GetMetadata() map[string]*UpdateOrderPrescriptionResponseMetadataValue {
 	if u == nil {
 		return nil
 	}
@@ -40259,7 +42560,7 @@ func (u *UpdateOrderPrescriptionResponse) SetExternalOrderID(externalOrderID *st
 
 // SetMetadata sets the Metadata field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateOrderPrescriptionResponse) SetMetadata(metadata *UpdateOrderPrescriptionResponseMetadata) {
+func (u *UpdateOrderPrescriptionResponse) SetMetadata(metadata map[string]*UpdateOrderPrescriptionResponseMetadataValue) {
 	u.Metadata = metadata
 	u.require(updateOrderPrescriptionResponseFieldMetadata)
 }
@@ -40327,69 +42628,87 @@ func (u *UpdateOrderPrescriptionResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-type UpdateOrderPrescriptionResponseMetadata struct {
+type UpdateOrderPrescriptionResponseMetadataValue struct {
+	String  string
+	Double  float64
+	Boolean bool
 
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	typ string
 }
 
-func (u *UpdateOrderPrescriptionResponseMetadata) GetExtraProperties() map[string]interface{} {
+func (u *UpdateOrderPrescriptionResponseMetadataValue) GetString() string {
 	if u == nil {
+		return ""
+	}
+	return u.String
+}
+
+func (u *UpdateOrderPrescriptionResponseMetadataValue) GetDouble() float64 {
+	if u == nil {
+		return 0
+	}
+	return u.Double
+}
+
+func (u *UpdateOrderPrescriptionResponseMetadataValue) GetBoolean() bool {
+	if u == nil {
+		return false
+	}
+	return u.Boolean
+}
+
+func (u *UpdateOrderPrescriptionResponseMetadataValue) UnmarshalJSON(data []byte) error {
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		u.typ = "String"
+		u.String = valueString
 		return nil
 	}
-	return u.extraProperties
+	var valueDouble float64
+	if err := json.Unmarshal(data, &valueDouble); err == nil {
+		u.typ = "Double"
+		u.Double = valueDouble
+		return nil
+	}
+	var valueBoolean bool
+	if err := json.Unmarshal(data, &valueBoolean); err == nil {
+		u.typ = "Boolean"
+		u.Boolean = valueBoolean
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, u)
 }
 
-func (u *UpdateOrderPrescriptionResponseMetadata) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+func (u UpdateOrderPrescriptionResponseMetadataValue) MarshalJSON() ([]byte, error) {
+	if u.typ == "String" || u.String != "" {
+		return json.Marshal(u.String)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	if u.typ == "Double" || u.Double != 0 {
+		return json.Marshal(u.Double)
+	}
+	if u.typ == "Boolean" || u.Boolean != false {
+		return json.Marshal(u.Boolean)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", u)
 }
 
-func (u *UpdateOrderPrescriptionResponseMetadata) UnmarshalJSON(data []byte) error {
-	type unmarshaler UpdateOrderPrescriptionResponseMetadata
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*u = UpdateOrderPrescriptionResponseMetadata(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *u)
-	if err != nil {
-		return err
-	}
-	u.extraProperties = extraProperties
-	u.rawJSON = json.RawMessage(data)
-	return nil
+type UpdateOrderPrescriptionResponseMetadataValueVisitor interface {
+	VisitString(string) error
+	VisitDouble(float64) error
+	VisitBoolean(bool) error
 }
 
-func (u *UpdateOrderPrescriptionResponseMetadata) MarshalJSON() ([]byte, error) {
-	type embed UpdateOrderPrescriptionResponseMetadata
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*u),
+func (u *UpdateOrderPrescriptionResponseMetadataValue) Accept(visitor UpdateOrderPrescriptionResponseMetadataValueVisitor) error {
+	if u.typ == "String" || u.String != "" {
+		return visitor.VisitString(u.String)
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (u *UpdateOrderPrescriptionResponseMetadata) String() string {
-	if u == nil {
-		return "<nil>"
+	if u.typ == "Double" || u.Double != 0 {
+		return visitor.VisitDouble(u.Double)
 	}
-	if len(u.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
-			return value
-		}
+	if u.typ == "Boolean" || u.Boolean != false {
+		return visitor.VisitBoolean(u.Boolean)
 	}
-	if value, err := internal.StringifyJSON(u); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", u)
+	return fmt.Errorf("type %T does not include a non-empty union type", u)
 }
 
 type UpdateOrderPrescriptionResponseObject string
@@ -40694,31 +43013,16 @@ func (u *UpdateOrderTestSimulationResponse) String() string {
 type UpdateOrderTestSimulationResponseAvailableActionsItem string
 
 const (
-	UpdateOrderTestSimulationResponseAvailableActionsItemAccept              UpdateOrderTestSimulationResponseAvailableActionsItem = "accept"
-	UpdateOrderTestSimulationResponseAvailableActionsItemProcess             UpdateOrderTestSimulationResponseAvailableActionsItem = "process"
-	UpdateOrderTestSimulationResponseAvailableActionsItemShip                UpdateOrderTestSimulationResponseAvailableActionsItem = "ship"
-	UpdateOrderTestSimulationResponseAvailableActionsItemDeliver             UpdateOrderTestSimulationResponseAvailableActionsItem = "deliver"
-	UpdateOrderTestSimulationResponseAvailableActionsItemReject              UpdateOrderTestSimulationResponseAvailableActionsItem = "reject"
-	UpdateOrderTestSimulationResponseAvailableActionsItemConfirmCancellation UpdateOrderTestSimulationResponseAvailableActionsItem = "confirm_cancellation"
-	UpdateOrderTestSimulationResponseAvailableActionsItemDeclineCancellation UpdateOrderTestSimulationResponseAvailableActionsItem = "decline_cancellation"
+	UpdateOrderTestSimulationResponseAvailableActionsItemShip    UpdateOrderTestSimulationResponseAvailableActionsItem = "ship"
+	UpdateOrderTestSimulationResponseAvailableActionsItemDeliver UpdateOrderTestSimulationResponseAvailableActionsItem = "deliver"
 )
 
 func NewUpdateOrderTestSimulationResponseAvailableActionsItemFromString(s string) (UpdateOrderTestSimulationResponseAvailableActionsItem, error) {
 	switch s {
-	case "accept":
-		return UpdateOrderTestSimulationResponseAvailableActionsItemAccept, nil
-	case "process":
-		return UpdateOrderTestSimulationResponseAvailableActionsItemProcess, nil
 	case "ship":
 		return UpdateOrderTestSimulationResponseAvailableActionsItemShip, nil
 	case "deliver":
 		return UpdateOrderTestSimulationResponseAvailableActionsItemDeliver, nil
-	case "reject":
-		return UpdateOrderTestSimulationResponseAvailableActionsItemReject, nil
-	case "confirm_cancellation":
-		return UpdateOrderTestSimulationResponseAvailableActionsItemConfirmCancellation, nil
-	case "decline_cancellation":
-		return UpdateOrderTestSimulationResponseAvailableActionsItemDeclineCancellation, nil
 	}
 	var t UpdateOrderTestSimulationResponseAvailableActionsItem
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

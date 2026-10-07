@@ -42,7 +42,7 @@ func (r *RawClient) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://api.joinaffinityai.com",
+		"https://api.affinityrx.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v1/catalog/items/%v/selling-price",
@@ -79,54 +79,6 @@ func (r *RawClient) Get(
 		return nil, err
 	}
 	return &core.Response[*affinity.PlatformPublicAPISellingPricesReadSellingPriceResponse]{
-		StatusCode: raw.StatusCode,
-		Header:     raw.Header,
-		Body:       response,
-	}, nil
-}
-
-func (r *RawClient) Update(
-	ctx context.Context,
-	request *catalog.PlatformPublicAPISellingPricesUpdateSellingPriceRequest,
-	opts ...option.RequestOption,
-) (*core.Response[*affinity.PlatformPublicAPISellingPricesUpdateSellingPriceResponse], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		r.baseURL,
-		"https://api.joinaffinityai.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v1/catalog/items/%v/selling-price",
-		request.CatalogItemID,
-	)
-	headers := internal.MergeHeaders(
-		r.options.ToHeader(),
-		options.ToHeader(),
-	)
-	headers.Add("Idempotency-Key", request.IdempotencyKey)
-	headers.Add("Content-Type", "application/json")
-	var response *affinity.PlatformPublicAPISellingPricesUpdateSellingPriceResponse
-	raw, err := r.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodPut,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			DisableRetries:  options.DisableRetries,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Request:         request,
-			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(catalog.ErrorCodes),
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	return &core.Response[*affinity.PlatformPublicAPISellingPricesUpdateSellingPriceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

@@ -256,20 +256,6 @@ func TestSettersMarkExplicitUpdateOrderTestSimulationRequest(t *testing.T) {
 }
 
 func TestEnumUpdateOrderTestSimulationRequestAction(t *testing.T) {
-	t.Run("NewFromString_accept", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewUpdateOrderTestSimulationRequestActionFromString("accept")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, UpdateOrderTestSimulationRequestAction("accept"), val, "enum value should match expected wire value")
-	})
-
-	t.Run("NewFromString_process", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewUpdateOrderTestSimulationRequestActionFromString("process")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, UpdateOrderTestSimulationRequestAction("process"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_ship", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewUpdateOrderTestSimulationRequestActionFromString("ship")
@@ -282,6 +268,20 @@ func TestEnumUpdateOrderTestSimulationRequestAction(t *testing.T) {
 		val, err := NewUpdateOrderTestSimulationRequestActionFromString("deliver")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, UpdateOrderTestSimulationRequestAction("deliver"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_accept", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewUpdateOrderTestSimulationRequestActionFromString("accept")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, UpdateOrderTestSimulationRequestAction("accept"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_process", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewUpdateOrderTestSimulationRequestActionFromString("process")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, UpdateOrderTestSimulationRequestAction("process"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_reject", func(t *testing.T) {
@@ -311,7 +311,7 @@ func TestEnumUpdateOrderTestSimulationRequestAction(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewUpdateOrderTestSimulationRequestActionFromString("accept")
+		val, err := NewUpdateOrderTestSimulationRequestActionFromString("ship")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)

@@ -9,5 +9,5 @@ package affinity
 var Environments = struct {
 	Production string
 }{
-	Production: "https://api.joinaffinityai.com",
+	Production: "https://api.affinityrx.com",
 }

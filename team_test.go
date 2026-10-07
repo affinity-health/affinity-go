@@ -6283,18 +6283,18 @@ func TestStringRegisterUserResponse(t *testing.T) {
 }
 
 func TestEnumGetPracticeTeamResponseInvitationsExpiredOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPracticeTeamResponseInvitationsExpiredOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPracticeTeamResponseInvitationsExpiredOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPracticeTeamResponseInvitationsExpiredOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPracticeTeamResponseInvitationsExpiredOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPracticeTeamResponseInvitationsExpiredOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPracticeTeamResponseInvitationsExpiredOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -6303,7 +6303,7 @@ func TestEnumGetPracticeTeamResponseInvitationsExpiredOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPracticeTeamResponseInvitationsExpiredOneFromString("Infinity")
+		val, err := NewGetPracticeTeamResponseInvitationsExpiredOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -6312,18 +6312,18 @@ func TestEnumGetPracticeTeamResponseInvitationsExpiredOne(t *testing.T) {
 }
 
 func TestEnumGetPracticeTeamResponseInvitationsPendingOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPracticeTeamResponseInvitationsPendingOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPracticeTeamResponseInvitationsPendingOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPracticeTeamResponseInvitationsPendingOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPracticeTeamResponseInvitationsPendingOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPracticeTeamResponseInvitationsPendingOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPracticeTeamResponseInvitationsPendingOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -6332,7 +6332,7 @@ func TestEnumGetPracticeTeamResponseInvitationsPendingOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPracticeTeamResponseInvitationsPendingOneFromString("Infinity")
+		val, err := NewGetPracticeTeamResponseInvitationsPendingOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -6341,18 +6341,18 @@ func TestEnumGetPracticeTeamResponseInvitationsPendingOne(t *testing.T) {
 }
 
 func TestEnumGetPracticeTeamResponseMembersActiveOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPracticeTeamResponseMembersActiveOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPracticeTeamResponseMembersActiveOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPracticeTeamResponseMembersActiveOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPracticeTeamResponseMembersActiveOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPracticeTeamResponseMembersActiveOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPracticeTeamResponseMembersActiveOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -6361,7 +6361,7 @@ func TestEnumGetPracticeTeamResponseMembersActiveOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPracticeTeamResponseMembersActiveOneFromString("Infinity")
+		val, err := NewGetPracticeTeamResponseMembersActiveOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -6370,18 +6370,18 @@ func TestEnumGetPracticeTeamResponseMembersActiveOne(t *testing.T) {
 }
 
 func TestEnumGetPracticeTeamResponseMembersDisabledOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPracticeTeamResponseMembersDisabledOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPracticeTeamResponseMembersDisabledOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPracticeTeamResponseMembersDisabledOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPracticeTeamResponseMembersDisabledOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPracticeTeamResponseMembersDisabledOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPracticeTeamResponseMembersDisabledOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -6390,7 +6390,7 @@ func TestEnumGetPracticeTeamResponseMembersDisabledOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPracticeTeamResponseMembersDisabledOneFromString("Infinity")
+		val, err := NewGetPracticeTeamResponseMembersDisabledOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -6399,18 +6399,18 @@ func TestEnumGetPracticeTeamResponseMembersDisabledOne(t *testing.T) {
 }
 
 func TestEnumGetPracticeTeamResponseMembersTotalOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPracticeTeamResponseMembersTotalOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPracticeTeamResponseMembersTotalOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPracticeTeamResponseMembersTotalOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPracticeTeamResponseMembersTotalOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPracticeTeamResponseMembersTotalOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPracticeTeamResponseMembersTotalOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -6419,7 +6419,7 @@ func TestEnumGetPracticeTeamResponseMembersTotalOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPracticeTeamResponseMembersTotalOneFromString("Infinity")
+		val, err := NewGetPracticeTeamResponseMembersTotalOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -6450,18 +6450,18 @@ func TestEnumGetPracticeTeamResponseObject(t *testing.T) {
 }
 
 func TestEnumGetPracticeTeamResponsePrescribersActiveOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPracticeTeamResponsePrescribersActiveOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPracticeTeamResponsePrescribersActiveOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPracticeTeamResponsePrescribersActiveOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPracticeTeamResponsePrescribersActiveOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPracticeTeamResponsePrescribersActiveOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPracticeTeamResponsePrescribersActiveOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -6470,7 +6470,7 @@ func TestEnumGetPracticeTeamResponsePrescribersActiveOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPracticeTeamResponsePrescribersActiveOneFromString("Infinity")
+		val, err := NewGetPracticeTeamResponsePrescribersActiveOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -6479,18 +6479,18 @@ func TestEnumGetPracticeTeamResponsePrescribersActiveOne(t *testing.T) {
 }
 
 func TestEnumGetPracticeTeamResponsePrescribersTotalOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetPracticeTeamResponsePrescribersTotalOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetPracticeTeamResponsePrescribersTotalOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetPracticeTeamResponsePrescribersTotalOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetPracticeTeamResponsePrescribersTotalOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetPracticeTeamResponsePrescribersTotalOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetPracticeTeamResponsePrescribersTotalOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -6499,7 +6499,7 @@ func TestEnumGetPracticeTeamResponsePrescribersTotalOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetPracticeTeamResponsePrescribersTotalOneFromString("Infinity")
+		val, err := NewGetPracticeTeamResponsePrescribersTotalOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)

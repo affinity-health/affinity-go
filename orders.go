@@ -1026,18 +1026,18 @@ type CancelOrderResponse struct {
 	Revision string                             `json:"revision" url:"revision"`
 	OtcItems []*CancelOrderResponseOtcItemsItem `json:"otcItems" url:"otcItems"`
 	// Snapshot of the practice-facing medication total. Null until every prescription has recorded submission pricing. Excludes shipping and supplies.
-	PracticeMedicationTotalCents *int                                      `json:"practiceMedicationTotalCents,omitempty" url:"practiceMedicationTotalCents,omitempty"`
-	ExternalOrderID              *string                                   `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
-	Metadata                     *CancelOrderResponseMetadata              `json:"metadata" url:"metadata"`
-	CreatedAt                    string                                    `json:"createdAt" url:"createdAt"`
-	Fulfillments                 []*CancelOrderResponseFulfillmentsItem    `json:"fulfillments" url:"fulfillments"`
-	ID                           string                                    `json:"id" url:"id"`
-	LifecycleEvents              []*CancelOrderResponseLifecycleEventsItem `json:"lifecycleEvents" url:"lifecycleEvents"`
-	Livemode                     bool                                      `json:"livemode" url:"livemode"`
-	Object                       CancelOrderResponseObject                 `json:"object" url:"object"`
-	PatientExternalID            *string                                   `json:"patientExternalId,omitempty" url:"patientExternalId,omitempty"`
-	PatientID                    string                                    `json:"patientId" url:"patientId"`
-	PatientName                  string                                    `json:"patientName" url:"patientName"`
+	PracticeMedicationTotalCents *int                                         `json:"practiceMedicationTotalCents,omitempty" url:"practiceMedicationTotalCents,omitempty"`
+	ExternalOrderID              *string                                      `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
+	Metadata                     map[string]*CancelOrderResponseMetadataValue `json:"metadata" url:"metadata"`
+	CreatedAt                    string                                       `json:"createdAt" url:"createdAt"`
+	Fulfillments                 []*CancelOrderResponseFulfillmentsItem       `json:"fulfillments" url:"fulfillments"`
+	ID                           string                                       `json:"id" url:"id"`
+	LifecycleEvents              []*CancelOrderResponseLifecycleEventsItem    `json:"lifecycleEvents" url:"lifecycleEvents"`
+	Livemode                     bool                                         `json:"livemode" url:"livemode"`
+	Object                       CancelOrderResponseObject                    `json:"object" url:"object"`
+	PatientExternalID            *string                                      `json:"patientExternalId,omitempty" url:"patientExternalId,omitempty"`
+	PatientID                    string                                       `json:"patientId" url:"patientId"`
+	PatientName                  string                                       `json:"patientName" url:"patientName"`
 	// The patient's current clinical state. This is not the saved delivery state; use each prescription's deliveryAddress for shipping.
 	PatientState   string                                  `json:"patientState" url:"patientState"`
 	PracticeID     string                                  `json:"practiceId" url:"practiceId"`
@@ -1084,7 +1084,7 @@ func (c *CancelOrderResponse) GetExternalOrderID() *string {
 	return c.ExternalOrderID
 }
 
-func (c *CancelOrderResponse) GetMetadata() *CancelOrderResponseMetadata {
+func (c *CancelOrderResponse) GetMetadata() map[string]*CancelOrderResponseMetadataValue {
 	if c == nil {
 		return nil
 	}
@@ -1261,7 +1261,7 @@ func (c *CancelOrderResponse) SetExternalOrderID(externalOrderID *string) {
 
 // SetMetadata sets the Metadata field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CancelOrderResponse) SetMetadata(metadata *CancelOrderResponseMetadata) {
+func (c *CancelOrderResponse) SetMetadata(metadata map[string]*CancelOrderResponseMetadataValue) {
 	c.Metadata = metadata
 	c.require(cancelOrderResponseFieldMetadata)
 }
@@ -3883,69 +3883,87 @@ func (c CancelOrderResponseLifecycleEventsItemSource) Ptr() *CancelOrderResponse
 	return &c
 }
 
-type CancelOrderResponseMetadata struct {
+type CancelOrderResponseMetadataValue struct {
+	String  string
+	Double  float64
+	Boolean bool
 
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	typ string
 }
 
-func (c *CancelOrderResponseMetadata) GetExtraProperties() map[string]interface{} {
+func (c *CancelOrderResponseMetadataValue) GetString() string {
 	if c == nil {
+		return ""
+	}
+	return c.String
+}
+
+func (c *CancelOrderResponseMetadataValue) GetDouble() float64 {
+	if c == nil {
+		return 0
+	}
+	return c.Double
+}
+
+func (c *CancelOrderResponseMetadataValue) GetBoolean() bool {
+	if c == nil {
+		return false
+	}
+	return c.Boolean
+}
+
+func (c *CancelOrderResponseMetadataValue) UnmarshalJSON(data []byte) error {
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		c.typ = "String"
+		c.String = valueString
 		return nil
 	}
-	return c.extraProperties
+	var valueDouble float64
+	if err := json.Unmarshal(data, &valueDouble); err == nil {
+		c.typ = "Double"
+		c.Double = valueDouble
+		return nil
+	}
+	var valueBoolean bool
+	if err := json.Unmarshal(data, &valueBoolean); err == nil {
+		c.typ = "Boolean"
+		c.Boolean = valueBoolean
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
 }
 
-func (c *CancelOrderResponseMetadata) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+func (c CancelOrderResponseMetadataValue) MarshalJSON() ([]byte, error) {
+	if c.typ == "String" || c.String != "" {
+		return json.Marshal(c.String)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	if c.typ == "Double" || c.Double != 0 {
+		return json.Marshal(c.Double)
+	}
+	if c.typ == "Boolean" || c.Boolean != false {
+		return json.Marshal(c.Boolean)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
-func (c *CancelOrderResponseMetadata) UnmarshalJSON(data []byte) error {
-	type unmarshaler CancelOrderResponseMetadata
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CancelOrderResponseMetadata(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
+type CancelOrderResponseMetadataValueVisitor interface {
+	VisitString(string) error
+	VisitDouble(float64) error
+	VisitBoolean(bool) error
 }
 
-func (c *CancelOrderResponseMetadata) MarshalJSON() ([]byte, error) {
-	type embed CancelOrderResponseMetadata
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
+func (c *CancelOrderResponseMetadataValue) Accept(visitor CancelOrderResponseMetadataValueVisitor) error {
+	if c.typ == "String" || c.String != "" {
+		return visitor.VisitString(c.String)
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (c *CancelOrderResponseMetadata) String() string {
-	if c == nil {
-		return "<nil>"
+	if c.typ == "Double" || c.Double != 0 {
+		return visitor.VisitDouble(c.Double)
 	}
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
+	if c.typ == "Boolean" || c.Boolean != false {
+		return visitor.VisitBoolean(c.Boolean)
 	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
+	return fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
 type CancelOrderResponseObject string
@@ -5688,16 +5706,16 @@ func (c *CancelOrderResponsePrescriptionsItemClinicalObservationsItemValue) Acce
 type CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOne string
 
 const (
-	CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneInfinity CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 	CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneNaN      CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOne = "NaN"
+	CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneInfinity CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 )
 
 func NewCancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString(s string) (CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	case "NaN":
 		return CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneNaN, nil
+	case "Infinity":
+		return CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	}
 	var t CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -5772,16 +5790,16 @@ func (c *CancelOrderResponsePrescriptionsItemDaysSupply) Accept(visitor CancelOr
 type CancelOrderResponsePrescriptionsItemDaysSupplyOne string
 
 const (
-	CancelOrderResponsePrescriptionsItemDaysSupplyOneInfinity CancelOrderResponsePrescriptionsItemDaysSupplyOne = "Infinity"
 	CancelOrderResponsePrescriptionsItemDaysSupplyOneNaN      CancelOrderResponsePrescriptionsItemDaysSupplyOne = "NaN"
+	CancelOrderResponsePrescriptionsItemDaysSupplyOneInfinity CancelOrderResponsePrescriptionsItemDaysSupplyOne = "Infinity"
 )
 
 func NewCancelOrderResponsePrescriptionsItemDaysSupplyOneFromString(s string) (CancelOrderResponsePrescriptionsItemDaysSupplyOne, error) {
 	switch s {
-	case "Infinity":
-		return CancelOrderResponsePrescriptionsItemDaysSupplyOneInfinity, nil
 	case "NaN":
 		return CancelOrderResponsePrescriptionsItemDaysSupplyOneNaN, nil
+	case "Infinity":
+		return CancelOrderResponsePrescriptionsItemDaysSupplyOneInfinity, nil
 	}
 	var t CancelOrderResponsePrescriptionsItemDaysSupplyOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -6503,16 +6521,16 @@ func (c *CancelOrderResponsePrescriptionsItemQuantity) Accept(visitor CancelOrde
 type CancelOrderResponsePrescriptionsItemQuantityOne string
 
 const (
-	CancelOrderResponsePrescriptionsItemQuantityOneInfinity CancelOrderResponsePrescriptionsItemQuantityOne = "Infinity"
 	CancelOrderResponsePrescriptionsItemQuantityOneNaN      CancelOrderResponsePrescriptionsItemQuantityOne = "NaN"
+	CancelOrderResponsePrescriptionsItemQuantityOneInfinity CancelOrderResponsePrescriptionsItemQuantityOne = "Infinity"
 )
 
 func NewCancelOrderResponsePrescriptionsItemQuantityOneFromString(s string) (CancelOrderResponsePrescriptionsItemQuantityOne, error) {
 	switch s {
-	case "Infinity":
-		return CancelOrderResponsePrescriptionsItemQuantityOneInfinity, nil
 	case "NaN":
 		return CancelOrderResponsePrescriptionsItemQuantityOneNaN, nil
+	case "Infinity":
+		return CancelOrderResponsePrescriptionsItemQuantityOneInfinity, nil
 	}
 	var t CancelOrderResponsePrescriptionsItemQuantityOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -7119,19 +7137,19 @@ var (
 
 type CreateOrderResponse struct {
 	// Opaque revision of the complete order prescription set. Send the revision you reviewed as expectedRevision; never replace it automatically after a conflict.
-	Revision        string                                  `json:"revision" url:"revision"`
-	OtcItems        []*CreateOrderResponseOtcItemsItem      `json:"otcItems" url:"otcItems"`
-	ExternalOrderID *string                                 `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
-	Metadata        *CreateOrderResponseMetadata            `json:"metadata" url:"metadata"`
-	CreatedAt       string                                  `json:"createdAt" url:"createdAt"`
-	ID              string                                  `json:"id" url:"id"`
-	Livemode        bool                                    `json:"livemode" url:"livemode"`
-	Object          CreateOrderResponseObject               `json:"object" url:"object"`
-	PatientID       string                                  `json:"patientId" url:"patientId"`
-	PracticeID      string                                  `json:"practiceId" url:"practiceId"`
-	Prescriptions   []*CreateOrderResponsePrescriptionsItem `json:"prescriptions" url:"prescriptions"`
-	UserID          *string                                 `json:"userId,omitempty" url:"userId,omitempty"`
-	Status          CreateOrderResponseStatus               `json:"status" url:"status"`
+	Revision        string                                       `json:"revision" url:"revision"`
+	OtcItems        []*CreateOrderResponseOtcItemsItem           `json:"otcItems" url:"otcItems"`
+	ExternalOrderID *string                                      `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
+	Metadata        map[string]*CreateOrderResponseMetadataValue `json:"metadata" url:"metadata"`
+	CreatedAt       string                                       `json:"createdAt" url:"createdAt"`
+	ID              string                                       `json:"id" url:"id"`
+	Livemode        bool                                         `json:"livemode" url:"livemode"`
+	Object          CreateOrderResponseObject                    `json:"object" url:"object"`
+	PatientID       string                                       `json:"patientId" url:"patientId"`
+	PracticeID      string                                       `json:"practiceId" url:"practiceId"`
+	Prescriptions   []*CreateOrderResponsePrescriptionsItem      `json:"prescriptions" url:"prescriptions"`
+	UserID          *string                                      `json:"userId,omitempty" url:"userId,omitempty"`
+	Status          CreateOrderResponseStatus                    `json:"status" url:"status"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -7161,7 +7179,7 @@ func (c *CreateOrderResponse) GetExternalOrderID() *string {
 	return c.ExternalOrderID
 }
 
-func (c *CreateOrderResponse) GetMetadata() *CreateOrderResponseMetadata {
+func (c *CreateOrderResponse) GetMetadata() map[string]*CreateOrderResponseMetadataValue {
 	if c == nil {
 		return nil
 	}
@@ -7268,7 +7286,7 @@ func (c *CreateOrderResponse) SetExternalOrderID(externalOrderID *string) {
 
 // SetMetadata sets the Metadata field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateOrderResponse) SetMetadata(metadata *CreateOrderResponseMetadata) {
+func (c *CreateOrderResponse) SetMetadata(metadata map[string]*CreateOrderResponseMetadataValue) {
 	c.Metadata = metadata
 	c.require(createOrderResponseFieldMetadata)
 }
@@ -7378,69 +7396,87 @@ func (c *CreateOrderResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-type CreateOrderResponseMetadata struct {
+type CreateOrderResponseMetadataValue struct {
+	String  string
+	Double  float64
+	Boolean bool
 
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	typ string
 }
 
-func (c *CreateOrderResponseMetadata) GetExtraProperties() map[string]interface{} {
+func (c *CreateOrderResponseMetadataValue) GetString() string {
 	if c == nil {
+		return ""
+	}
+	return c.String
+}
+
+func (c *CreateOrderResponseMetadataValue) GetDouble() float64 {
+	if c == nil {
+		return 0
+	}
+	return c.Double
+}
+
+func (c *CreateOrderResponseMetadataValue) GetBoolean() bool {
+	if c == nil {
+		return false
+	}
+	return c.Boolean
+}
+
+func (c *CreateOrderResponseMetadataValue) UnmarshalJSON(data []byte) error {
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		c.typ = "String"
+		c.String = valueString
 		return nil
 	}
-	return c.extraProperties
+	var valueDouble float64
+	if err := json.Unmarshal(data, &valueDouble); err == nil {
+		c.typ = "Double"
+		c.Double = valueDouble
+		return nil
+	}
+	var valueBoolean bool
+	if err := json.Unmarshal(data, &valueBoolean); err == nil {
+		c.typ = "Boolean"
+		c.Boolean = valueBoolean
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
 }
 
-func (c *CreateOrderResponseMetadata) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+func (c CreateOrderResponseMetadataValue) MarshalJSON() ([]byte, error) {
+	if c.typ == "String" || c.String != "" {
+		return json.Marshal(c.String)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	if c.typ == "Double" || c.Double != 0 {
+		return json.Marshal(c.Double)
+	}
+	if c.typ == "Boolean" || c.Boolean != false {
+		return json.Marshal(c.Boolean)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
-func (c *CreateOrderResponseMetadata) UnmarshalJSON(data []byte) error {
-	type unmarshaler CreateOrderResponseMetadata
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CreateOrderResponseMetadata(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
+type CreateOrderResponseMetadataValueVisitor interface {
+	VisitString(string) error
+	VisitDouble(float64) error
+	VisitBoolean(bool) error
 }
 
-func (c *CreateOrderResponseMetadata) MarshalJSON() ([]byte, error) {
-	type embed CreateOrderResponseMetadata
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
+func (c *CreateOrderResponseMetadataValue) Accept(visitor CreateOrderResponseMetadataValueVisitor) error {
+	if c.typ == "String" || c.String != "" {
+		return visitor.VisitString(c.String)
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (c *CreateOrderResponseMetadata) String() string {
-	if c == nil {
-		return "<nil>"
+	if c.typ == "Double" || c.Double != 0 {
+		return visitor.VisitDouble(c.Double)
 	}
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
+	if c.typ == "Boolean" || c.Boolean != false {
+		return visitor.VisitBoolean(c.Boolean)
 	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
+	return fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
 type CreateOrderResponseObject string
@@ -7970,16 +8006,16 @@ func (c *CreateOrderResponsePrescriptionsItemQuantity) Accept(visitor CreateOrde
 type CreateOrderResponsePrescriptionsItemQuantityOne string
 
 const (
-	CreateOrderResponsePrescriptionsItemQuantityOneInfinity CreateOrderResponsePrescriptionsItemQuantityOne = "Infinity"
 	CreateOrderResponsePrescriptionsItemQuantityOneNaN      CreateOrderResponsePrescriptionsItemQuantityOne = "NaN"
+	CreateOrderResponsePrescriptionsItemQuantityOneInfinity CreateOrderResponsePrescriptionsItemQuantityOne = "Infinity"
 )
 
 func NewCreateOrderResponsePrescriptionsItemQuantityOneFromString(s string) (CreateOrderResponsePrescriptionsItemQuantityOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderResponsePrescriptionsItemQuantityOneInfinity, nil
 	case "NaN":
 		return CreateOrderResponsePrescriptionsItemQuantityOneNaN, nil
+	case "Infinity":
+		return CreateOrderResponsePrescriptionsItemQuantityOneInfinity, nil
 	}
 	var t CreateOrderResponsePrescriptionsItemQuantityOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -8057,18 +8093,18 @@ type GetOrderResponse struct {
 	Revision string                          `json:"revision" url:"revision"`
 	OtcItems []*GetOrderResponseOtcItemsItem `json:"otcItems" url:"otcItems"`
 	// Snapshot of the practice-facing medication total. Null until every prescription has recorded submission pricing. Excludes shipping and supplies.
-	PracticeMedicationTotalCents *int                                   `json:"practiceMedicationTotalCents,omitempty" url:"practiceMedicationTotalCents,omitempty"`
-	ExternalOrderID              *string                                `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
-	Metadata                     *GetOrderResponseMetadata              `json:"metadata" url:"metadata"`
-	CreatedAt                    string                                 `json:"createdAt" url:"createdAt"`
-	Fulfillments                 []*GetOrderResponseFulfillmentsItem    `json:"fulfillments" url:"fulfillments"`
-	ID                           string                                 `json:"id" url:"id"`
-	LifecycleEvents              []*GetOrderResponseLifecycleEventsItem `json:"lifecycleEvents" url:"lifecycleEvents"`
-	Livemode                     bool                                   `json:"livemode" url:"livemode"`
-	Object                       GetOrderResponseObject                 `json:"object" url:"object"`
-	PatientExternalID            *string                                `json:"patientExternalId,omitempty" url:"patientExternalId,omitempty"`
-	PatientID                    string                                 `json:"patientId" url:"patientId"`
-	PatientName                  string                                 `json:"patientName" url:"patientName"`
+	PracticeMedicationTotalCents *int                                      `json:"practiceMedicationTotalCents,omitempty" url:"practiceMedicationTotalCents,omitempty"`
+	ExternalOrderID              *string                                   `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
+	Metadata                     map[string]*GetOrderResponseMetadataValue `json:"metadata" url:"metadata"`
+	CreatedAt                    string                                    `json:"createdAt" url:"createdAt"`
+	Fulfillments                 []*GetOrderResponseFulfillmentsItem       `json:"fulfillments" url:"fulfillments"`
+	ID                           string                                    `json:"id" url:"id"`
+	LifecycleEvents              []*GetOrderResponseLifecycleEventsItem    `json:"lifecycleEvents" url:"lifecycleEvents"`
+	Livemode                     bool                                      `json:"livemode" url:"livemode"`
+	Object                       GetOrderResponseObject                    `json:"object" url:"object"`
+	PatientExternalID            *string                                   `json:"patientExternalId,omitempty" url:"patientExternalId,omitempty"`
+	PatientID                    string                                    `json:"patientId" url:"patientId"`
+	PatientName                  string                                    `json:"patientName" url:"patientName"`
 	// The patient's current clinical state. This is not the saved delivery state; use each prescription's deliveryAddress for shipping.
 	PatientState   string                               `json:"patientState" url:"patientState"`
 	PracticeID     string                               `json:"practiceId" url:"practiceId"`
@@ -8114,7 +8150,7 @@ func (g *GetOrderResponse) GetExternalOrderID() *string {
 	return g.ExternalOrderID
 }
 
-func (g *GetOrderResponse) GetMetadata() *GetOrderResponseMetadata {
+func (g *GetOrderResponse) GetMetadata() map[string]*GetOrderResponseMetadataValue {
 	if g == nil {
 		return nil
 	}
@@ -8284,7 +8320,7 @@ func (g *GetOrderResponse) SetExternalOrderID(externalOrderID *string) {
 
 // SetMetadata sets the Metadata field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetOrderResponse) SetMetadata(metadata *GetOrderResponseMetadata) {
+func (g *GetOrderResponse) SetMetadata(metadata map[string]*GetOrderResponseMetadataValue) {
 	g.Metadata = metadata
 	g.require(getOrderResponseFieldMetadata)
 }
@@ -10621,69 +10657,87 @@ func (g GetOrderResponseLifecycleEventsItemSource) Ptr() *GetOrderResponseLifecy
 	return &g
 }
 
-type GetOrderResponseMetadata struct {
+type GetOrderResponseMetadataValue struct {
+	String  string
+	Double  float64
+	Boolean bool
 
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	typ string
 }
 
-func (g *GetOrderResponseMetadata) GetExtraProperties() map[string]interface{} {
+func (g *GetOrderResponseMetadataValue) GetString() string {
 	if g == nil {
+		return ""
+	}
+	return g.String
+}
+
+func (g *GetOrderResponseMetadataValue) GetDouble() float64 {
+	if g == nil {
+		return 0
+	}
+	return g.Double
+}
+
+func (g *GetOrderResponseMetadataValue) GetBoolean() bool {
+	if g == nil {
+		return false
+	}
+	return g.Boolean
+}
+
+func (g *GetOrderResponseMetadataValue) UnmarshalJSON(data []byte) error {
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		g.typ = "String"
+		g.String = valueString
 		return nil
 	}
-	return g.extraProperties
+	var valueDouble float64
+	if err := json.Unmarshal(data, &valueDouble); err == nil {
+		g.typ = "Double"
+		g.Double = valueDouble
+		return nil
+	}
+	var valueBoolean bool
+	if err := json.Unmarshal(data, &valueBoolean); err == nil {
+		g.typ = "Boolean"
+		g.Boolean = valueBoolean
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, g)
 }
 
-func (g *GetOrderResponseMetadata) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+func (g GetOrderResponseMetadataValue) MarshalJSON() ([]byte, error) {
+	if g.typ == "String" || g.String != "" {
+		return json.Marshal(g.String)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	if g.typ == "Double" || g.Double != 0 {
+		return json.Marshal(g.Double)
+	}
+	if g.typ == "Boolean" || g.Boolean != false {
+		return json.Marshal(g.Boolean)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", g)
 }
 
-func (g *GetOrderResponseMetadata) UnmarshalJSON(data []byte) error {
-	type unmarshaler GetOrderResponseMetadata
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*g = GetOrderResponseMetadata(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *g)
-	if err != nil {
-		return err
-	}
-	g.extraProperties = extraProperties
-	g.rawJSON = json.RawMessage(data)
-	return nil
+type GetOrderResponseMetadataValueVisitor interface {
+	VisitString(string) error
+	VisitDouble(float64) error
+	VisitBoolean(bool) error
 }
 
-func (g *GetOrderResponseMetadata) MarshalJSON() ([]byte, error) {
-	type embed GetOrderResponseMetadata
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*g),
+func (g *GetOrderResponseMetadataValue) Accept(visitor GetOrderResponseMetadataValueVisitor) error {
+	if g.typ == "String" || g.String != "" {
+		return visitor.VisitString(g.String)
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (g *GetOrderResponseMetadata) String() string {
-	if g == nil {
-		return "<nil>"
+	if g.typ == "Double" || g.Double != 0 {
+		return visitor.VisitDouble(g.Double)
 	}
-	if len(g.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
-			return value
-		}
+	if g.typ == "Boolean" || g.Boolean != false {
+		return visitor.VisitBoolean(g.Boolean)
 	}
-	if value, err := internal.StringifyJSON(g); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", g)
+	return fmt.Errorf("type %T does not include a non-empty union type", g)
 }
 
 type GetOrderResponseObject string
@@ -12426,16 +12480,16 @@ func (g *GetOrderResponsePrescriptionsItemClinicalObservationsItemValue) Accept(
 type GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne string
 
 const (
-	GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneInfinity GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 	GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneNaN      GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne = "NaN"
+	GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneInfinity GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 )
 
 func NewGetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString(s string) (GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	case "NaN":
 		return GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneNaN, nil
+	case "Infinity":
+		return GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	}
 	var t GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -12510,16 +12564,16 @@ func (g *GetOrderResponsePrescriptionsItemDaysSupply) Accept(visitor GetOrderRes
 type GetOrderResponsePrescriptionsItemDaysSupplyOne string
 
 const (
-	GetOrderResponsePrescriptionsItemDaysSupplyOneInfinity GetOrderResponsePrescriptionsItemDaysSupplyOne = "Infinity"
 	GetOrderResponsePrescriptionsItemDaysSupplyOneNaN      GetOrderResponsePrescriptionsItemDaysSupplyOne = "NaN"
+	GetOrderResponsePrescriptionsItemDaysSupplyOneInfinity GetOrderResponsePrescriptionsItemDaysSupplyOne = "Infinity"
 )
 
 func NewGetOrderResponsePrescriptionsItemDaysSupplyOneFromString(s string) (GetOrderResponsePrescriptionsItemDaysSupplyOne, error) {
 	switch s {
-	case "Infinity":
-		return GetOrderResponsePrescriptionsItemDaysSupplyOneInfinity, nil
 	case "NaN":
 		return GetOrderResponsePrescriptionsItemDaysSupplyOneNaN, nil
+	case "Infinity":
+		return GetOrderResponsePrescriptionsItemDaysSupplyOneInfinity, nil
 	}
 	var t GetOrderResponsePrescriptionsItemDaysSupplyOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -13241,16 +13295,16 @@ func (g *GetOrderResponsePrescriptionsItemQuantity) Accept(visitor GetOrderRespo
 type GetOrderResponsePrescriptionsItemQuantityOne string
 
 const (
-	GetOrderResponsePrescriptionsItemQuantityOneInfinity GetOrderResponsePrescriptionsItemQuantityOne = "Infinity"
 	GetOrderResponsePrescriptionsItemQuantityOneNaN      GetOrderResponsePrescriptionsItemQuantityOne = "NaN"
+	GetOrderResponsePrescriptionsItemQuantityOneInfinity GetOrderResponsePrescriptionsItemQuantityOne = "Infinity"
 )
 
 func NewGetOrderResponsePrescriptionsItemQuantityOneFromString(s string) (GetOrderResponsePrescriptionsItemQuantityOne, error) {
 	switch s {
-	case "Infinity":
-		return GetOrderResponsePrescriptionsItemQuantityOneInfinity, nil
 	case "NaN":
 		return GetOrderResponsePrescriptionsItemQuantityOneNaN, nil
+	case "Infinity":
+		return GetOrderResponsePrescriptionsItemQuantityOneInfinity, nil
 	}
 	var t GetOrderResponsePrescriptionsItemQuantityOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -14001,18 +14055,18 @@ type ListOrdersResponseDataItem struct {
 	Revision string                                    `json:"revision" url:"revision"`
 	OtcItems []*ListOrdersResponseDataItemOtcItemsItem `json:"otcItems" url:"otcItems"`
 	// Snapshot of the practice-facing medication total. Null until every prescription has recorded submission pricing. Excludes shipping and supplies.
-	PracticeMedicationTotalCents *int                                             `json:"practiceMedicationTotalCents,omitempty" url:"practiceMedicationTotalCents,omitempty"`
-	ExternalOrderID              *string                                          `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
-	Metadata                     *ListOrdersResponseDataItemMetadata              `json:"metadata" url:"metadata"`
-	CreatedAt                    string                                           `json:"createdAt" url:"createdAt"`
-	Fulfillments                 []*ListOrdersResponseDataItemFulfillmentsItem    `json:"fulfillments" url:"fulfillments"`
-	ID                           string                                           `json:"id" url:"id"`
-	LifecycleEvents              []*ListOrdersResponseDataItemLifecycleEventsItem `json:"lifecycleEvents" url:"lifecycleEvents"`
-	Livemode                     bool                                             `json:"livemode" url:"livemode"`
-	Object                       ListOrdersResponseDataItemObject                 `json:"object" url:"object"`
-	PatientExternalID            *string                                          `json:"patientExternalId,omitempty" url:"patientExternalId,omitempty"`
-	PatientID                    string                                           `json:"patientId" url:"patientId"`
-	PatientName                  string                                           `json:"patientName" url:"patientName"`
+	PracticeMedicationTotalCents *int                                                `json:"practiceMedicationTotalCents,omitempty" url:"practiceMedicationTotalCents,omitempty"`
+	ExternalOrderID              *string                                             `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
+	Metadata                     map[string]*ListOrdersResponseDataItemMetadataValue `json:"metadata" url:"metadata"`
+	CreatedAt                    string                                              `json:"createdAt" url:"createdAt"`
+	Fulfillments                 []*ListOrdersResponseDataItemFulfillmentsItem       `json:"fulfillments" url:"fulfillments"`
+	ID                           string                                              `json:"id" url:"id"`
+	LifecycleEvents              []*ListOrdersResponseDataItemLifecycleEventsItem    `json:"lifecycleEvents" url:"lifecycleEvents"`
+	Livemode                     bool                                                `json:"livemode" url:"livemode"`
+	Object                       ListOrdersResponseDataItemObject                    `json:"object" url:"object"`
+	PatientExternalID            *string                                             `json:"patientExternalId,omitempty" url:"patientExternalId,omitempty"`
+	PatientID                    string                                              `json:"patientId" url:"patientId"`
+	PatientName                  string                                              `json:"patientName" url:"patientName"`
 	// The patient's current clinical state. This is not the saved delivery state; use each prescription's deliveryAddress for shipping.
 	PatientState   string                                         `json:"patientState" url:"patientState"`
 	PracticeID     string                                         `json:"practiceId" url:"practiceId"`
@@ -14058,7 +14112,7 @@ func (l *ListOrdersResponseDataItem) GetExternalOrderID() *string {
 	return l.ExternalOrderID
 }
 
-func (l *ListOrdersResponseDataItem) GetMetadata() *ListOrdersResponseDataItemMetadata {
+func (l *ListOrdersResponseDataItem) GetMetadata() map[string]*ListOrdersResponseDataItemMetadataValue {
 	if l == nil {
 		return nil
 	}
@@ -14228,7 +14282,7 @@ func (l *ListOrdersResponseDataItem) SetExternalOrderID(externalOrderID *string)
 
 // SetMetadata sets the Metadata field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListOrdersResponseDataItem) SetMetadata(metadata *ListOrdersResponseDataItemMetadata) {
+func (l *ListOrdersResponseDataItem) SetMetadata(metadata map[string]*ListOrdersResponseDataItemMetadataValue) {
 	l.Metadata = metadata
 	l.require(listOrdersResponseDataItemFieldMetadata)
 }
@@ -16565,69 +16619,87 @@ func (l ListOrdersResponseDataItemLifecycleEventsItemSource) Ptr() *ListOrdersRe
 	return &l
 }
 
-type ListOrdersResponseDataItemMetadata struct {
+type ListOrdersResponseDataItemMetadataValue struct {
+	String  string
+	Double  float64
+	Boolean bool
 
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	typ string
 }
 
-func (l *ListOrdersResponseDataItemMetadata) GetExtraProperties() map[string]interface{} {
+func (l *ListOrdersResponseDataItemMetadataValue) GetString() string {
 	if l == nil {
+		return ""
+	}
+	return l.String
+}
+
+func (l *ListOrdersResponseDataItemMetadataValue) GetDouble() float64 {
+	if l == nil {
+		return 0
+	}
+	return l.Double
+}
+
+func (l *ListOrdersResponseDataItemMetadataValue) GetBoolean() bool {
+	if l == nil {
+		return false
+	}
+	return l.Boolean
+}
+
+func (l *ListOrdersResponseDataItemMetadataValue) UnmarshalJSON(data []byte) error {
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		l.typ = "String"
+		l.String = valueString
 		return nil
 	}
-	return l.extraProperties
+	var valueDouble float64
+	if err := json.Unmarshal(data, &valueDouble); err == nil {
+		l.typ = "Double"
+		l.Double = valueDouble
+		return nil
+	}
+	var valueBoolean bool
+	if err := json.Unmarshal(data, &valueBoolean); err == nil {
+		l.typ = "Boolean"
+		l.Boolean = valueBoolean
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, l)
 }
 
-func (l *ListOrdersResponseDataItemMetadata) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+func (l ListOrdersResponseDataItemMetadataValue) MarshalJSON() ([]byte, error) {
+	if l.typ == "String" || l.String != "" {
+		return json.Marshal(l.String)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	if l.typ == "Double" || l.Double != 0 {
+		return json.Marshal(l.Double)
+	}
+	if l.typ == "Boolean" || l.Boolean != false {
+		return json.Marshal(l.Boolean)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", l)
 }
 
-func (l *ListOrdersResponseDataItemMetadata) UnmarshalJSON(data []byte) error {
-	type unmarshaler ListOrdersResponseDataItemMetadata
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*l = ListOrdersResponseDataItemMetadata(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *l)
-	if err != nil {
-		return err
-	}
-	l.extraProperties = extraProperties
-	l.rawJSON = json.RawMessage(data)
-	return nil
+type ListOrdersResponseDataItemMetadataValueVisitor interface {
+	VisitString(string) error
+	VisitDouble(float64) error
+	VisitBoolean(bool) error
 }
 
-func (l *ListOrdersResponseDataItemMetadata) MarshalJSON() ([]byte, error) {
-	type embed ListOrdersResponseDataItemMetadata
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*l),
+func (l *ListOrdersResponseDataItemMetadataValue) Accept(visitor ListOrdersResponseDataItemMetadataValueVisitor) error {
+	if l.typ == "String" || l.String != "" {
+		return visitor.VisitString(l.String)
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (l *ListOrdersResponseDataItemMetadata) String() string {
-	if l == nil {
-		return "<nil>"
+	if l.typ == "Double" || l.Double != 0 {
+		return visitor.VisitDouble(l.Double)
 	}
-	if len(l.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
-			return value
-		}
+	if l.typ == "Boolean" || l.Boolean != false {
+		return visitor.VisitBoolean(l.Boolean)
 	}
-	if value, err := internal.StringifyJSON(l); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", l)
+	return fmt.Errorf("type %T does not include a non-empty union type", l)
 }
 
 type ListOrdersResponseDataItemObject string
@@ -18370,16 +18442,16 @@ func (l *ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValu
 type ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOne string
 
 const (
-	ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneInfinity ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 	ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneNaN      ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOne = "NaN"
+	ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneInfinity ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 )
 
 func NewListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneFromString(s string) (ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	case "NaN":
 		return ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneNaN, nil
+	case "Infinity":
+		return ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	}
 	var t ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -18454,16 +18526,16 @@ func (l *ListOrdersResponseDataItemPrescriptionsItemDaysSupply) Accept(visitor L
 type ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne string
 
 const (
-	ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneInfinity ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne = "Infinity"
 	ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneNaN      ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne = "NaN"
+	ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneInfinity ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne = "Infinity"
 )
 
 func NewListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneFromString(s string) (ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne, error) {
 	switch s {
-	case "Infinity":
-		return ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneInfinity, nil
 	case "NaN":
 		return ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneNaN, nil
+	case "Infinity":
+		return ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneInfinity, nil
 	}
 	var t ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -19185,16 +19257,16 @@ func (l *ListOrdersResponseDataItemPrescriptionsItemQuantity) Accept(visitor Lis
 type ListOrdersResponseDataItemPrescriptionsItemQuantityOne string
 
 const (
-	ListOrdersResponseDataItemPrescriptionsItemQuantityOneInfinity ListOrdersResponseDataItemPrescriptionsItemQuantityOne = "Infinity"
 	ListOrdersResponseDataItemPrescriptionsItemQuantityOneNaN      ListOrdersResponseDataItemPrescriptionsItemQuantityOne = "NaN"
+	ListOrdersResponseDataItemPrescriptionsItemQuantityOneInfinity ListOrdersResponseDataItemPrescriptionsItemQuantityOne = "Infinity"
 )
 
 func NewListOrdersResponseDataItemPrescriptionsItemQuantityOneFromString(s string) (ListOrdersResponseDataItemPrescriptionsItemQuantityOne, error) {
 	switch s {
-	case "Infinity":
-		return ListOrdersResponseDataItemPrescriptionsItemQuantityOneInfinity, nil
 	case "NaN":
 		return ListOrdersResponseDataItemPrescriptionsItemQuantityOneNaN, nil
+	case "Infinity":
+		return ListOrdersResponseDataItemPrescriptionsItemQuantityOneInfinity, nil
 	}
 	var t ListOrdersResponseDataItemPrescriptionsItemQuantityOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -21877,16 +21949,16 @@ func (p *PreviewOrderResponseOrderInputPatientClinicalProfileHeightInches) Accep
 type PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne string
 
 const (
-	PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneInfinity PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne = "Infinity"
 	PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneNaN      PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne = "NaN"
+	PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneInfinity PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne = "Infinity"
 )
 
 func NewPreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneFromString(s string) (PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne, error) {
 	switch s {
-	case "Infinity":
-		return PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneInfinity, nil
 	case "NaN":
 		return PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneNaN, nil
+	case "Infinity":
+		return PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneInfinity, nil
 	}
 	var t PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -21961,16 +22033,16 @@ func (p *PreviewOrderResponseOrderInputPatientClinicalProfileWeightPounds) Accep
 type PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne string
 
 const (
-	PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneInfinity PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne = "Infinity"
 	PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneNaN      PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne = "NaN"
+	PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneInfinity PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne = "Infinity"
 )
 
 func NewPreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneFromString(s string) (PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne, error) {
 	switch s {
-	case "Infinity":
-		return PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneInfinity, nil
 	case "NaN":
 		return PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneNaN, nil
+	case "Infinity":
+		return PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneInfinity, nil
 	}
 	var t PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -22437,16 +22509,16 @@ func (p *PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimeters)
 type PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOne string
 
 const (
-	PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneInfinity PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOne = "Infinity"
 	PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneNaN      PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOne = "NaN"
+	PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneInfinity PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOne = "Infinity"
 )
 
 func NewPreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneFromString(s string) (PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOne, error) {
 	switch s {
-	case "Infinity":
-		return PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneInfinity, nil
 	case "NaN":
 		return PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneNaN, nil
+	case "Infinity":
+		return PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneInfinity, nil
 	}
 	var t PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -22521,16 +22593,16 @@ func (p *PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilograms) A
 type PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOne string
 
 const (
-	PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneInfinity PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOne = "Infinity"
 	PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneNaN      PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOne = "NaN"
+	PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneInfinity PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOne = "Infinity"
 )
 
 func NewPreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneFromString(s string) (PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOne, error) {
 	switch s {
-	case "Infinity":
-		return PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneInfinity, nil
 	case "NaN":
 		return PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneNaN, nil
+	case "Infinity":
+		return PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneInfinity, nil
 	}
 	var t PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -23961,16 +24033,16 @@ func (p *PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItem
 type PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOne string
 
 const (
-	PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneInfinity PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 	PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneNaN      PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOne = "NaN"
+	PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneInfinity PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 )
 
 func NewPreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneFromString(s string) (PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	case "NaN":
 		return PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneNaN, nil
+	case "Infinity":
+		return PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	}
 	var t PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -26454,16 +26526,16 @@ func (s *SignAndSubmitOrderResponsePrescriptionsItemErrorStatus) Accept(visitor 
 type SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne string
 
 const (
-	SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneInfinity SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne = "Infinity"
 	SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneNaN      SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne = "NaN"
+	SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneInfinity SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne = "Infinity"
 )
 
 func NewSignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneFromString(s string) (SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne, error) {
 	switch s {
-	case "Infinity":
-		return SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneInfinity, nil
 	case "NaN":
 		return SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneNaN, nil
+	case "Infinity":
+		return SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneInfinity, nil
 	}
 	var t SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -28043,16 +28115,16 @@ func (c *CreateOrderRequestPatientClinicalProfileHeightInches) Accept(visitor Cr
 type CreateOrderRequestPatientClinicalProfileHeightInchesOne string
 
 const (
-	CreateOrderRequestPatientClinicalProfileHeightInchesOneInfinity CreateOrderRequestPatientClinicalProfileHeightInchesOne = "Infinity"
 	CreateOrderRequestPatientClinicalProfileHeightInchesOneNaN      CreateOrderRequestPatientClinicalProfileHeightInchesOne = "NaN"
+	CreateOrderRequestPatientClinicalProfileHeightInchesOneInfinity CreateOrderRequestPatientClinicalProfileHeightInchesOne = "Infinity"
 )
 
 func NewCreateOrderRequestPatientClinicalProfileHeightInchesOneFromString(s string) (CreateOrderRequestPatientClinicalProfileHeightInchesOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderRequestPatientClinicalProfileHeightInchesOneInfinity, nil
 	case "NaN":
 		return CreateOrderRequestPatientClinicalProfileHeightInchesOneNaN, nil
+	case "Infinity":
+		return CreateOrderRequestPatientClinicalProfileHeightInchesOneInfinity, nil
 	}
 	var t CreateOrderRequestPatientClinicalProfileHeightInchesOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -28127,16 +28199,16 @@ func (c *CreateOrderRequestPatientClinicalProfileWeightPounds) Accept(visitor Cr
 type CreateOrderRequestPatientClinicalProfileWeightPoundsOne string
 
 const (
-	CreateOrderRequestPatientClinicalProfileWeightPoundsOneInfinity CreateOrderRequestPatientClinicalProfileWeightPoundsOne = "Infinity"
 	CreateOrderRequestPatientClinicalProfileWeightPoundsOneNaN      CreateOrderRequestPatientClinicalProfileWeightPoundsOne = "NaN"
+	CreateOrderRequestPatientClinicalProfileWeightPoundsOneInfinity CreateOrderRequestPatientClinicalProfileWeightPoundsOne = "Infinity"
 )
 
 func NewCreateOrderRequestPatientClinicalProfileWeightPoundsOneFromString(s string) (CreateOrderRequestPatientClinicalProfileWeightPoundsOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderRequestPatientClinicalProfileWeightPoundsOneInfinity, nil
 	case "NaN":
 		return CreateOrderRequestPatientClinicalProfileWeightPoundsOneNaN, nil
+	case "Infinity":
+		return CreateOrderRequestPatientClinicalProfileWeightPoundsOneInfinity, nil
 	}
 	var t CreateOrderRequestPatientClinicalProfileWeightPoundsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -28603,16 +28675,16 @@ func (c *CreateOrderRequestPatientMeasurementsItemHeightCentimeters) Accept(visi
 type CreateOrderRequestPatientMeasurementsItemHeightCentimetersOne string
 
 const (
-	CreateOrderRequestPatientMeasurementsItemHeightCentimetersOneInfinity CreateOrderRequestPatientMeasurementsItemHeightCentimetersOne = "Infinity"
 	CreateOrderRequestPatientMeasurementsItemHeightCentimetersOneNaN      CreateOrderRequestPatientMeasurementsItemHeightCentimetersOne = "NaN"
+	CreateOrderRequestPatientMeasurementsItemHeightCentimetersOneInfinity CreateOrderRequestPatientMeasurementsItemHeightCentimetersOne = "Infinity"
 )
 
 func NewCreateOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString(s string) (CreateOrderRequestPatientMeasurementsItemHeightCentimetersOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderRequestPatientMeasurementsItemHeightCentimetersOneInfinity, nil
 	case "NaN":
 		return CreateOrderRequestPatientMeasurementsItemHeightCentimetersOneNaN, nil
+	case "Infinity":
+		return CreateOrderRequestPatientMeasurementsItemHeightCentimetersOneInfinity, nil
 	}
 	var t CreateOrderRequestPatientMeasurementsItemHeightCentimetersOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -28687,16 +28759,16 @@ func (c *CreateOrderRequestPatientMeasurementsItemWeightKilograms) Accept(visito
 type CreateOrderRequestPatientMeasurementsItemWeightKilogramsOne string
 
 const (
-	CreateOrderRequestPatientMeasurementsItemWeightKilogramsOneInfinity CreateOrderRequestPatientMeasurementsItemWeightKilogramsOne = "Infinity"
 	CreateOrderRequestPatientMeasurementsItemWeightKilogramsOneNaN      CreateOrderRequestPatientMeasurementsItemWeightKilogramsOne = "NaN"
+	CreateOrderRequestPatientMeasurementsItemWeightKilogramsOneInfinity CreateOrderRequestPatientMeasurementsItemWeightKilogramsOne = "Infinity"
 )
 
 func NewCreateOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString(s string) (CreateOrderRequestPatientMeasurementsItemWeightKilogramsOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderRequestPatientMeasurementsItemWeightKilogramsOneInfinity, nil
 	case "NaN":
 		return CreateOrderRequestPatientMeasurementsItemWeightKilogramsOneNaN, nil
+	case "Infinity":
+		return CreateOrderRequestPatientMeasurementsItemWeightKilogramsOneInfinity, nil
 	}
 	var t CreateOrderRequestPatientMeasurementsItemWeightKilogramsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -30127,16 +30199,16 @@ func (c *CreateOrderRequestPrescriptionsItemClinicalObservationsItemValue) Accep
 type CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne string
 
 const (
-	CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneInfinity CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 	CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneNaN      CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne = "NaN"
+	CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneInfinity CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne = "Infinity"
 )
 
 func NewCreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneFromString(s string) (CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	case "NaN":
 		return CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneNaN, nil
+	case "Infinity":
+		return CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneInfinity, nil
 	}
 	var t CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -30411,16 +30483,16 @@ func (c *CreateOrderRequestPrescriptionsItemQuantity) Accept(visitor CreateOrder
 type CreateOrderRequestPrescriptionsItemQuantityOne string
 
 const (
-	CreateOrderRequestPrescriptionsItemQuantityOneInfinity CreateOrderRequestPrescriptionsItemQuantityOne = "Infinity"
 	CreateOrderRequestPrescriptionsItemQuantityOneNaN      CreateOrderRequestPrescriptionsItemQuantityOne = "NaN"
+	CreateOrderRequestPrescriptionsItemQuantityOneInfinity CreateOrderRequestPrescriptionsItemQuantityOne = "Infinity"
 )
 
 func NewCreateOrderRequestPrescriptionsItemQuantityOneFromString(s string) (CreateOrderRequestPrescriptionsItemQuantityOne, error) {
 	switch s {
-	case "Infinity":
-		return CreateOrderRequestPrescriptionsItemQuantityOneInfinity, nil
 	case "NaN":
 		return CreateOrderRequestPrescriptionsItemQuantityOneNaN, nil
+	case "Infinity":
+		return CreateOrderRequestPrescriptionsItemQuantityOneInfinity, nil
 	}
 	var t CreateOrderRequestPrescriptionsItemQuantityOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -31848,16 +31920,16 @@ func (p *PreviewOrderRequestPatientClinicalProfileHeightInches) Accept(visitor P
 type PreviewOrderRequestPatientClinicalProfileHeightInchesOne string
 
 const (
-	PreviewOrderRequestPatientClinicalProfileHeightInchesOneInfinity PreviewOrderRequestPatientClinicalProfileHeightInchesOne = "Infinity"
 	PreviewOrderRequestPatientClinicalProfileHeightInchesOneNaN      PreviewOrderRequestPatientClinicalProfileHeightInchesOne = "NaN"
+	PreviewOrderRequestPatientClinicalProfileHeightInchesOneInfinity PreviewOrderRequestPatientClinicalProfileHeightInchesOne = "Infinity"
 )
 
 func NewPreviewOrderRequestPatientClinicalProfileHeightInchesOneFromString(s string) (PreviewOrderRequestPatientClinicalProfileHeightInchesOne, error) {
 	switch s {
-	case "Infinity":
-		return PreviewOrderRequestPatientClinicalProfileHeightInchesOneInfinity, nil
 	case "NaN":
 		return PreviewOrderRequestPatientClinicalProfileHeightInchesOneNaN, nil
+	case "Infinity":
+		return PreviewOrderRequestPatientClinicalProfileHeightInchesOneInfinity, nil
 	}
 	var t PreviewOrderRequestPatientClinicalProfileHeightInchesOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -31932,16 +32004,16 @@ func (p *PreviewOrderRequestPatientClinicalProfileWeightPounds) Accept(visitor P
 type PreviewOrderRequestPatientClinicalProfileWeightPoundsOne string
 
 const (
-	PreviewOrderRequestPatientClinicalProfileWeightPoundsOneInfinity PreviewOrderRequestPatientClinicalProfileWeightPoundsOne = "Infinity"
 	PreviewOrderRequestPatientClinicalProfileWeightPoundsOneNaN      PreviewOrderRequestPatientClinicalProfileWeightPoundsOne = "NaN"
+	PreviewOrderRequestPatientClinicalProfileWeightPoundsOneInfinity PreviewOrderRequestPatientClinicalProfileWeightPoundsOne = "Infinity"
 )
 
 func NewPreviewOrderRequestPatientClinicalProfileWeightPoundsOneFromString(s string) (PreviewOrderRequestPatientClinicalProfileWeightPoundsOne, error) {
 	switch s {
-	case "Infinity":
-		return PreviewOrderRequestPatientClinicalProfileWeightPoundsOneInfinity, nil
 	case "NaN":
 		return PreviewOrderRequestPatientClinicalProfileWeightPoundsOneNaN, nil
+	case "Infinity":
+		return PreviewOrderRequestPatientClinicalProfileWeightPoundsOneInfinity, nil
 	}
 	var t PreviewOrderRequestPatientClinicalProfileWeightPoundsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -32408,16 +32480,16 @@ func (p *PreviewOrderRequestPatientMeasurementsItemHeightCentimeters) Accept(vis
 type PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne string
 
 const (
-	PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneInfinity PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne = "Infinity"
 	PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneNaN      PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne = "NaN"
+	PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneInfinity PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne = "Infinity"
 )
 
 func NewPreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString(s string) (PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne, error) {
 	switch s {
-	case "Infinity":
-		return PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneInfinity, nil
 	case "NaN":
 		return PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneNaN, nil
+	case "Infinity":
+		return PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneInfinity, nil
 	}
 	var t PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -32492,16 +32564,16 @@ func (p *PreviewOrderRequestPatientMeasurementsItemWeightKilograms) Accept(visit
 type PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne string
 
 const (
-	PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneInfinity PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne = "Infinity"
 	PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneNaN      PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne = "NaN"
+	PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneInfinity PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne = "Infinity"
 )
 
 func NewPreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString(s string) (PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne, error) {
 	switch s {
-	case "Infinity":
-		return PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneInfinity, nil
 	case "NaN":
 		return PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneNaN, nil
+	case "Infinity":
+		return PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneInfinity, nil
 	}
 	var t PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -34000,16 +34072,16 @@ func (p *PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemVa
 type PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOne string
 
 const (
-	PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneInfinity PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOne = "Infinity"
 	PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneNaN      PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOne = "NaN"
+	PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneInfinity PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOne = "Infinity"
 )
 
 func NewPreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneFromString(s string) (PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOne, error) {
 	switch s {
-	case "Infinity":
-		return PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneInfinity, nil
 	case "NaN":
 		return PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneNaN, nil
+	case "Infinity":
+		return PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneInfinity, nil
 	}
 	var t PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOne
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

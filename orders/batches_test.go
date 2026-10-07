@@ -9467,18 +9467,18 @@ func TestEnumCreateOrderBatchRequestOrdersItemPatientAddressesItemAddressCountry
 }
 
 func TestEnumCreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -9487,7 +9487,7 @@ func TestEnumCreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInches
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneFromString("Infinity")
+		val, err := NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -9496,18 +9496,18 @@ func TestEnumCreateOrderBatchRequestOrdersItemPatientClinicalProfileHeightInches
 }
 
 func TestEnumCreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -9516,7 +9516,7 @@ func TestEnumCreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPounds
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneFromString("Infinity")
+		val, err := NewCreateOrderBatchRequestOrdersItemPatientClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -9568,18 +9568,18 @@ func TestEnumCreateOrderBatchRequestOrdersItemPatientGender(t *testing.T) {
 }
 
 func TestEnumCreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -9588,7 +9588,7 @@ func TestEnumCreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCenti
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		val, err := NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -9597,18 +9597,18 @@ func TestEnumCreateOrderBatchRequestOrdersItemPatientMeasurementsItemHeightCenti
 }
 
 func TestEnumCreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -9617,7 +9617,7 @@ func TestEnumCreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilog
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		val, err := NewCreateOrderBatchRequestOrdersItemPatientMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -9854,18 +9854,18 @@ func TestEnumCreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalMedicatio
 }
 
 func TestEnumCreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -9874,7 +9874,7 @@ func TestEnumCreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservati
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		val, err := NewCreateOrderBatchRequestOrdersItemPrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -9905,18 +9905,18 @@ func TestEnumCreateOrderBatchRequestOrdersItemPrescriptionsItemDispensingShippin
 }
 
 func TestEnumCreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -9925,7 +9925,7 @@ func TestEnumCreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOne(t *te
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneFromString("Infinity")
+		val, err := NewCreateOrderBatchRequestOrdersItemPrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)

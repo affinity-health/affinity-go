@@ -35,30 +35,13 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Requires selling_prices:read. Omit practiceId for the platform default, or supply a managed practice. A null amount inherits the next applicable price. Amounts use the catalog pricing basis, in USD cents. purchaseAmountCents is the platform's Affinity purchase price for that same basis. requiresReview indicates changed product pricing terms, not a below-purchase-price discount.
+// Requires selling_prices:read. Reads the Affinity-managed purchase-price override inherited by this platform's practices unless Affinity sets a practice override. Use the practice-scoped catalog for effective practice prices and presentation-price when an Affinity default may be absent. Platforms cannot edit purchase prices.
 func (c *Client) Get(
 	ctx context.Context,
 	request *catalog.GetSellingPricesRequest,
 	opts ...option.RequestOption,
 ) (*affinity.PlatformPublicAPISellingPricesReadSellingPriceResponse, error) {
 	response, err := c.WithRawResponse.Get(
-		ctx,
-		request,
-		opts...,
-	)
-	if err != nil {
-		return nil, err
-	}
-	return response.Body, nil
-}
-
-// Requires selling_prices:write. Sets a platform default or managed practice override in the current Test/Live mode. Send baseVersion from Read selling price. Null removes the override. Prices use the catalog pricing basis. Intentional discounts below purchaseAmountCents are allowed; compare these amounts to warn about selling below your Affinity purchase price. This does not change the platform's Affinity purchase price or collect practice payments.
-func (c *Client) Update(
-	ctx context.Context,
-	request *catalog.PlatformPublicAPISellingPricesUpdateSellingPriceRequest,
-	opts ...option.RequestOption,
-) (*affinity.PlatformPublicAPISellingPricesUpdateSellingPriceResponse, error) {
-	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
 		opts...,

@@ -3062,7 +3062,7 @@ func TestSettersCancelOrderResponse(t *testing.T) {
 
 	t.Run("SetMetadata", func(t *testing.T) {
 		obj := &CancelOrderResponse{}
-		var fernTestValueMetadata *CancelOrderResponseMetadata
+		var fernTestValueMetadata map[string]*CancelOrderResponseMetadataValue
 		obj.SetMetadata(fernTestValueMetadata)
 		assert.Equal(t, fernTestValueMetadata, obj.Metadata)
 		assert.NotNil(t, obj.explicitFields)
@@ -3341,7 +3341,7 @@ func TestGettersCancelOrderResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CancelOrderResponse{}
-		var expected *CancelOrderResponseMetadata
+		var expected map[string]*CancelOrderResponseMetadataValue
 		obj.Metadata = expected
 
 		// Act & Assert
@@ -3995,7 +3995,7 @@ func TestSettersMarkExplicitCancelOrderResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CancelOrderResponse{}
-		var fernTestValueMetadata *CancelOrderResponseMetadata
+		var fernTestValueMetadata map[string]*CancelOrderResponseMetadataValue
 
 		// Act
 		obj.SetMetadata(fernTestValueMetadata)
@@ -10173,6 +10173,78 @@ func TestSettersMarkExplicitCancelOrderResponseLifecycleEventsItem(t *testing.T)
 
 		// Note: This does not explicitly assert the presence of a specific JSON field
 		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+}
+
+func TestGettersCancelOrderResponseMetadataValue(t *testing.T) {
+	t.Run("GetString", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CancelOrderResponseMetadataValue{}
+		var expected string
+		obj.String = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetString(), "getter should return the property value")
+	})
+
+	t.Run("GetString_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *CancelOrderResponseMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetString() // Should return zero value
+	})
+
+	t.Run("GetDouble", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CancelOrderResponseMetadataValue{}
+		var expected float64
+		obj.Double = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetDouble(), "getter should return the property value")
+	})
+
+	t.Run("GetDouble_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *CancelOrderResponseMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetDouble() // Should return zero value
+	})
+
+	t.Run("GetBoolean", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CancelOrderResponseMetadataValue{}
+		var expected bool
+		obj.Boolean = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetBoolean(), "getter should return the property value")
+	})
+
+	t.Run("GetBoolean_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *CancelOrderResponseMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetBoolean() // Should return zero value
 	})
 
 }
@@ -17604,7 +17676,7 @@ func TestSettersCreateOrderResponse(t *testing.T) {
 
 	t.Run("SetMetadata", func(t *testing.T) {
 		obj := &CreateOrderResponse{}
-		var fernTestValueMetadata *CreateOrderResponseMetadata
+		var fernTestValueMetadata map[string]*CreateOrderResponseMetadataValue
 		obj.SetMetadata(fernTestValueMetadata)
 		assert.Equal(t, fernTestValueMetadata, obj.Metadata)
 		assert.NotNil(t, obj.explicitFields)
@@ -17778,7 +17850,7 @@ func TestGettersCreateOrderResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateOrderResponse{}
-		var expected *CreateOrderResponseMetadata
+		var expected map[string]*CreateOrderResponseMetadataValue
 		obj.Metadata = expected
 
 		// Act & Assert
@@ -18134,7 +18206,7 @@ func TestSettersMarkExplicitCreateOrderResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &CreateOrderResponse{}
-		var fernTestValueMetadata *CreateOrderResponseMetadata
+		var fernTestValueMetadata map[string]*CreateOrderResponseMetadataValue
 
 		// Act
 		obj.SetMetadata(fernTestValueMetadata)
@@ -18438,6 +18510,78 @@ func TestSettersMarkExplicitCreateOrderResponse(t *testing.T) {
 
 		// Note: This does not explicitly assert the presence of a specific JSON field
 		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+}
+
+func TestGettersCreateOrderResponseMetadataValue(t *testing.T) {
+	t.Run("GetString", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateOrderResponseMetadataValue{}
+		var expected string
+		obj.String = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetString(), "getter should return the property value")
+	})
+
+	t.Run("GetString_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *CreateOrderResponseMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetString() // Should return zero value
+	})
+
+	t.Run("GetDouble", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateOrderResponseMetadataValue{}
+		var expected float64
+		obj.Double = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetDouble(), "getter should return the property value")
+	})
+
+	t.Run("GetDouble_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *CreateOrderResponseMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetDouble() // Should return zero value
+	})
+
+	t.Run("GetBoolean", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateOrderResponseMetadataValue{}
+		var expected bool
+		obj.Boolean = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetBoolean(), "getter should return the property value")
+	})
+
+	t.Run("GetBoolean_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *CreateOrderResponseMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetBoolean() // Should return zero value
 	})
 
 }
@@ -19690,7 +19834,7 @@ func TestSettersGetOrderResponse(t *testing.T) {
 
 	t.Run("SetMetadata", func(t *testing.T) {
 		obj := &GetOrderResponse{}
-		var fernTestValueMetadata *GetOrderResponseMetadata
+		var fernTestValueMetadata map[string]*GetOrderResponseMetadataValue
 		obj.SetMetadata(fernTestValueMetadata)
 		assert.Equal(t, fernTestValueMetadata, obj.Metadata)
 		assert.NotNil(t, obj.explicitFields)
@@ -19961,7 +20105,7 @@ func TestGettersGetOrderResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &GetOrderResponse{}
-		var expected *GetOrderResponseMetadata
+		var expected map[string]*GetOrderResponseMetadataValue
 		obj.Metadata = expected
 
 		// Act & Assert
@@ -20582,7 +20726,7 @@ func TestSettersMarkExplicitGetOrderResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &GetOrderResponse{}
-		var fernTestValueMetadata *GetOrderResponseMetadata
+		var fernTestValueMetadata map[string]*GetOrderResponseMetadataValue
 
 		// Act
 		obj.SetMetadata(fernTestValueMetadata)
@@ -26391,6 +26535,78 @@ func TestSettersMarkExplicitGetOrderResponseLifecycleEventsItem(t *testing.T) {
 
 		// Note: This does not explicitly assert the presence of a specific JSON field
 		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+}
+
+func TestGettersGetOrderResponseMetadataValue(t *testing.T) {
+	t.Run("GetString", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &GetOrderResponseMetadataValue{}
+		var expected string
+		obj.String = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetString(), "getter should return the property value")
+	})
+
+	t.Run("GetString_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *GetOrderResponseMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetString() // Should return zero value
+	})
+
+	t.Run("GetDouble", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &GetOrderResponseMetadataValue{}
+		var expected float64
+		obj.Double = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetDouble(), "getter should return the property value")
+	})
+
+	t.Run("GetDouble_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *GetOrderResponseMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetDouble() // Should return zero value
+	})
+
+	t.Run("GetBoolean", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &GetOrderResponseMetadataValue{}
+		var expected bool
+		obj.Boolean = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetBoolean(), "getter should return the property value")
+	})
+
+	t.Run("GetBoolean_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *GetOrderResponseMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetBoolean() // Should return zero value
 	})
 
 }
@@ -34097,7 +34313,7 @@ func TestSettersListOrdersResponseDataItem(t *testing.T) {
 
 	t.Run("SetMetadata", func(t *testing.T) {
 		obj := &ListOrdersResponseDataItem{}
-		var fernTestValueMetadata *ListOrdersResponseDataItemMetadata
+		var fernTestValueMetadata map[string]*ListOrdersResponseDataItemMetadataValue
 		obj.SetMetadata(fernTestValueMetadata)
 		assert.Equal(t, fernTestValueMetadata, obj.Metadata)
 		assert.NotNil(t, obj.explicitFields)
@@ -34368,7 +34584,7 @@ func TestGettersListOrdersResponseDataItem(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ListOrdersResponseDataItem{}
-		var expected *ListOrdersResponseDataItemMetadata
+		var expected map[string]*ListOrdersResponseDataItemMetadataValue
 		obj.Metadata = expected
 
 		// Act & Assert
@@ -34989,7 +35205,7 @@ func TestSettersMarkExplicitListOrdersResponseDataItem(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ListOrdersResponseDataItem{}
-		var fernTestValueMetadata *ListOrdersResponseDataItemMetadata
+		var fernTestValueMetadata map[string]*ListOrdersResponseDataItemMetadataValue
 
 		// Act
 		obj.SetMetadata(fernTestValueMetadata)
@@ -40798,6 +41014,78 @@ func TestSettersMarkExplicitListOrdersResponseDataItemLifecycleEventsItem(t *tes
 
 		// Note: This does not explicitly assert the presence of a specific JSON field
 		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+}
+
+func TestGettersListOrdersResponseDataItemMetadataValue(t *testing.T) {
+	t.Run("GetString", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ListOrdersResponseDataItemMetadataValue{}
+		var expected string
+		obj.String = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetString(), "getter should return the property value")
+	})
+
+	t.Run("GetString_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ListOrdersResponseDataItemMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetString() // Should return zero value
+	})
+
+	t.Run("GetDouble", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ListOrdersResponseDataItemMetadataValue{}
+		var expected float64
+		obj.Double = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetDouble(), "getter should return the property value")
+	})
+
+	t.Run("GetDouble_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ListOrdersResponseDataItemMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetDouble() // Should return zero value
+	})
+
+	t.Run("GetBoolean", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ListOrdersResponseDataItemMetadataValue{}
+		var expected bool
+		obj.Boolean = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetBoolean(), "getter should return the property value")
+	})
+
+	t.Run("GetBoolean_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ListOrdersResponseDataItemMetadataValue
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetBoolean() // Should return zero value
 	})
 
 }
@@ -81187,39 +81475,6 @@ func TestJSONMarshalingCancelOrderResponseLifecycleEventsItem(t *testing.T) {
 	})
 }
 
-func TestJSONMarshalingCancelOrderResponseMetadata(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &CancelOrderResponseMetadata{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled CancelOrderResponseMetadata
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj CancelOrderResponseMetadata
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj CancelOrderResponseMetadata
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
 func TestJSONMarshalingCancelOrderResponseOtcItemsItem(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
@@ -82408,39 +82663,6 @@ func TestJSONMarshalingCreateOrderResponse(t *testing.T) {
 	})
 }
 
-func TestJSONMarshalingCreateOrderResponseMetadata(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &CreateOrderResponseMetadata{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled CreateOrderResponseMetadata
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj CreateOrderResponseMetadata
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj CreateOrderResponseMetadata
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
 func TestJSONMarshalingCreateOrderResponseOtcItemsItem(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
@@ -82832,39 +83054,6 @@ func TestJSONMarshalingGetOrderResponseLifecycleEventsItem(t *testing.T) {
 	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
 		t.Parallel()
 		var obj GetOrderResponseLifecycleEventsItem
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
-func TestJSONMarshalingGetOrderResponseMetadata(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &GetOrderResponseMetadata{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled GetOrderResponseMetadata
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj GetOrderResponseMetadata
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj GetOrderResponseMetadata
 		err := json.Unmarshal([]byte(`{}`), &obj)
 		assert.NoError(t, err, "unmarshaling empty object should succeed")
 	})
@@ -83723,39 +83912,6 @@ func TestJSONMarshalingListOrdersResponseDataItemLifecycleEventsItem(t *testing.
 	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
 		t.Parallel()
 		var obj ListOrdersResponseDataItemLifecycleEventsItem
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
-func TestJSONMarshalingListOrdersResponseDataItemMetadata(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ListOrdersResponseDataItemMetadata{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled ListOrdersResponseDataItemMetadata
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj ListOrdersResponseDataItemMetadata
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj ListOrdersResponseDataItemMetadata
 		err := json.Unmarshal([]byte(`{}`), &obj)
 		assert.NoError(t, err, "unmarshaling empty object should succeed")
 	})
@@ -86923,22 +87079,6 @@ func TestStringCancelOrderResponseLifecycleEventsItem(t *testing.T) {
 	})
 }
 
-func TestStringCancelOrderResponseMetadata(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &CancelOrderResponseMetadata{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *CancelOrderResponseMetadata
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
 func TestStringCancelOrderResponseOtcItemsItem(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()
@@ -87515,22 +87655,6 @@ func TestStringCreateOrderResponse(t *testing.T) {
 	})
 }
 
-func TestStringCreateOrderResponseMetadata(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &CreateOrderResponseMetadata{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *CreateOrderResponseMetadata
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
 func TestStringCreateOrderResponseOtcItemsItem(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()
@@ -87718,22 +87842,6 @@ func TestStringGetOrderResponseLifecycleEventsItem(t *testing.T) {
 	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *GetOrderResponseLifecycleEventsItem
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
-func TestStringGetOrderResponseMetadata(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &GetOrderResponseMetadata{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *GetOrderResponseMetadata
 		result := obj.String()
 		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
 	})
@@ -88150,22 +88258,6 @@ func TestStringListOrdersResponseDataItemLifecycleEventsItem(t *testing.T) {
 	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ListOrdersResponseDataItemLifecycleEventsItem
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
-func TestStringListOrdersResponseDataItemMetadata(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &ListOrdersResponseDataItemMetadata{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *ListOrdersResponseDataItemMetadata
 		result := obj.String()
 		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
 	})
@@ -90286,18 +90378,18 @@ func TestEnumCancelOrderResponsePrescriptionsItemClinicalMedicationReviewStatus(
 }
 
 func TestEnumCancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -90306,7 +90398,7 @@ func TestEnumCancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOn
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		val, err := NewCancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -90315,18 +90407,18 @@ func TestEnumCancelOrderResponsePrescriptionsItemClinicalObservationsItemValueOn
 }
 
 func TestEnumCancelOrderResponsePrescriptionsItemDaysSupplyOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCancelOrderResponsePrescriptionsItemDaysSupplyOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CancelOrderResponsePrescriptionsItemDaysSupplyOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCancelOrderResponsePrescriptionsItemDaysSupplyOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CancelOrderResponsePrescriptionsItemDaysSupplyOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCancelOrderResponsePrescriptionsItemDaysSupplyOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CancelOrderResponsePrescriptionsItemDaysSupplyOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -90335,7 +90427,7 @@ func TestEnumCancelOrderResponsePrescriptionsItemDaysSupplyOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCancelOrderResponsePrescriptionsItemDaysSupplyOneFromString("Infinity")
+		val, err := NewCancelOrderResponsePrescriptionsItemDaysSupplyOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -90452,18 +90544,18 @@ func TestEnumCancelOrderResponsePrescriptionsItemPatientSnapshotGender(t *testin
 }
 
 func TestEnumCancelOrderResponsePrescriptionsItemQuantityOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCancelOrderResponsePrescriptionsItemQuantityOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CancelOrderResponsePrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCancelOrderResponsePrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CancelOrderResponsePrescriptionsItemQuantityOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCancelOrderResponsePrescriptionsItemQuantityOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CancelOrderResponsePrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -90472,7 +90564,7 @@ func TestEnumCancelOrderResponsePrescriptionsItemQuantityOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCancelOrderResponsePrescriptionsItemQuantityOneFromString("Infinity")
+		val, err := NewCancelOrderResponsePrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -90646,18 +90738,18 @@ func TestEnumCreateOrderRequestPatientAddressesItemAddressCountry(t *testing.T) 
 }
 
 func TestEnumCreateOrderRequestPatientClinicalProfileHeightInchesOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderRequestPatientClinicalProfileHeightInchesOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderRequestPatientClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderRequestPatientClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderRequestPatientClinicalProfileHeightInchesOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderRequestPatientClinicalProfileHeightInchesOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderRequestPatientClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -90666,7 +90758,7 @@ func TestEnumCreateOrderRequestPatientClinicalProfileHeightInchesOne(t *testing.
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderRequestPatientClinicalProfileHeightInchesOneFromString("Infinity")
+		val, err := NewCreateOrderRequestPatientClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -90675,18 +90767,18 @@ func TestEnumCreateOrderRequestPatientClinicalProfileHeightInchesOne(t *testing.
 }
 
 func TestEnumCreateOrderRequestPatientClinicalProfileWeightPoundsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderRequestPatientClinicalProfileWeightPoundsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderRequestPatientClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderRequestPatientClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderRequestPatientClinicalProfileWeightPoundsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderRequestPatientClinicalProfileWeightPoundsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderRequestPatientClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -90695,7 +90787,7 @@ func TestEnumCreateOrderRequestPatientClinicalProfileWeightPoundsOne(t *testing.
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderRequestPatientClinicalProfileWeightPoundsOneFromString("Infinity")
+		val, err := NewCreateOrderRequestPatientClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -90747,18 +90839,18 @@ func TestEnumCreateOrderRequestPatientGender(t *testing.T) {
 }
 
 func TestEnumCreateOrderRequestPatientMeasurementsItemHeightCentimetersOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderRequestPatientMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderRequestPatientMeasurementsItemHeightCentimetersOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderRequestPatientMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -90767,7 +90859,7 @@ func TestEnumCreateOrderRequestPatientMeasurementsItemHeightCentimetersOne(t *te
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		val, err := NewCreateOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -90776,18 +90868,18 @@ func TestEnumCreateOrderRequestPatientMeasurementsItemHeightCentimetersOne(t *te
 }
 
 func TestEnumCreateOrderRequestPatientMeasurementsItemWeightKilogramsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderRequestPatientMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderRequestPatientMeasurementsItemWeightKilogramsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderRequestPatientMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -90796,7 +90888,7 @@ func TestEnumCreateOrderRequestPatientMeasurementsItemWeightKilogramsOne(t *test
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		val, err := NewCreateOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -91033,18 +91125,18 @@ func TestEnumCreateOrderRequestPrescriptionsItemClinicalMedicationReviewStatus(t
 }
 
 func TestEnumCreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -91053,7 +91145,7 @@ func TestEnumCreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOne
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		val, err := NewCreateOrderRequestPrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -91084,18 +91176,18 @@ func TestEnumCreateOrderRequestPrescriptionsItemDispensingShippingDestinationTyp
 }
 
 func TestEnumCreateOrderRequestPrescriptionsItemQuantityOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderRequestPrescriptionsItemQuantityOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderRequestPrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderRequestPrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderRequestPrescriptionsItemQuantityOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderRequestPrescriptionsItemQuantityOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderRequestPrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -91104,7 +91196,7 @@ func TestEnumCreateOrderRequestPrescriptionsItemQuantityOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderRequestPrescriptionsItemQuantityOneFromString("Infinity")
+		val, err := NewCreateOrderRequestPrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -91157,18 +91249,18 @@ func TestEnumCreateOrderResponsePrescriptionsItemObject(t *testing.T) {
 }
 
 func TestEnumCreateOrderResponsePrescriptionsItemQuantityOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewCreateOrderResponsePrescriptionsItemQuantityOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, CreateOrderResponsePrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewCreateOrderResponsePrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, CreateOrderResponsePrescriptionsItemQuantityOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCreateOrderResponsePrescriptionsItemQuantityOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CreateOrderResponsePrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -91177,7 +91269,7 @@ func TestEnumCreateOrderResponsePrescriptionsItemQuantityOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewCreateOrderResponsePrescriptionsItemQuantityOneFromString("Infinity")
+		val, err := NewCreateOrderResponsePrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -91804,18 +91896,18 @@ func TestEnumGetOrderResponsePrescriptionsItemClinicalMedicationReviewStatus(t *
 }
 
 func TestEnumGetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -91824,7 +91916,7 @@ func TestEnumGetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne(t
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		val, err := NewGetOrderResponsePrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -91833,18 +91925,18 @@ func TestEnumGetOrderResponsePrescriptionsItemClinicalObservationsItemValueOne(t
 }
 
 func TestEnumGetOrderResponsePrescriptionsItemDaysSupplyOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetOrderResponsePrescriptionsItemDaysSupplyOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetOrderResponsePrescriptionsItemDaysSupplyOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetOrderResponsePrescriptionsItemDaysSupplyOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetOrderResponsePrescriptionsItemDaysSupplyOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetOrderResponsePrescriptionsItemDaysSupplyOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetOrderResponsePrescriptionsItemDaysSupplyOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -91853,7 +91945,7 @@ func TestEnumGetOrderResponsePrescriptionsItemDaysSupplyOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetOrderResponsePrescriptionsItemDaysSupplyOneFromString("Infinity")
+		val, err := NewGetOrderResponsePrescriptionsItemDaysSupplyOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -91970,18 +92062,18 @@ func TestEnumGetOrderResponsePrescriptionsItemPatientSnapshotGender(t *testing.T
 }
 
 func TestEnumGetOrderResponsePrescriptionsItemQuantityOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewGetOrderResponsePrescriptionsItemQuantityOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, GetOrderResponsePrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewGetOrderResponsePrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, GetOrderResponsePrescriptionsItemQuantityOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewGetOrderResponsePrescriptionsItemQuantityOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, GetOrderResponsePrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -91990,7 +92082,7 @@ func TestEnumGetOrderResponsePrescriptionsItemQuantityOne(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewGetOrderResponsePrescriptionsItemQuantityOneFromString("Infinity")
+		val, err := NewGetOrderResponsePrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -92815,18 +92907,18 @@ func TestEnumListOrdersResponseDataItemPrescriptionsItemClinicalMedicationReview
 }
 
 func TestEnumListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -92835,7 +92927,7 @@ func TestEnumListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItem
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		val, err := NewListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -92844,18 +92936,18 @@ func TestEnumListOrdersResponseDataItemPrescriptionsItemClinicalObservationsItem
 }
 
 func TestEnumListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -92864,7 +92956,7 @@ func TestEnumListOrdersResponseDataItemPrescriptionsItemDaysSupplyOne(t *testing
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneFromString("Infinity")
+		val, err := NewListOrdersResponseDataItemPrescriptionsItemDaysSupplyOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -92981,18 +93073,18 @@ func TestEnumListOrdersResponseDataItemPrescriptionsItemPatientSnapshotGender(t 
 }
 
 func TestEnumListOrdersResponseDataItemPrescriptionsItemQuantityOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewListOrdersResponseDataItemPrescriptionsItemQuantityOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListOrdersResponseDataItemPrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListOrdersResponseDataItemPrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ListOrdersResponseDataItemPrescriptionsItemQuantityOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListOrdersResponseDataItemPrescriptionsItemQuantityOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListOrdersResponseDataItemPrescriptionsItemQuantityOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -93001,7 +93093,7 @@ func TestEnumListOrdersResponseDataItemPrescriptionsItemQuantityOne(t *testing.T
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewListOrdersResponseDataItemPrescriptionsItemQuantityOneFromString("Infinity")
+		val, err := NewListOrdersResponseDataItemPrescriptionsItemQuantityOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -93219,18 +93311,18 @@ func TestEnumPreviewOrderRequestPatientAddressesItemAddressCountry(t *testing.T)
 }
 
 func TestEnumPreviewOrderRequestPatientClinicalProfileHeightInchesOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewPreviewOrderRequestPatientClinicalProfileHeightInchesOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, PreviewOrderRequestPatientClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPreviewOrderRequestPatientClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, PreviewOrderRequestPatientClinicalProfileHeightInchesOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPreviewOrderRequestPatientClinicalProfileHeightInchesOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PreviewOrderRequestPatientClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -93239,7 +93331,7 @@ func TestEnumPreviewOrderRequestPatientClinicalProfileHeightInchesOne(t *testing
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPreviewOrderRequestPatientClinicalProfileHeightInchesOneFromString("Infinity")
+		val, err := NewPreviewOrderRequestPatientClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -93248,18 +93340,18 @@ func TestEnumPreviewOrderRequestPatientClinicalProfileHeightInchesOne(t *testing
 }
 
 func TestEnumPreviewOrderRequestPatientClinicalProfileWeightPoundsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewPreviewOrderRequestPatientClinicalProfileWeightPoundsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, PreviewOrderRequestPatientClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPreviewOrderRequestPatientClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, PreviewOrderRequestPatientClinicalProfileWeightPoundsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPreviewOrderRequestPatientClinicalProfileWeightPoundsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PreviewOrderRequestPatientClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -93268,7 +93360,7 @@ func TestEnumPreviewOrderRequestPatientClinicalProfileWeightPoundsOne(t *testing
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPreviewOrderRequestPatientClinicalProfileWeightPoundsOneFromString("Infinity")
+		val, err := NewPreviewOrderRequestPatientClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -93320,18 +93412,18 @@ func TestEnumPreviewOrderRequestPatientGender(t *testing.T) {
 }
 
 func TestEnumPreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewPreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -93340,7 +93432,7 @@ func TestEnumPreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne(t *t
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		val, err := NewPreviewOrderRequestPatientMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -93349,18 +93441,18 @@ func TestEnumPreviewOrderRequestPatientMeasurementsItemHeightCentimetersOne(t *t
 }
 
 func TestEnumPreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewPreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -93369,7 +93461,7 @@ func TestEnumPreviewOrderRequestPatientMeasurementsItemWeightKilogramsOne(t *tes
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		val, err := NewPreviewOrderRequestPatientMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -93606,18 +93698,18 @@ func TestEnumPreviewOrderRequestPrescriptionsItemOverridesClinicalMedicationRevi
 }
 
 func TestEnumPreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewPreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -93626,7 +93718,7 @@ func TestEnumPreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsIt
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneFromString("Infinity")
+		val, err := NewPreviewOrderRequestPrescriptionsItemOverridesClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -93831,18 +93923,18 @@ func TestEnumPreviewOrderResponseOrderInputPatientAddressesItemAddressCountry(t 
 }
 
 func TestEnumPreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewPreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -93851,7 +93943,7 @@ func TestEnumPreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneFromString("Infinity")
+		val, err := NewPreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -93860,18 +93952,18 @@ func TestEnumPreviewOrderResponseOrderInputPatientClinicalProfileHeightInchesOne
 }
 
 func TestEnumPreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewPreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -93880,7 +93972,7 @@ func TestEnumPreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOne
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneFromString("Infinity")
+		val, err := NewPreviewOrderResponseOrderInputPatientClinicalProfileWeightPoundsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -93932,18 +94024,18 @@ func TestEnumPreviewOrderResponseOrderInputPatientGender(t *testing.T) {
 }
 
 func TestEnumPreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewPreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -93952,7 +94044,7 @@ func TestEnumPreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimet
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneFromString("Infinity")
+		val, err := NewPreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimetersOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -93961,18 +94053,18 @@ func TestEnumPreviewOrderResponseOrderInputPatientMeasurementsItemHeightCentimet
 }
 
 func TestEnumPreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewPreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -93981,7 +94073,7 @@ func TestEnumPreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogram
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneFromString("Infinity")
+		val, err := NewPreviewOrderResponseOrderInputPatientMeasurementsItemWeightKilogramsOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -94218,18 +94310,18 @@ func TestEnumPreviewOrderResponseOrderInputPrescriptionsItemClinicalMedicationRe
 }
 
 func TestEnumPreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewPreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -94238,7 +94330,7 @@ func TestEnumPreviewOrderResponseOrderInputPrescriptionsItemClinicalObservations
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneFromString("Infinity")
+		val, err := NewPreviewOrderResponseOrderInputPrescriptionsItemClinicalObservationsItemValueOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -94516,18 +94608,18 @@ func TestEnumSignAndSubmitOrderResponseObject(t *testing.T) {
 }
 
 func TestEnumSignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne(t *testing.T) {
-	t.Run("NewFromString_Infinity", func(t *testing.T) {
-		t.Parallel()
-		val, err := NewSignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneFromString("Infinity")
-		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne("Infinity"), val, "enum value should match expected wire value")
-	})
-
 	t.Run("NewFromString_NaN", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewSignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneFromString("NaN")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne("NaN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Infinity", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewSignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneFromString("Infinity")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, SignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne("Infinity"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -94536,7 +94628,7 @@ func TestEnumSignAndSubmitOrderResponsePrescriptionsItemErrorStatusOne(t *testin
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewSignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneFromString("Infinity")
+		val, err := NewSignAndSubmitOrderResponsePrescriptionsItemErrorStatusOneFromString("NaN")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -94946,29 +95038,6 @@ func TestExtraPropertiesCancelOrderResponseLifecycleEventsItem(t *testing.T) {
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CancelOrderResponseLifecycleEventsItem
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesCancelOrderResponseMetadata(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &CancelOrderResponseMetadata{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *CancelOrderResponseMetadata
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})
@@ -95802,29 +95871,6 @@ func TestExtraPropertiesCreateOrderResponse(t *testing.T) {
 	})
 }
 
-func TestExtraPropertiesCreateOrderResponseMetadata(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &CreateOrderResponseMetadata{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *CreateOrderResponseMetadata
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
 func TestExtraPropertiesCreateOrderResponseOtcItemsItem(t *testing.T) {
 	t.Run("GetExtraProperties", func(t *testing.T) {
 		t.Parallel()
@@ -96096,29 +96142,6 @@ func TestExtraPropertiesGetOrderResponseLifecycleEventsItem(t *testing.T) {
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *GetOrderResponseLifecycleEventsItem
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesGetOrderResponseMetadata(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &GetOrderResponseMetadata{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *GetOrderResponseMetadata
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})
@@ -96717,29 +96740,6 @@ func TestExtraPropertiesListOrdersResponseDataItemLifecycleEventsItem(t *testing
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ListOrdersResponseDataItemLifecycleEventsItem
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesListOrdersResponseDataItemMetadata(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &ListOrdersResponseDataItemMetadata{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *ListOrdersResponseDataItemMetadata
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})

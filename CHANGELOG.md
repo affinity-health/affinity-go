@@ -2,7 +2,13 @@
 
 ## Unreleased
 
+## 0.3.0 - 2026-10-07
+
 ### Changed
+
+- Regenerate from the deployed API contract used by TypeScript SDK 1.16.0.
+- Use https://api.affinityrx.com and API version 2026-09-28.
+- Add presentation-price reads and remove customer purchase-price writes.
 
 - Use direct API-key constructors, short nested resource methods, and separate request options across all 73 API operations.
 - Resolve practice keys automatically and support immutable scoped clients or per-request practice context.
