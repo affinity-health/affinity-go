@@ -192,23 +192,20 @@ func (g *GetOrdersRequest) SetOrderID(orderID string) {
 }
 
 var (
-	listOrdersRequestFieldEndingBefore    = big.NewInt(1 << 0)
-	listOrdersRequestFieldLimit           = big.NewInt(1 << 1)
-	listOrdersRequestFieldStartingAfter   = big.NewInt(1 << 2)
-	listOrdersRequestFieldExternalOrderID = big.NewInt(1 << 3)
-	listOrdersRequestFieldUpdatedAfter    = big.NewInt(1 << 4)
-	listOrdersRequestFieldPatientID       = big.NewInt(1 << 5)
-	listOrdersRequestFieldPracticeID      = big.NewInt(1 << 6)
-	listOrdersRequestFieldQuery           = big.NewInt(1 << 7)
-	listOrdersRequestFieldStatus          = big.NewInt(1 << 8)
-	listOrdersRequestFieldCancelRequested = big.NewInt(1 << 9)
-	listOrdersRequestFieldRecentlyShipped = big.NewInt(1 << 10)
-	listOrdersRequestFieldSort            = big.NewInt(1 << 11)
+	listOrdersRequestFieldLimit           = big.NewInt(1 << 0)
+	listOrdersRequestFieldStartingAfter   = big.NewInt(1 << 1)
+	listOrdersRequestFieldExternalOrderID = big.NewInt(1 << 2)
+	listOrdersRequestFieldUpdatedAfter    = big.NewInt(1 << 3)
+	listOrdersRequestFieldPatientID       = big.NewInt(1 << 4)
+	listOrdersRequestFieldPracticeID      = big.NewInt(1 << 5)
+	listOrdersRequestFieldQuery           = big.NewInt(1 << 6)
+	listOrdersRequestFieldStatus          = big.NewInt(1 << 7)
+	listOrdersRequestFieldCancelRequested = big.NewInt(1 << 8)
+	listOrdersRequestFieldRecentlyShipped = big.NewInt(1 << 9)
+	listOrdersRequestFieldSort            = big.NewInt(1 << 10)
 )
 
 type ListOrdersRequest struct {
-	// Page backward before this opaque cursor. Keep the same filters, sort, organization and mode. Send either startingAfter or endingBefore.
-	EndingBefore *string `json:"-" url:"endingBefore,omitempty"`
 	// Maximum records per page, from 1 to 100. Defaults to 25.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode. Use only one cursor parameter.
@@ -243,13 +240,6 @@ func (l *ListOrdersRequest) require(field *big.Int) {
 	}
 	next.Or(next, field)
 	l.explicitFields = next
-}
-
-// SetEndingBefore sets the EndingBefore field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListOrdersRequest) SetEndingBefore(endingBefore *string) {
-	l.EndingBefore = endingBefore
-	l.require(listOrdersRequestFieldEndingBefore)
 }
 
 // SetLimit sets the Limit field and marks it as non-optional;
@@ -4332,16 +4322,22 @@ func (l ListOrdersRequestRecentlyShipped) Ptr() *ListOrdersRequestRecentlyShippe
 type ListOrdersRequestSort string
 
 const (
-	ListOrdersRequestSortPatient ListOrdersRequestSort = "patient"
-	ListOrdersRequestSortCreated ListOrdersRequestSort = "created"
+	ListOrdersRequestSortPatient           ListOrdersRequestSort = "patient"
+	ListOrdersRequestSortPatientDescending ListOrdersRequestSort = "-patient"
+	ListOrdersRequestSortCreated           ListOrdersRequestSort = "created"
+	ListOrdersRequestSortCreatedDescending ListOrdersRequestSort = "-created"
 )
 
 func NewListOrdersRequestSortFromString(s string) (ListOrdersRequestSort, error) {
 	switch s {
 	case "patient":
 		return ListOrdersRequestSortPatient, nil
+	case "-patient":
+		return ListOrdersRequestSortPatientDescending, nil
 	case "created":
 		return ListOrdersRequestSortCreated, nil
+	case "-created":
+		return ListOrdersRequestSortCreatedDescending, nil
 	}
 	var t ListOrdersRequestSort
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

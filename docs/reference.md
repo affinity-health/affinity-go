@@ -345,14 +345,6 @@ _, err := client.Orders.List(
 <dl>
 <dd>
 
-**endingBefore:** `*string` — Page backward before this opaque cursor. Keep the same filters, sort, organization and mode. Send either startingAfter or endingBefore.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
 **limit:** `*int` — Maximum records per page, from 1 to 100. Defaults to 25.
     
 </dd>
@@ -769,14 +761,6 @@ _, err := client.Practices.List(
 <dl>
 <dd>
 
-**endingBefore:** `*string` — Page backward before this opaque cursor. Keep the same filters, sort, organization and mode. Send either startingAfter or endingBefore.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
 **limit:** `*int` — Maximum records per page, from 1 to 100. Defaults to 25.
     
 </dd>
@@ -1141,14 +1125,6 @@ _, err := client.Webhooks.List(
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**endingBefore:** `*string` — Page backward before this opaque cursor. Keep the same filters, sort, organization and mode. Send either startingAfter or endingBefore.
-    
-</dd>
-</dl>
 
 <dl>
 <dd>

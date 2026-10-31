@@ -296,14 +296,6 @@ func TestSettersMarkExplicitGetPracticesRequest(t *testing.T) {
 }
 
 func TestSettersListPracticesRequest(t *testing.T) {
-	t.Run("SetEndingBefore", func(t *testing.T) {
-		obj := &ListPracticesRequest{}
-		var fernTestValueEndingBefore *string
-		obj.SetEndingBefore(fernTestValueEndingBefore)
-		assert.Equal(t, fernTestValueEndingBefore, obj.EndingBefore)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
 	t.Run("SetLimit", func(t *testing.T) {
 		obj := &ListPracticesRequest{}
 		var fernTestValueLimit *int
@@ -347,37 +339,6 @@ func TestSettersListPracticesRequest(t *testing.T) {
 }
 
 func TestSettersMarkExplicitListPracticesRequest(t *testing.T) {
-	t.Run("SetEndingBefore_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ListPracticesRequest{}
-		var fernTestValueEndingBefore *string
-
-		// Act
-		obj.SetEndingBefore(fernTestValueEndingBefore)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
 	t.Run("SetLimit_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
@@ -2281,11 +2242,25 @@ func TestEnumListPracticesRequestSort(t *testing.T) {
 		assert.Equal(t, ListPracticesRequestSort("name"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString__name", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListPracticesRequestSortFromString("-name")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListPracticesRequestSort("-name"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_location", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListPracticesRequestSortFromString("location")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ListPracticesRequestSort("location"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString__location", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListPracticesRequestSortFromString("-location")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListPracticesRequestSort("-location"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_mode", func(t *testing.T) {
@@ -2295,11 +2270,25 @@ func TestEnumListPracticesRequestSort(t *testing.T) {
 		assert.Equal(t, ListPracticesRequestSort("mode"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString__mode", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListPracticesRequestSortFromString("-mode")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListPracticesRequestSort("-mode"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_created", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListPracticesRequestSortFromString("created")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ListPracticesRequestSort("created"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString__created", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListPracticesRequestSortFromString("-created")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListPracticesRequestSort("-created"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {

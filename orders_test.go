@@ -458,14 +458,6 @@ func TestSettersMarkExplicitGetOrdersRequest(t *testing.T) {
 }
 
 func TestSettersListOrdersRequest(t *testing.T) {
-	t.Run("SetEndingBefore", func(t *testing.T) {
-		obj := &ListOrdersRequest{}
-		var fernTestValueEndingBefore *string
-		obj.SetEndingBefore(fernTestValueEndingBefore)
-		assert.Equal(t, fernTestValueEndingBefore, obj.EndingBefore)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
 	t.Run("SetLimit", func(t *testing.T) {
 		obj := &ListOrdersRequest{}
 		var fernTestValueLimit *int
@@ -557,37 +549,6 @@ func TestSettersListOrdersRequest(t *testing.T) {
 }
 
 func TestSettersMarkExplicitListOrdersRequest(t *testing.T) {
-	t.Run("SetEndingBefore_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ListOrdersRequest{}
-		var fernTestValueEndingBefore *string
-
-		// Act
-		obj.SetEndingBefore(fernTestValueEndingBefore)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
 	t.Run("SetLimit_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
@@ -9789,11 +9750,25 @@ func TestEnumListOrdersRequestSort(t *testing.T) {
 		assert.Equal(t, ListOrdersRequestSort("patient"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString__patient", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListOrdersRequestSortFromString("-patient")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListOrdersRequestSort("-patient"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_created", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListOrdersRequestSortFromString("created")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ListOrdersRequestSort("created"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString__created", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListOrdersRequestSortFromString("-created")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListOrdersRequestSort("-created"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {

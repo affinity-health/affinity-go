@@ -134,17 +134,14 @@ func (g *GetPracticesRequest) SetPracticeID(practiceID string) {
 }
 
 var (
-	listPracticesRequestFieldEndingBefore  = big.NewInt(1 << 0)
-	listPracticesRequestFieldLimit         = big.NewInt(1 << 1)
-	listPracticesRequestFieldStartingAfter = big.NewInt(1 << 2)
-	listPracticesRequestFieldExternalID    = big.NewInt(1 << 3)
-	listPracticesRequestFieldQuery         = big.NewInt(1 << 4)
-	listPracticesRequestFieldSort          = big.NewInt(1 << 5)
+	listPracticesRequestFieldLimit         = big.NewInt(1 << 0)
+	listPracticesRequestFieldStartingAfter = big.NewInt(1 << 1)
+	listPracticesRequestFieldExternalID    = big.NewInt(1 << 2)
+	listPracticesRequestFieldQuery         = big.NewInt(1 << 3)
+	listPracticesRequestFieldSort          = big.NewInt(1 << 4)
 )
 
 type ListPracticesRequest struct {
-	// Page backward before this opaque cursor. Keep the same filters, sort, organization and mode. Send either startingAfter or endingBefore.
-	EndingBefore *string `json:"-" url:"endingBefore,omitempty"`
 	// Maximum records per page, from 1 to 100. Defaults to 25.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode. Use only one cursor parameter.
@@ -167,13 +164,6 @@ func (l *ListPracticesRequest) require(field *big.Int) {
 	}
 	next.Or(next, field)
 	l.explicitFields = next
-}
-
-// SetEndingBefore sets the EndingBefore field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListPracticesRequest) SetEndingBefore(endingBefore *string) {
-	l.EndingBefore = endingBefore
-	l.require(listPracticesRequestFieldEndingBefore)
 }
 
 // SetLimit sets the Limit field and marks it as non-optional;
@@ -607,22 +597,34 @@ func (p PracticeListObject) Ptr() *PracticeListObject {
 type ListPracticesRequestSort string
 
 const (
-	ListPracticesRequestSortName     ListPracticesRequestSort = "name"
-	ListPracticesRequestSortLocation ListPracticesRequestSort = "location"
-	ListPracticesRequestSortMode     ListPracticesRequestSort = "mode"
-	ListPracticesRequestSortCreated  ListPracticesRequestSort = "created"
+	ListPracticesRequestSortName               ListPracticesRequestSort = "name"
+	ListPracticesRequestSortNameDescending     ListPracticesRequestSort = "-name"
+	ListPracticesRequestSortLocation           ListPracticesRequestSort = "location"
+	ListPracticesRequestSortLocationDescending ListPracticesRequestSort = "-location"
+	ListPracticesRequestSortMode               ListPracticesRequestSort = "mode"
+	ListPracticesRequestSortModeDescending     ListPracticesRequestSort = "-mode"
+	ListPracticesRequestSortCreated            ListPracticesRequestSort = "created"
+	ListPracticesRequestSortCreatedDescending  ListPracticesRequestSort = "-created"
 )
 
 func NewListPracticesRequestSortFromString(s string) (ListPracticesRequestSort, error) {
 	switch s {
 	case "name":
 		return ListPracticesRequestSortName, nil
+	case "-name":
+		return ListPracticesRequestSortNameDescending, nil
 	case "location":
 		return ListPracticesRequestSortLocation, nil
+	case "-location":
+		return ListPracticesRequestSortLocationDescending, nil
 	case "mode":
 		return ListPracticesRequestSortMode, nil
+	case "-mode":
+		return ListPracticesRequestSortModeDescending, nil
 	case "created":
 		return ListPracticesRequestSortCreated, nil
+	case "-created":
+		return ListPracticesRequestSortCreatedDescending, nil
 	}
 	var t ListPracticesRequestSort
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

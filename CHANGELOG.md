@@ -6,6 +6,19 @@ break the interface.
 
 ## Unreleased
 
+## 0.4.2 - 2026-11-01
+
+### Fixed
+
+- Descending sorts are in the sort types: `-created` and `-patient` for orders, and `-name`,
+  `-location`, `-mode` and `-created` for practices. Before, the generator dropped each `-` value,
+  so a typed call could not reverse a sort.
+
+### Removed
+
+- The `EndingBefore` list parameter. Lists page forward only. After a page fetched with
+  `EndingBefore`, the next page also sent the forward cursor, and the API refused it with a 400.
+
 ## 0.4.1 - 2026-10-31
 
 ### Added

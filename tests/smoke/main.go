@@ -201,6 +201,35 @@ func run(ctx context.Context, c *client.Client, baseURL, webhookURL string, orde
 		}
 		record("practices.list (every page, 1 per page)", err, fmt.Sprintf("%d practices", n))
 	}
+	{
+		ids := func(sort affinity.ListPracticesRequestSort) ([]string, error) {
+			page, err := c.Practices.List(ctx, &affinity.ListPracticesRequest{Limit: affinity.Int(1), Sort: &sort})
+			if err != nil {
+				return nil, err
+			}
+			var out []string
+			it := page.Iterator()
+			for it.Next(ctx) {
+				out = append(out, it.Current().ID)
+			}
+			return out, it.Err()
+		}
+		newest, err := ids(affinity.ListPracticesRequestSortCreatedDescending)
+		var oldest []string
+		if err == nil {
+			oldest, err = ids(affinity.ListPracticesRequestSortCreated)
+		}
+		if err == nil {
+			reversed := len(newest) > 0 && len(newest) == len(oldest)
+			for i := range newest {
+				reversed = reversed && newest[i] == oldest[len(oldest)-1-i]
+			}
+			if !reversed {
+				err = errors.New("sort -created is not the reverse of sort created")
+			}
+		}
+		record("practices.list sort -created (every page)", err, fmt.Sprintf("%d practices", len(newest)))
+	}
 
 	// Medications.
 	{
