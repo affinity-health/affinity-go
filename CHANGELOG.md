@@ -6,6 +6,15 @@ break the interface.
 
 ## Unreleased
 
+## 0.4.1 - 2026-10-31
+
+### Added
+
+- `client.New(key, options...)`: a client with a 60-second timeout per attempt
+  (`client.DefaultTimeout`) and 2 retries (`client.DefaultMaxAttempts` = 3) for 408, 429 and 5xx.
+  Retries send the same request, with the same idempotency key. Options after the key replace
+  the defaults. `client.NewClient` is unchanged: no timeout and 1 retry.
+
 ## 0.4.0 - 2026-10-31
 
 This version is regenerated with Fern from API version `2026-10-28`. It replaces the whole

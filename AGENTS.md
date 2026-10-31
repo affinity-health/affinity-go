@@ -17,9 +17,10 @@ This repository is the official Go SDK for the Affinity public API. Module
 ## Hand-written files
 
 `README.md`, `CHANGELOG.md`, `AGENTS.md`, `CONTRIBUTING.md`, `SECURITY.md`, `LICENSE`,
-`.gitignore`, `.github/`, `fern/`, `scripts/`, `spec/` and `tests/` (`tests/smoke` and
-`tests/webhooksig`). `scripts/generate.sh` keeps exactly these and replaces everything else at
-the root. The webhook verifier in `tests/webhooksig/verify.go` must stay identical to the README
+`.gitignore`, `.github/`, `fern/`, `scripts/`, `spec/` and `tests/` (`tests/smoke`,
+`tests/webhooksig` and `tests/defaults`). `scripts/generate.sh` keeps exactly these and replaces
+everything else at the root, then copies `scripts/client-defaults.go.txt` to
+`client/defaults.go` (`client.New` and its timeout and retry defaults; edit the `.txt`). The webhook verifier in `tests/webhooksig/verify.go` must stay identical to the README
 example.
 
 ## Commands

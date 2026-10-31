@@ -84,11 +84,12 @@ func main() {
 	}
 	baseURL := os.Getenv("AFFINITY_BASE_URL")
 	webhookURL := strings.TrimRight(os.Getenv("AFFINITY_SMOKE_WEBHOOK_URL"), "/")
-	options := []option.RequestOption{option.WithToken(apiKey), option.WithoutRetries()}
+	// client.New with retries off, so every check sees the first answer.
+	options := []option.RequestOption{option.WithoutRetries()}
 	if baseURL != "" {
 		options = append(options, option.WithBaseURL(baseURL))
 	}
-	c := client.NewClient(options...)
+	c := client.New(apiKey, options...)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
 	defer cancel()
 
@@ -147,11 +148,11 @@ func run(ctx context.Context, c *client.Client, baseURL, webhookURL string, orde
 		return errors.New("use a platform Test key: it creates a practice")
 	}
 
-	badOptions := []option.RequestOption{option.WithToken("sk_test_not_a_key")}
+	var badOptions []option.RequestOption
 	if baseURL != "" {
 		badOptions = append(badOptions, option.WithBaseURL(baseURL))
 	}
-	_, err = client.NewClient(badOptions...).Account.Get(ctx)
+	_, err = client.New("sk_test_not_a_key", badOptions...).Account.Get(ctx)
 	refused[*affinity.UnauthorizedError]("a bad key raises UnauthorizedError", err, nil)
 
 	_, err = c.Feedback.Create(ctx, &affinity.CreateFeedbackRequest{IdempotencyKey: key(), Message: ""})

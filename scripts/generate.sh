@@ -10,7 +10,7 @@ cd "$root"
 fern_version="$(jq -r .version fern/fern.config.json)"
 generator="fernapi/fern-go-sdk"
 generator_version="$(awk '/fern-go-sdk/ { getline; print $2 }' fern/generators.yml)"
-sdk_version="0.4.0"
+sdk_version="0.4.1"
 output="$root/.fern-output"
 
 # Hand-written files and directories. Everything else at the root is Fern output.
@@ -42,6 +42,8 @@ for entry in "$output"/*; do
   done
   cp -R "$entry" "$root/"
 done
+# client.New and its defaults are hand-written (Fern's Go generator has no setting for them).
+cp scripts/client-defaults.go.txt client/defaults.go
 rm -rf "$output" fern/openapi.json
 
 jq -n \

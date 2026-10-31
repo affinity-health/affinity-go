@@ -6,15 +6,15 @@ Keep API keys on the server. Never put them in browser code, mobile applications
 
 ## Install
 
-Install from GitHub at tag `v0.4.0`. The module is not published to a registry other than GitHub.
+Install from GitHub at tag `v0.4.1`. The module is not published to a registry other than GitHub.
 
 ```sh
-go get github.com/affinity-health/affinity-go@v0.4.0
+go get github.com/affinity-health/affinity-go@v0.4.1
 ```
 
 ## Use
 
-Create the client with `client.NewClient` and request options. Use a Test key (`sk_test_…`) while you build: Test orders go to a test pharmacy.
+Create the client with `client.New(key, options...)`. Use a Test key (`sk_test_…`) while you build: Test orders go to a test pharmacy.
 
 ```go
 package main
@@ -32,7 +32,7 @@ import (
 
 func main() {
 	ctx := context.Background()
-	c := client.NewClient(option.WithToken(os.Getenv("AFFINITY_API_KEY")))
+	c := client.New(os.Getenv("AFFINITY_API_KEY"))
 
 	account, err := c.Account.Get(ctx)
 	if err != nil {
@@ -95,10 +95,12 @@ Every problem body has `RequestID`. For a successful call, `WithRawResponse` giv
 
 - Base URL `https://api.affinityrx.com` (`affinity.Environments.Default`). Change it with `option.WithBaseURL`.
 - `Affinity-Version: 2026-10-28` on every request.
-- Retries: at most 2 attempts in total (1 retry) for 408, 429 and 5xx responses, with exponential backoff that honors `Retry-After`. Network errors are not retried. Change it with `option.WithMaxAttempts(n)` or turn it off with `option.WithoutRetries()`.
-- Timeout: none. The client uses `http.DefaultClient`. Set a deadline on the context, or pass `option.WithHTTPClient(&http.Client{Timeout: 60 * time.Second})`.
+- Retries: 2 retries (3 attempts) for 408, 429 and 5xx responses, with exponential backoff that honors `Retry-After`. A retry sends the same request, with the same `IdempotencyKey`. Network errors are not retried: retry them yourself with the same key. Change it with `option.WithMaxAttempts(n)` or turn it off with `option.WithoutRetries()`.
+- Timeout: 60 seconds per attempt (`client.DefaultTimeout`). Replace it with `option.WithHTTPClient(&http.Client{Timeout: ...})`, or set a deadline on the context.
 
-Options passed to `client.NewClient` apply to every request; options passed to a method apply to that call only.
+`client.New` sets these defaults; options you pass after the key replace them. Fern's `client.NewClient` is also available, but it has no timeout and makes 1 retry.
+
+Options passed to `client.New` apply to every request; options passed to a method apply to that call only.
 
 See [docs/reference.md](docs/reference.md) for every method and https://docs.affinityrx.com for the API.
 
