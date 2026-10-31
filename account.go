@@ -7,52 +7,43 @@ import (
 	fmt "fmt"
 	internal "github.com/affinity-health/affinity-go/internal"
 	big "math/big"
+	time "time"
 )
 
 var (
-	getAccountRequestFieldOrgID = big.NewInt(1 << 0)
+	accountFieldID          = big.NewInt(1 << 0)
+	accountFieldName        = big.NewInt(1 << 1)
+	accountFieldPhone       = big.NewInt(1 << 2)
+	accountFieldAddress     = big.NewInt(1 << 3)
+	accountFieldLiveEnabled = big.NewInt(1 << 4)
+	accountFieldCreatedAt   = big.NewInt(1 << 5)
+	accountFieldMode        = big.NewInt(1 << 6)
+	accountFieldType        = big.NewInt(1 << 7)
 )
 
-type GetAccountRequest struct {
-	OrgID *string `json:"-" url:"orgId,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
+// accountNullableFields maps the wire names of Account's nullable fields (required or optional) to their field bits.
+var accountNullableFields = map[string]*big.Int{
+	"phone":   accountFieldPhone,
+	"address": accountFieldAddress,
 }
 
-func (g *GetAccountRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
-	}
-	g.explicitFields.Or(g.explicitFields, field)
-}
-
-// SetOrgID sets the OrgID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountRequest) SetOrgID(orgID *string) {
-	g.OrgID = orgID
-	g.require(getAccountRequestFieldOrgID)
-}
-
-var (
-	getAccountResponseFieldAccount       = big.NewInt(1 << 0)
-	getAccountResponseFieldLivemode      = big.NewInt(1 << 1)
-	getAccountResponseFieldScopes        = big.NewInt(1 << 2)
-	getAccountResponseFieldMembership    = big.NewInt(1 << 3)
-	getAccountResponseFieldOperatingMode = big.NewInt(1 << 4)
-	getAccountResponseFieldUser          = big.NewInt(1 << 5)
-)
-
-type GetAccountResponse struct {
-	Account *GetAccountResponseAccount `json:"account" url:"account"`
-	// True for a Live request; false for a Test request.
-	Livemode bool `json:"livemode" url:"livemode"`
-	// Effective scopes of the authenticated API key. Null for a dashboard session; use membership.permissions for that session.
-	Scopes     []string                      `json:"scopes,omitempty" url:"scopes,omitempty"`
-	Membership *GetAccountResponseMembership `json:"membership" url:"membership"`
-	// The organization's Live-access status, independent of this request's livemode.
-	OperatingMode GetAccountResponseOperatingMode `json:"operatingMode" url:"operatingMode"`
-	User          *GetAccountResponseUser         `json:"user" url:"user"`
+type Account struct {
+	// The public record identifier.
+	ID string `json:"id" url:"id"`
+	// The name.
+	Name string `json:"name" url:"name"`
+	// The contact phone number.
+	Phone *string `json:"phone,omitempty" url:"phone,omitempty"`
+	// The US mailing address.
+	Address *Address `json:"address,omitempty" url:"address,omitempty"`
+	// Effective Live access. A managed practice requires both its own Live setting and its platform's Live access.
+	LiveEnabled bool `json:"liveEnabled" url:"liveEnabled"`
+	// When the record was created.
+	CreatedAt time.Time `json:"createdAt" url:"createdAt"`
+	// The Test or Live mode selected by the API key.
+	Mode AccountMode `json:"mode" url:"mode"`
+	// The organization type.
+	Type AccountType `json:"type" url:"type"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -61,770 +52,236 @@ type GetAccountResponse struct {
 	rawJSON         json.RawMessage
 }
 
-func (g *GetAccountResponse) GetAccount() *GetAccountResponseAccount {
-	if g == nil {
-		return nil
+func (a *Account) GetID() string {
+	if a == nil {
+		return ""
 	}
-	return g.Account
+	return a.ID
 }
 
-func (g *GetAccountResponse) GetLivemode() bool {
-	if g == nil {
+func (a *Account) GetName() string {
+	if a == nil {
+		return ""
+	}
+	return a.Name
+}
+
+func (a *Account) GetPhone() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Phone
+}
+
+func (a *Account) GetAddress() *Address {
+	if a == nil {
+		return nil
+	}
+	return a.Address
+}
+
+func (a *Account) GetLiveEnabled() bool {
+	if a == nil {
 		return false
 	}
-	return g.Livemode
+	return a.LiveEnabled
 }
 
-func (g *GetAccountResponse) GetScopes() []string {
-	if g == nil {
-		return nil
+func (a *Account) GetCreatedAt() time.Time {
+	if a == nil {
+		return time.Time{}
 	}
-	return g.Scopes
+	return a.CreatedAt
 }
 
-func (g *GetAccountResponse) GetMembership() *GetAccountResponseMembership {
-	if g == nil {
-		return nil
-	}
-	return g.Membership
-}
-
-func (g *GetAccountResponse) GetOperatingMode() GetAccountResponseOperatingMode {
-	if g == nil {
+func (a *Account) GetMode() AccountMode {
+	if a == nil {
 		return ""
 	}
-	return g.OperatingMode
+	return a.Mode
 }
 
-func (g *GetAccountResponse) GetUser() *GetAccountResponseUser {
-	if g == nil {
-		return nil
-	}
-	return g.User
-}
-
-func (g *GetAccountResponse) GetExtraProperties() map[string]interface{} {
-	if g == nil {
-		return nil
-	}
-	return g.extraProperties
-}
-
-func (g *GetAccountResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
-	}
-	g.explicitFields.Or(g.explicitFields, field)
-}
-
-// SetAccount sets the Account field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponse) SetAccount(account *GetAccountResponseAccount) {
-	g.Account = account
-	g.require(getAccountResponseFieldAccount)
-}
-
-// SetLivemode sets the Livemode field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponse) SetLivemode(livemode bool) {
-	g.Livemode = livemode
-	g.require(getAccountResponseFieldLivemode)
-}
-
-// SetScopes sets the Scopes field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponse) SetScopes(scopes []string) {
-	g.Scopes = scopes
-	g.require(getAccountResponseFieldScopes)
-}
-
-// SetMembership sets the Membership field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponse) SetMembership(membership *GetAccountResponseMembership) {
-	g.Membership = membership
-	g.require(getAccountResponseFieldMembership)
-}
-
-// SetOperatingMode sets the OperatingMode field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponse) SetOperatingMode(operatingMode GetAccountResponseOperatingMode) {
-	g.OperatingMode = operatingMode
-	g.require(getAccountResponseFieldOperatingMode)
-}
-
-// SetUser sets the User field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponse) SetUser(user *GetAccountResponseUser) {
-	g.User = user
-	g.require(getAccountResponseFieldUser)
-}
-
-func (g *GetAccountResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler GetAccountResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*g = GetAccountResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *g)
-	if err != nil {
-		return err
-	}
-	g.extraProperties = extraProperties
-	g.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (g *GetAccountResponse) MarshalJSON() ([]byte, error) {
-	type embed GetAccountResponse
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*g),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (g *GetAccountResponse) String() string {
-	if g == nil {
-		return "<nil>"
-	}
-	if len(g.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(g); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", g)
-}
-
-var (
-	getAccountResponseAccountFieldAllowedReturnURLs = big.NewInt(1 << 0)
-	getAccountResponseAccountFieldDisplayName       = big.NewInt(1 << 1)
-	getAccountResponseAccountFieldID                = big.NewInt(1 << 2)
-	getAccountResponseAccountFieldObject            = big.NewInt(1 << 3)
-	getAccountResponseAccountFieldSlug              = big.NewInt(1 << 4)
-	getAccountResponseAccountFieldStatus            = big.NewInt(1 << 5)
-	getAccountResponseAccountFieldSupportEmail      = big.NewInt(1 << 6)
-	getAccountResponseAccountFieldWebsiteURL        = big.NewInt(1 << 7)
-)
-
-type GetAccountResponseAccount struct {
-	AllowedReturnURLs []string                        `json:"allowedReturnUrls" url:"allowedReturnUrls"`
-	DisplayName       string                          `json:"displayName" url:"displayName"`
-	ID                string                          `json:"id" url:"id"`
-	Object            GetAccountResponseAccountObject `json:"object" url:"object"`
-	Slug              string                          `json:"slug" url:"slug"`
-	Status            GetAccountResponseAccountStatus `json:"status" url:"status"`
-	SupportEmail      *string                         `json:"supportEmail,omitempty" url:"supportEmail,omitempty"`
-	WebsiteURL        *string                         `json:"websiteUrl,omitempty" url:"websiteUrl,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (g *GetAccountResponseAccount) GetAllowedReturnURLs() []string {
-	if g == nil {
-		return nil
-	}
-	return g.AllowedReturnURLs
-}
-
-func (g *GetAccountResponseAccount) GetDisplayName() string {
-	if g == nil {
+func (a *Account) GetType() AccountType {
+	if a == nil {
 		return ""
 	}
-	return g.DisplayName
+	return a.Type
 }
 
-func (g *GetAccountResponseAccount) GetID() string {
-	if g == nil {
-		return ""
-	}
-	return g.ID
-}
-
-func (g *GetAccountResponseAccount) GetObject() GetAccountResponseAccountObject {
-	if g == nil {
-		return ""
-	}
-	return g.Object
-}
-
-func (g *GetAccountResponseAccount) GetSlug() string {
-	if g == nil {
-		return ""
-	}
-	return g.Slug
-}
-
-func (g *GetAccountResponseAccount) GetStatus() GetAccountResponseAccountStatus {
-	if g == nil {
-		return ""
-	}
-	return g.Status
-}
-
-func (g *GetAccountResponseAccount) GetSupportEmail() *string {
-	if g == nil {
+func (a *Account) GetExtraProperties() map[string]interface{} {
+	if a == nil {
 		return nil
 	}
-	return g.SupportEmail
+	return a.extraProperties
 }
 
-func (g *GetAccountResponseAccount) GetWebsiteURL() *string {
-	if g == nil {
-		return nil
+func (a *Account) require(field *big.Int) {
+	next := new(big.Int)
+	if a.explicitFields != nil {
+		next.Set(a.explicitFields)
 	}
-	return g.WebsiteURL
-}
-
-func (g *GetAccountResponseAccount) GetExtraProperties() map[string]interface{} {
-	if g == nil {
-		return nil
-	}
-	return g.extraProperties
-}
-
-func (g *GetAccountResponseAccount) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
-	}
-	g.explicitFields.Or(g.explicitFields, field)
-}
-
-// SetAllowedReturnURLs sets the AllowedReturnURLs field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseAccount) SetAllowedReturnURLs(allowedReturnURLs []string) {
-	g.AllowedReturnURLs = allowedReturnURLs
-	g.require(getAccountResponseAccountFieldAllowedReturnURLs)
-}
-
-// SetDisplayName sets the DisplayName field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseAccount) SetDisplayName(displayName string) {
-	g.DisplayName = displayName
-	g.require(getAccountResponseAccountFieldDisplayName)
+	next.Or(next, field)
+	a.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseAccount) SetID(id string) {
-	g.ID = id
-	g.require(getAccountResponseAccountFieldID)
-}
-
-// SetObject sets the Object field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseAccount) SetObject(object GetAccountResponseAccountObject) {
-	g.Object = object
-	g.require(getAccountResponseAccountFieldObject)
-}
-
-// SetSlug sets the Slug field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseAccount) SetSlug(slug string) {
-	g.Slug = slug
-	g.require(getAccountResponseAccountFieldSlug)
-}
-
-// SetStatus sets the Status field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseAccount) SetStatus(status GetAccountResponseAccountStatus) {
-	g.Status = status
-	g.require(getAccountResponseAccountFieldStatus)
-}
-
-// SetSupportEmail sets the SupportEmail field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseAccount) SetSupportEmail(supportEmail *string) {
-	g.SupportEmail = supportEmail
-	g.require(getAccountResponseAccountFieldSupportEmail)
-}
-
-// SetWebsiteURL sets the WebsiteURL field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseAccount) SetWebsiteURL(websiteURL *string) {
-	g.WebsiteURL = websiteURL
-	g.require(getAccountResponseAccountFieldWebsiteURL)
-}
-
-func (g *GetAccountResponseAccount) UnmarshalJSON(data []byte) error {
-	type unmarshaler GetAccountResponseAccount
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*g = GetAccountResponseAccount(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *g)
-	if err != nil {
-		return err
-	}
-	g.extraProperties = extraProperties
-	g.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (g *GetAccountResponseAccount) MarshalJSON() ([]byte, error) {
-	type embed GetAccountResponseAccount
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*g),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (g *GetAccountResponseAccount) String() string {
-	if g == nil {
-		return "<nil>"
-	}
-	if len(g.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(g); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", g)
-}
-
-type GetAccountResponseAccountObject string
-
-const (
-	GetAccountResponseAccountObjectAccount GetAccountResponseAccountObject = "account"
-)
-
-func NewGetAccountResponseAccountObjectFromString(s string) (GetAccountResponseAccountObject, error) {
-	switch s {
-	case "account":
-		return GetAccountResponseAccountObjectAccount, nil
-	}
-	var t GetAccountResponseAccountObject
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (g GetAccountResponseAccountObject) Ptr() *GetAccountResponseAccountObject {
-	return &g
-}
-
-type GetAccountResponseAccountStatus string
-
-const (
-	GetAccountResponseAccountStatusActive    GetAccountResponseAccountStatus = "active"
-	GetAccountResponseAccountStatusPending   GetAccountResponseAccountStatus = "pending"
-	GetAccountResponseAccountStatusSuspended GetAccountResponseAccountStatus = "suspended"
-)
-
-func NewGetAccountResponseAccountStatusFromString(s string) (GetAccountResponseAccountStatus, error) {
-	switch s {
-	case "active":
-		return GetAccountResponseAccountStatusActive, nil
-	case "pending":
-		return GetAccountResponseAccountStatusPending, nil
-	case "suspended":
-		return GetAccountResponseAccountStatusSuspended, nil
-	}
-	var t GetAccountResponseAccountStatus
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (g GetAccountResponseAccountStatus) Ptr() *GetAccountResponseAccountStatus {
-	return &g
-}
-
-var (
-	getAccountResponseMembershipFieldPermissions = big.NewInt(1 << 0)
-	getAccountResponseMembershipFieldRole        = big.NewInt(1 << 1)
-	getAccountResponseMembershipFieldRoleName    = big.NewInt(1 << 2)
-	getAccountResponseMembershipFieldStatus      = big.NewInt(1 << 3)
-)
-
-type GetAccountResponseMembership struct {
-	// Effective API scopes for a service key; dashboard permissions for a signed-in member.
-	Permissions []string                           `json:"permissions" url:"permissions"`
-	Role        GetAccountResponseMembershipRole   `json:"role" url:"role"`
-	RoleName    string                             `json:"roleName" url:"roleName"`
-	Status      GetAccountResponseMembershipStatus `json:"status" url:"status"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (g *GetAccountResponseMembership) GetPermissions() []string {
-	if g == nil {
-		return nil
-	}
-	return g.Permissions
-}
-
-func (g *GetAccountResponseMembership) GetRole() GetAccountResponseMembershipRole {
-	if g == nil {
-		return ""
-	}
-	return g.Role
-}
-
-func (g *GetAccountResponseMembership) GetRoleName() string {
-	if g == nil {
-		return ""
-	}
-	return g.RoleName
-}
-
-func (g *GetAccountResponseMembership) GetStatus() GetAccountResponseMembershipStatus {
-	if g == nil {
-		return ""
-	}
-	return g.Status
-}
-
-func (g *GetAccountResponseMembership) GetExtraProperties() map[string]interface{} {
-	if g == nil {
-		return nil
-	}
-	return g.extraProperties
-}
-
-func (g *GetAccountResponseMembership) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
-	}
-	g.explicitFields.Or(g.explicitFields, field)
-}
-
-// SetPermissions sets the Permissions field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseMembership) SetPermissions(permissions []string) {
-	g.Permissions = permissions
-	g.require(getAccountResponseMembershipFieldPermissions)
-}
-
-// SetRole sets the Role field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseMembership) SetRole(role GetAccountResponseMembershipRole) {
-	g.Role = role
-	g.require(getAccountResponseMembershipFieldRole)
-}
-
-// SetRoleName sets the RoleName field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseMembership) SetRoleName(roleName string) {
-	g.RoleName = roleName
-	g.require(getAccountResponseMembershipFieldRoleName)
-}
-
-// SetStatus sets the Status field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseMembership) SetStatus(status GetAccountResponseMembershipStatus) {
-	g.Status = status
-	g.require(getAccountResponseMembershipFieldStatus)
-}
-
-func (g *GetAccountResponseMembership) UnmarshalJSON(data []byte) error {
-	type unmarshaler GetAccountResponseMembership
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*g = GetAccountResponseMembership(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *g)
-	if err != nil {
-		return err
-	}
-	g.extraProperties = extraProperties
-	g.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (g *GetAccountResponseMembership) MarshalJSON() ([]byte, error) {
-	type embed GetAccountResponseMembership
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*g),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (g *GetAccountResponseMembership) String() string {
-	if g == nil {
-		return "<nil>"
-	}
-	if len(g.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(g); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", g)
-}
-
-type GetAccountResponseMembershipRole string
-
-const (
-	GetAccountResponseMembershipRoleAdministrator    GetAccountResponseMembershipRole = "administrator"
-	GetAccountResponseMembershipRoleClinicalReviewer GetAccountResponseMembershipRole = "clinical_reviewer"
-	GetAccountResponseMembershipRoleDeveloper        GetAccountResponseMembershipRole = "developer"
-	GetAccountResponseMembershipRoleOperations       GetAccountResponseMembershipRole = "operations"
-	GetAccountResponseMembershipRoleOwner            GetAccountResponseMembershipRole = "owner"
-	GetAccountResponseMembershipRoleViewer           GetAccountResponseMembershipRole = "viewer"
-	GetAccountResponseMembershipRoleServiceKey       GetAccountResponseMembershipRole = "service_key"
-)
-
-func NewGetAccountResponseMembershipRoleFromString(s string) (GetAccountResponseMembershipRole, error) {
-	switch s {
-	case "administrator":
-		return GetAccountResponseMembershipRoleAdministrator, nil
-	case "clinical_reviewer":
-		return GetAccountResponseMembershipRoleClinicalReviewer, nil
-	case "developer":
-		return GetAccountResponseMembershipRoleDeveloper, nil
-	case "operations":
-		return GetAccountResponseMembershipRoleOperations, nil
-	case "owner":
-		return GetAccountResponseMembershipRoleOwner, nil
-	case "viewer":
-		return GetAccountResponseMembershipRoleViewer, nil
-	case "service_key":
-		return GetAccountResponseMembershipRoleServiceKey, nil
-	}
-	var t GetAccountResponseMembershipRole
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (g GetAccountResponseMembershipRole) Ptr() *GetAccountResponseMembershipRole {
-	return &g
-}
-
-type GetAccountResponseMembershipStatus string
-
-const (
-	GetAccountResponseMembershipStatusActive   GetAccountResponseMembershipStatus = "active"
-	GetAccountResponseMembershipStatusDisabled GetAccountResponseMembershipStatus = "disabled"
-	GetAccountResponseMembershipStatusInvited  GetAccountResponseMembershipStatus = "invited"
-)
-
-func NewGetAccountResponseMembershipStatusFromString(s string) (GetAccountResponseMembershipStatus, error) {
-	switch s {
-	case "active":
-		return GetAccountResponseMembershipStatusActive, nil
-	case "disabled":
-		return GetAccountResponseMembershipStatusDisabled, nil
-	case "invited":
-		return GetAccountResponseMembershipStatusInvited, nil
-	}
-	var t GetAccountResponseMembershipStatus
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (g GetAccountResponseMembershipStatus) Ptr() *GetAccountResponseMembershipStatus {
-	return &g
-}
-
-// The organization's Live-access status, independent of this request's livemode.
-type GetAccountResponseOperatingMode string
-
-const (
-	GetAccountResponseOperatingModeProduction        GetAccountResponseOperatingMode = "production"
-	GetAccountResponseOperatingModeProductionPending GetAccountResponseOperatingMode = "production_pending"
-	GetAccountResponseOperatingModeSandbox           GetAccountResponseOperatingMode = "sandbox"
-	GetAccountResponseOperatingModeSuspended         GetAccountResponseOperatingMode = "suspended"
-)
-
-func NewGetAccountResponseOperatingModeFromString(s string) (GetAccountResponseOperatingMode, error) {
-	switch s {
-	case "production":
-		return GetAccountResponseOperatingModeProduction, nil
-	case "production_pending":
-		return GetAccountResponseOperatingModeProductionPending, nil
-	case "sandbox":
-		return GetAccountResponseOperatingModeSandbox, nil
-	case "suspended":
-		return GetAccountResponseOperatingModeSuspended, nil
-	}
-	var t GetAccountResponseOperatingMode
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (g GetAccountResponseOperatingMode) Ptr() *GetAccountResponseOperatingMode {
-	return &g
-}
-
-var (
-	getAccountResponseUserFieldEmail            = big.NewInt(1 << 0)
-	getAccountResponseUserFieldEmailVerified    = big.NewInt(1 << 1)
-	getAccountResponseUserFieldImage            = big.NewInt(1 << 2)
-	getAccountResponseUserFieldName             = big.NewInt(1 << 3)
-	getAccountResponseUserFieldTwoFactorEnabled = big.NewInt(1 << 4)
-	getAccountResponseUserFieldUserID           = big.NewInt(1 << 5)
-)
-
-type GetAccountResponseUser struct {
-	Email            string  `json:"email" url:"email"`
-	EmailVerified    *bool   `json:"emailVerified,omitempty" url:"emailVerified,omitempty"`
-	Image            *string `json:"image,omitempty" url:"image,omitempty"`
-	Name             string  `json:"name" url:"name"`
-	TwoFactorEnabled *bool   `json:"twoFactorEnabled,omitempty" url:"twoFactorEnabled,omitempty"`
-	UserID           string  `json:"userId" url:"userId"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (g *GetAccountResponseUser) GetEmail() string {
-	if g == nil {
-		return ""
-	}
-	return g.Email
-}
-
-func (g *GetAccountResponseUser) GetEmailVerified() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.EmailVerified
-}
-
-func (g *GetAccountResponseUser) GetImage() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Image
-}
-
-func (g *GetAccountResponseUser) GetName() string {
-	if g == nil {
-		return ""
-	}
-	return g.Name
-}
-
-func (g *GetAccountResponseUser) GetTwoFactorEnabled() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.TwoFactorEnabled
-}
-
-func (g *GetAccountResponseUser) GetUserID() string {
-	if g == nil {
-		return ""
-	}
-	return g.UserID
-}
-
-func (g *GetAccountResponseUser) GetExtraProperties() map[string]interface{} {
-	if g == nil {
-		return nil
-	}
-	return g.extraProperties
-}
-
-func (g *GetAccountResponseUser) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
-	}
-	g.explicitFields.Or(g.explicitFields, field)
-}
-
-// SetEmail sets the Email field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseUser) SetEmail(email string) {
-	g.Email = email
-	g.require(getAccountResponseUserFieldEmail)
-}
-
-// SetEmailVerified sets the EmailVerified field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseUser) SetEmailVerified(emailVerified *bool) {
-	g.EmailVerified = emailVerified
-	g.require(getAccountResponseUserFieldEmailVerified)
-}
-
-// SetImage sets the Image field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseUser) SetImage(image *string) {
-	g.Image = image
-	g.require(getAccountResponseUserFieldImage)
+func (a *Account) SetID(id string) {
+	a.ID = id
+	a.require(accountFieldID)
 }
 
 // SetName sets the Name field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseUser) SetName(name string) {
-	g.Name = name
-	g.require(getAccountResponseUserFieldName)
+func (a *Account) SetName(name string) {
+	a.Name = name
+	a.require(accountFieldName)
 }
 
-// SetTwoFactorEnabled sets the TwoFactorEnabled field and marks it as non-optional;
+// SetPhone sets the Phone field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseUser) SetTwoFactorEnabled(twoFactorEnabled *bool) {
-	g.TwoFactorEnabled = twoFactorEnabled
-	g.require(getAccountResponseUserFieldTwoFactorEnabled)
+func (a *Account) SetPhone(phone *string) {
+	a.Phone = phone
+	a.require(accountFieldPhone)
 }
 
-// SetUserID sets the UserID field and marks it as non-optional;
+// SetAddress sets the Address field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAccountResponseUser) SetUserID(userID string) {
-	g.UserID = userID
-	g.require(getAccountResponseUserFieldUserID)
+func (a *Account) SetAddress(address *Address) {
+	a.Address = address
+	a.require(accountFieldAddress)
 }
 
-func (g *GetAccountResponseUser) UnmarshalJSON(data []byte) error {
-	type unmarshaler GetAccountResponseUser
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+// SetLiveEnabled sets the LiveEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *Account) SetLiveEnabled(liveEnabled bool) {
+	a.LiveEnabled = liveEnabled
+	a.require(accountFieldLiveEnabled)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *Account) SetCreatedAt(createdAt time.Time) {
+	a.CreatedAt = createdAt
+	a.require(accountFieldCreatedAt)
+}
+
+// SetMode sets the Mode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *Account) SetMode(mode AccountMode) {
+	a.Mode = mode
+	a.require(accountFieldMode)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *Account) SetType(type_ AccountType) {
+	a.Type = type_
+	a.require(accountFieldType)
+}
+
+func (a *Account) UnmarshalJSON(data []byte) error {
+	type embed Account
+	var unmarshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"createdAt"`
+	}{
+		embed: embed(*a),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*g = GetAccountResponseUser(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	*a = Account(unmarshaler.embed)
+	a.CreatedAt = unmarshaler.CreatedAt.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
 	if err != nil {
 		return err
 	}
-	g.extraProperties = extraProperties
-	g.rawJSON = json.RawMessage(data)
+	a.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, accountNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		a.require(presentFields)
+	}
+	a.rawJSON = json.RawMessage(data)
 	return nil
 }
 
-func (g *GetAccountResponseUser) MarshalJSON() ([]byte, error) {
-	type embed GetAccountResponseUser
+func (a *Account) MarshalJSON() ([]byte, error) {
+	type embed Account
 	var marshaler = struct {
 		embed
+		CreatedAt *internal.DateTime `json:"createdAt"`
 	}{
-		embed: embed(*g),
+		embed:     embed(*a),
+		CreatedAt: internal.NewDateTime(a.CreatedAt),
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
 	return json.Marshal(explicitMarshaler)
 }
 
-func (g *GetAccountResponseUser) String() string {
-	if g == nil {
+func (a *Account) String() string {
+	if a == nil {
 		return "<nil>"
 	}
-	if len(g.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
 		}
 	}
-	if value, err := internal.StringifyJSON(g); err == nil {
+	if value, err := internal.StringifyJSON(a); err == nil {
 		return value
 	}
-	return fmt.Sprintf("%#v", g)
+	return fmt.Sprintf("%#v", a)
+}
+
+// The Test or Live mode selected by the API key.
+type AccountMode string
+
+const (
+	AccountModeTest AccountMode = "test"
+	AccountModeLive AccountMode = "live"
+)
+
+func NewAccountModeFromString(s string) (AccountMode, error) {
+	switch s {
+	case "test":
+		return AccountModeTest, nil
+	case "live":
+		return AccountModeLive, nil
+	}
+	var t AccountMode
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (a AccountMode) Ptr() *AccountMode {
+	return &a
+}
+
+// The organization type.
+type AccountType string
+
+const (
+	AccountTypePlatform AccountType = "platform"
+	AccountTypePractice AccountType = "practice"
+	AccountTypePharmacy AccountType = "pharmacy"
+)
+
+func NewAccountTypeFromString(s string) (AccountType, error) {
+	switch s {
+	case "platform":
+		return AccountTypePlatform, nil
+	case "practice":
+		return AccountTypePractice, nil
+	case "pharmacy":
+		return AccountTypePharmacy, nil
+	}
+	var t AccountType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (a AccountType) Ptr() *AccountType {
+	return &a
 }

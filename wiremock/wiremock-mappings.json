@@ -1,0 +1,597 @@
+{
+  "mappings": [
+    {
+      "id": "4faa39da-2c03-4efe-ac9a-5068811ac41c",
+      "name": "Read the organization and mode you act as - default",
+      "request": {
+        "urlPathTemplate": "/v1/account",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"prac_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"name\": \"name\",\n  \"phone\": \"phone\",\n  \"address\": {\n    \"line1\": \"line1\",\n    \"line2\": \"line2\",\n    \"city\": \"city\",\n    \"state\": \"state\",\n    \"postalCode\": \"postalCode\"\n  },\n  \"liveEnabled\": true,\n  \"createdAt\": \"2024-01-15T09:30:00Z\",\n  \"mode\": \"test\",\n  \"type\": \"platform\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "4faa39da-2c03-4efe-ac9a-5068811ac41c",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "9f6e18a2-5bd4-4ba4-b82e-7d9892b14e44",
+      "name": "Send feedback - default",
+      "request": {
+        "urlPathTemplate": "/v1/feedback",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 202,
+        "body": "{\n  \"id\": \"fbk_01j2y8m6jcc9tt24af5pw9x1bc\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "9f6e18a2-5bd4-4ba4-b82e-7d9892b14e44",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "63a1dfdf-db85-4b31-8e46-0eba3ca154f6",
+      "name": "List medications - default",
+      "request": {
+        "urlPathTemplate": "/v1/medications",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "queryParameters": {
+          "practiceId": {
+            "equalTo": "prac_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"category\": \"weight_loss\",\n      \"coldChainRequired\": true,\n      \"compoundingReasons\": [\n        \"compoundingReasons\"\n      ],\n      \"defaultDirections\": \"defaultDirections\",\n      \"fill\": {\n        \"amount\": 1,\n        \"container\": null,\n        \"ingredients\": [\n          {\n            \"amount\": 1.1,\n            \"name\": \"name\",\n            \"unit\": \"unit\"\n          }\n        ],\n        \"unit\": \"unit\",\n        \"volume\": null\n      },\n      \"form\": \"form\",\n      \"fullName\": \"fullName\",\n      \"id\": \"med_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"name\": \"name\",\n      \"pharmacy\": {\n        \"id\": \"pharm_01j2y8m6jcc9tt24af5pw9x1bc\",\n        \"name\": \"name\"\n      },\n      \"price\": 1,\n      \"quantities\": [\n        1\n      ],\n      \"quantityUnit\": \"quantityUnit\",\n      \"requirements\": [\n        \"requirements\"\n      ],\n      \"restrictedStates\": [\n        \"restrictedStates\"\n      ],\n      \"shippingOptions\": [\n        {\n          \"id\": \"shp_01j2y8m6jcc9tt24af5pw9x1bc\",\n          \"name\": \"name\",\n          \"price\": 1\n        }\n      ],\n      \"shippingSuppliesPrice\": 1,\n      \"strength\": \"strength\"\n    }\n  ],\n  \"hasMore\": true,\n  \"nextCursor\": \"nextCursor\",\n  \"object\": \"list\",\n  \"url\": \"url\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "63a1dfdf-db85-4b31-8e46-0eba3ca154f6",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "a6c723b5-b613-4adf-b441-48a446c88af3",
+      "name": "Read a medication - default",
+      "request": {
+        "urlPathTemplate": "/v1/medications/{medicationId}",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "medicationId": {
+            "equalTo": "med_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        },
+        "queryParameters": {
+          "practiceId": {
+            "equalTo": "prac_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"category\": \"weight_loss\",\n  \"coldChainRequired\": true,\n  \"compoundingReasons\": [\n    \"compoundingReasons\"\n  ],\n  \"defaultDirections\": \"defaultDirections\",\n  \"fill\": {\n    \"amount\": 1,\n    \"container\": \"container\",\n    \"ingredients\": [\n      {\n        \"amount\": 1.1,\n        \"name\": \"name\",\n        \"unit\": \"unit\"\n      }\n    ],\n    \"unit\": \"unit\",\n    \"volume\": {\n      \"amount\": 1.1,\n      \"unit\": \"unit\"\n    }\n  },\n  \"form\": \"form\",\n  \"fullName\": \"fullName\",\n  \"id\": \"med_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"name\": \"name\",\n  \"pharmacy\": {\n    \"id\": \"pharm_01j2y8m6jcc9tt24af5pw9x1bc\",\n    \"name\": \"name\"\n  },\n  \"price\": 1,\n  \"quantities\": [\n    1\n  ],\n  \"quantityUnit\": \"quantityUnit\",\n  \"requirements\": [\n    \"requirements\"\n  ],\n  \"restrictedStates\": [\n    \"restrictedStates\"\n  ],\n  \"shippingOptions\": [\n    {\n      \"id\": \"shp_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"name\": \"name\",\n      \"price\": 1\n    }\n  ],\n  \"shippingSuppliesPrice\": 1,\n  \"strength\": \"strength\",\n  \"variants\": [\n    {\n      \"category\": \"weight_loss\",\n      \"coldChainRequired\": true,\n      \"compoundingReasons\": [\n        \"compoundingReasons\"\n      ],\n      \"defaultDirections\": \"defaultDirections\",\n      \"fill\": {\n        \"amount\": 1,\n        \"container\": null,\n        \"ingredients\": [\n          {\n            \"amount\": 1.1,\n            \"name\": \"name\",\n            \"unit\": \"unit\"\n          }\n        ],\n        \"unit\": \"unit\",\n        \"volume\": null\n      },\n      \"form\": \"form\",\n      \"fullName\": \"fullName\",\n      \"id\": \"med_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"name\": \"name\",\n      \"pharmacy\": {\n        \"id\": \"pharm_01j2y8m6jcc9tt24af5pw9x1bc\",\n        \"name\": \"name\"\n      },\n      \"price\": 1,\n      \"quantities\": [\n        1\n      ],\n      \"quantityUnit\": \"quantityUnit\",\n      \"requirements\": [\n        \"requirements\"\n      ],\n      \"restrictedStates\": [\n        \"restrictedStates\"\n      ],\n      \"shippingOptions\": [\n        {\n          \"id\": \"shp_01j2y8m6jcc9tt24af5pw9x1bc\",\n          \"name\": \"name\",\n          \"price\": 1\n        }\n      ],\n      \"shippingSuppliesPrice\": 1,\n      \"strength\": \"strength\"\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "a6c723b5-b613-4adf-b441-48a446c88af3",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "8b8af78f-754f-4831-ac07-74583339fbd0",
+      "name": "List orders - default",
+      "request": {
+        "urlPathTemplate": "/v1/orders",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "queryParameters": {
+          "patientId": {
+            "equalTo": "pat_01j2y8m6jcc9tt24af5pw9x1bc"
+          },
+          "practiceId": {
+            "equalTo": "prac_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"cancelRequestedAt\": \"2024-01-15T09:30:00Z\",\n      \"createdAt\": \"2024-01-15T09:30:00Z\",\n      \"externalOrderId\": \"externalOrderId\",\n      \"failureReason\": \"failureReason\",\n      \"id\": \"ord_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"mode\": \"test\",\n      \"patient\": {\n        \"address\": {\n          \"line1\": \"line1\",\n          \"line2\": null,\n          \"city\": \"city\",\n          \"state\": \"state\",\n          \"postalCode\": \"postalCode\"\n        },\n        \"allergies\": [\n          {\n            \"category\": \"drug\",\n            \"display\": \"display\"\n          }\n        ],\n        \"dateOfBirth\": \"2023-01-15\",\n        \"email\": \"email\",\n        \"firstName\": \"firstName\",\n        \"sex\": \"female\",\n        \"lastName\": \"lastName\",\n        \"middleName\": null,\n        \"phone\": \"phone\"\n      },\n      \"patientId\": \"pat_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"practice\": {\n        \"address\": {\n          \"line1\": \"line1\",\n          \"line2\": null,\n          \"city\": \"city\",\n          \"state\": \"state\",\n          \"postalCode\": \"postalCode\"\n        },\n        \"name\": \"name\",\n        \"phone\": \"phone\",\n        \"archivedAt\": null\n      },\n      \"practiceId\": \"prac_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"prescriber\": {\n        \"firstName\": \"firstName\",\n        \"lastName\": \"lastName\",\n        \"npi\": \"npi\",\n        \"phone\": null,\n        \"address\": null\n      },\n      \"prescriptions\": [\n        {\n          \"compoundingReason\": null,\n          \"directions\": \"directions\",\n          \"id\": \"rx_01j2y8m6jcc9tt24af5pw9x1bc\",\n          \"pharmacy\": {\n            \"id\": \"pharm_01j2y8m6jcc9tt24af5pw9x1bc\",\n            \"name\": \"name\"\n          },\n          \"status\": \"submitted\",\n          \"failureReason\": null,\n          \"medication\": {\n            \"fill\": null,\n            \"form\": null,\n            \"id\": \"med_01j2y8m6jcc9tt24af5pw9x1bc\",\n            \"name\": \"name\",\n            \"quantityUnit\": null,\n            \"strength\": null\n          },\n          \"notes\": null,\n          \"price\": 1,\n          \"quantity\": 1,\n          \"refills\": 1,\n          \"substitutionPermitted\": true\n        }\n      ],\n      \"shipping\": {\n        \"option\": {\n          \"id\": \"shp_01j2y8m6jcc9tt24af5pw9x1bc\",\n          \"name\": \"name\",\n          \"price\": 1\n        },\n        \"destination\": {\n          \"type\": \"patient\"\n        }\n      },\n      \"shipments\": [\n        {\n          \"carrier\": null,\n          \"trackingNumber\": \"trackingNumber\",\n          \"trackingUrl\": null\n        }\n      ],\n      \"status\": \"submitted\",\n      \"trackingUrl\": \"trackingUrl\",\n      \"statusHistory\": [\n        {\n          \"createdAt\": \"2024-01-15T09:30:00Z\",\n          \"status\": \"submitted\"\n        }\n      ],\n      \"total\": 1,\n      \"updatedAt\": \"2024-01-15T09:30:00Z\"\n    }\n  ],\n  \"hasMore\": true,\n  \"nextCursor\": \"nextCursor\",\n  \"object\": \"list\",\n  \"url\": \"url\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "8b8af78f-754f-4831-ac07-74583339fbd0",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "720256f5-fd2c-4e13-a668-4518761a5e72",
+      "name": "Create, sign and submit an order - default",
+      "request": {
+        "urlPathTemplate": "/v1/orders",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"cancelRequestedAt\": \"2024-01-15T09:30:00Z\",\n  \"createdAt\": \"2024-01-15T09:30:00Z\",\n  \"externalOrderId\": \"externalOrderId\",\n  \"failureReason\": \"failureReason\",\n  \"id\": \"ord_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"mode\": \"test\",\n  \"patient\": {\n    \"address\": {\n      \"line1\": \"line1\",\n      \"line2\": \"line2\",\n      \"city\": \"city\",\n      \"state\": \"state\",\n      \"postalCode\": \"postalCode\"\n    },\n    \"allergies\": [\n      {\n        \"category\": \"drug\",\n        \"display\": \"display\"\n      }\n    ],\n    \"dateOfBirth\": \"2023-01-15\",\n    \"email\": \"email\",\n    \"firstName\": \"firstName\",\n    \"sex\": \"female\",\n    \"lastName\": \"lastName\",\n    \"middleName\": \"middleName\",\n    \"phone\": \"phone\"\n  },\n  \"patientId\": \"pat_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"practice\": {\n    \"address\": {\n      \"line1\": \"line1\",\n      \"line2\": \"line2\",\n      \"city\": \"city\",\n      \"state\": \"state\",\n      \"postalCode\": \"postalCode\"\n    },\n    \"name\": \"name\",\n    \"phone\": \"phone\",\n    \"archivedAt\": \"2024-01-15T09:30:00Z\"\n  },\n  \"practiceId\": \"prac_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"prescriber\": {\n    \"firstName\": \"firstName\",\n    \"lastName\": \"lastName\",\n    \"npi\": \"npi\",\n    \"phone\": \"phone\",\n    \"address\": {\n      \"line1\": \"line1\",\n      \"line2\": \"line2\",\n      \"city\": \"city\",\n      \"state\": \"state\",\n      \"postalCode\": \"postalCode\"\n    }\n  },\n  \"prescriptions\": [\n    {\n      \"compoundingReason\": \"compoundingReason\",\n      \"directions\": \"directions\",\n      \"id\": \"rx_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"pharmacy\": {\n        \"id\": \"pharm_01j2y8m6jcc9tt24af5pw9x1bc\",\n        \"name\": \"name\"\n      },\n      \"status\": \"submitted\",\n      \"failureReason\": \"failureReason\",\n      \"medication\": {\n        \"fill\": null,\n        \"form\": null,\n        \"id\": \"med_01j2y8m6jcc9tt24af5pw9x1bc\",\n        \"name\": \"name\",\n        \"quantityUnit\": null,\n        \"strength\": null\n      },\n      \"notes\": \"notes\",\n      \"price\": 1,\n      \"quantity\": 1,\n      \"refills\": 1,\n      \"substitutionPermitted\": true\n    }\n  ],\n  \"shipping\": {\n    \"option\": {\n      \"id\": \"shp_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"name\": \"name\",\n      \"price\": 1\n    },\n    \"destination\": {\n      \"type\": \"patient\"\n    }\n  },\n  \"shipments\": [\n    {\n      \"carrier\": \"carrier\",\n      \"trackingNumber\": \"trackingNumber\",\n      \"trackingUrl\": \"trackingUrl\"\n    }\n  ],\n  \"status\": \"submitted\",\n  \"trackingUrl\": \"trackingUrl\",\n  \"statusHistory\": [\n    {\n      \"createdAt\": \"2024-01-15T09:30:00Z\",\n      \"status\": \"submitted\"\n    }\n  ],\n  \"total\": 1,\n  \"updatedAt\": \"2024-01-15T09:30:00Z\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "720256f5-fd2c-4e13-a668-4518761a5e72",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "545b6ae9-4bc2-49af-9847-b0e4d5d49a73",
+      "name": "Read an order - default",
+      "request": {
+        "urlPathTemplate": "/v1/orders/{orderId}",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "orderId": {
+            "equalTo": "ord_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"cancelRequestedAt\": \"2024-01-15T09:30:00Z\",\n  \"createdAt\": \"2024-01-15T09:30:00Z\",\n  \"externalOrderId\": \"externalOrderId\",\n  \"failureReason\": \"failureReason\",\n  \"id\": \"ord_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"mode\": \"test\",\n  \"patient\": {\n    \"address\": {\n      \"line1\": \"line1\",\n      \"line2\": \"line2\",\n      \"city\": \"city\",\n      \"state\": \"state\",\n      \"postalCode\": \"postalCode\"\n    },\n    \"allergies\": [\n      {\n        \"category\": \"drug\",\n        \"display\": \"display\"\n      }\n    ],\n    \"dateOfBirth\": \"2023-01-15\",\n    \"email\": \"email\",\n    \"firstName\": \"firstName\",\n    \"sex\": \"female\",\n    \"lastName\": \"lastName\",\n    \"middleName\": \"middleName\",\n    \"phone\": \"phone\"\n  },\n  \"patientId\": \"pat_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"practice\": {\n    \"address\": {\n      \"line1\": \"line1\",\n      \"line2\": \"line2\",\n      \"city\": \"city\",\n      \"state\": \"state\",\n      \"postalCode\": \"postalCode\"\n    },\n    \"name\": \"name\",\n    \"phone\": \"phone\",\n    \"archivedAt\": \"2024-01-15T09:30:00Z\"\n  },\n  \"practiceId\": \"prac_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"prescriber\": {\n    \"firstName\": \"firstName\",\n    \"lastName\": \"lastName\",\n    \"npi\": \"npi\",\n    \"phone\": \"phone\",\n    \"address\": {\n      \"line1\": \"line1\",\n      \"line2\": \"line2\",\n      \"city\": \"city\",\n      \"state\": \"state\",\n      \"postalCode\": \"postalCode\"\n    }\n  },\n  \"prescriptions\": [\n    {\n      \"compoundingReason\": \"compoundingReason\",\n      \"directions\": \"directions\",\n      \"id\": \"rx_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"pharmacy\": {\n        \"id\": \"pharm_01j2y8m6jcc9tt24af5pw9x1bc\",\n        \"name\": \"name\"\n      },\n      \"status\": \"submitted\",\n      \"failureReason\": \"failureReason\",\n      \"medication\": {\n        \"fill\": null,\n        \"form\": null,\n        \"id\": \"med_01j2y8m6jcc9tt24af5pw9x1bc\",\n        \"name\": \"name\",\n        \"quantityUnit\": null,\n        \"strength\": null\n      },\n      \"notes\": \"notes\",\n      \"price\": 1,\n      \"quantity\": 1,\n      \"refills\": 1,\n      \"substitutionPermitted\": true\n    }\n  ],\n  \"shipping\": {\n    \"option\": {\n      \"id\": \"shp_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"name\": \"name\",\n      \"price\": 1\n    },\n    \"destination\": {\n      \"type\": \"patient\"\n    }\n  },\n  \"shipments\": [\n    {\n      \"carrier\": \"carrier\",\n      \"trackingNumber\": \"trackingNumber\",\n      \"trackingUrl\": \"trackingUrl\"\n    }\n  ],\n  \"status\": \"submitted\",\n  \"trackingUrl\": \"trackingUrl\",\n  \"statusHistory\": [\n    {\n      \"createdAt\": \"2024-01-15T09:30:00Z\",\n      \"status\": \"submitted\"\n    }\n  ],\n  \"total\": 1,\n  \"updatedAt\": \"2024-01-15T09:30:00Z\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "545b6ae9-4bc2-49af-9847-b0e4d5d49a73",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "085be7d8-52ae-4813-9c24-6dd04b73ddda",
+      "name": "Cancel an order - default",
+      "request": {
+        "urlPathTemplate": "/v1/orders/{orderId}/cancel",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "orderId": {
+            "equalTo": "ord_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"cancelRequestedAt\": \"2024-01-15T09:30:00Z\",\n  \"createdAt\": \"2024-01-15T09:30:00Z\",\n  \"externalOrderId\": \"externalOrderId\",\n  \"failureReason\": \"failureReason\",\n  \"id\": \"ord_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"mode\": \"test\",\n  \"patient\": {\n    \"address\": {\n      \"line1\": \"line1\",\n      \"line2\": \"line2\",\n      \"city\": \"city\",\n      \"state\": \"state\",\n      \"postalCode\": \"postalCode\"\n    },\n    \"allergies\": [\n      {\n        \"category\": \"drug\",\n        \"display\": \"display\"\n      }\n    ],\n    \"dateOfBirth\": \"2023-01-15\",\n    \"email\": \"email\",\n    \"firstName\": \"firstName\",\n    \"sex\": \"female\",\n    \"lastName\": \"lastName\",\n    \"middleName\": \"middleName\",\n    \"phone\": \"phone\"\n  },\n  \"patientId\": \"pat_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"practice\": {\n    \"address\": {\n      \"line1\": \"line1\",\n      \"line2\": \"line2\",\n      \"city\": \"city\",\n      \"state\": \"state\",\n      \"postalCode\": \"postalCode\"\n    },\n    \"name\": \"name\",\n    \"phone\": \"phone\",\n    \"archivedAt\": \"2024-01-15T09:30:00Z\"\n  },\n  \"practiceId\": \"prac_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"prescriber\": {\n    \"firstName\": \"firstName\",\n    \"lastName\": \"lastName\",\n    \"npi\": \"npi\",\n    \"phone\": \"phone\",\n    \"address\": {\n      \"line1\": \"line1\",\n      \"line2\": \"line2\",\n      \"city\": \"city\",\n      \"state\": \"state\",\n      \"postalCode\": \"postalCode\"\n    }\n  },\n  \"prescriptions\": [\n    {\n      \"compoundingReason\": \"compoundingReason\",\n      \"directions\": \"directions\",\n      \"id\": \"rx_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"pharmacy\": {\n        \"id\": \"pharm_01j2y8m6jcc9tt24af5pw9x1bc\",\n        \"name\": \"name\"\n      },\n      \"status\": \"submitted\",\n      \"failureReason\": \"failureReason\",\n      \"medication\": {\n        \"fill\": null,\n        \"form\": null,\n        \"id\": \"med_01j2y8m6jcc9tt24af5pw9x1bc\",\n        \"name\": \"name\",\n        \"quantityUnit\": null,\n        \"strength\": null\n      },\n      \"notes\": \"notes\",\n      \"price\": 1,\n      \"quantity\": 1,\n      \"refills\": 1,\n      \"substitutionPermitted\": true\n    }\n  ],\n  \"shipping\": {\n    \"option\": {\n      \"id\": \"shp_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"name\": \"name\",\n      \"price\": 1\n    },\n    \"destination\": {\n      \"type\": \"patient\"\n    }\n  },\n  \"shipments\": [\n    {\n      \"carrier\": \"carrier\",\n      \"trackingNumber\": \"trackingNumber\",\n      \"trackingUrl\": \"trackingUrl\"\n    }\n  ],\n  \"status\": \"submitted\",\n  \"trackingUrl\": \"trackingUrl\",\n  \"statusHistory\": [\n    {\n      \"createdAt\": \"2024-01-15T09:30:00Z\",\n      \"status\": \"submitted\"\n    }\n  ],\n  \"total\": 1,\n  \"updatedAt\": \"2024-01-15T09:30:00Z\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "085be7d8-52ae-4813-9c24-6dd04b73ddda",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "2cfa75e9-62e0-4c91-9bae-2814fdde167e",
+      "name": "List practices - default",
+      "request": {
+        "urlPathTemplate": "/v1/practices",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"id\": \"prac_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"name\": \"name\",\n      \"phone\": \"phone\",\n      \"address\": {\n        \"line1\": \"line1\",\n        \"line2\": null,\n        \"city\": \"city\",\n        \"state\": \"state\",\n        \"postalCode\": \"postalCode\"\n      },\n      \"liveEnabled\": true,\n      \"createdAt\": \"2024-01-15T09:30:00Z\",\n      \"externalId\": \"externalId\"\n    }\n  ],\n  \"hasMore\": true,\n  \"nextCursor\": \"nextCursor\",\n  \"object\": \"list\",\n  \"url\": \"url\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "2cfa75e9-62e0-4c91-9bae-2814fdde167e",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "dba9b48a-0266-4b20-8fe8-7dc7e40cc98b",
+      "name": "Create a practice - default",
+      "request": {
+        "urlPathTemplate": "/v1/practices",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"prac_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"name\": \"name\",\n  \"phone\": \"phone\",\n  \"address\": {\n    \"line1\": \"line1\",\n    \"line2\": \"line2\",\n    \"city\": \"city\",\n    \"state\": \"state\",\n    \"postalCode\": \"postalCode\"\n  },\n  \"liveEnabled\": true,\n  \"createdAt\": \"2024-01-15T09:30:00Z\",\n  \"externalId\": \"externalId\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "dba9b48a-0266-4b20-8fe8-7dc7e40cc98b",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "84d6d4b0-87b1-4861-81dd-379d39331d7f",
+      "name": "Read a practice - default",
+      "request": {
+        "urlPathTemplate": "/v1/practices/{practiceId}",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "practiceId": {
+            "equalTo": "prac_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"prac_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"name\": \"name\",\n  \"phone\": \"phone\",\n  \"address\": {\n    \"line1\": \"line1\",\n    \"line2\": \"line2\",\n    \"city\": \"city\",\n    \"state\": \"state\",\n    \"postalCode\": \"postalCode\"\n  },\n  \"liveEnabled\": true,\n  \"createdAt\": \"2024-01-15T09:30:00Z\",\n  \"externalId\": \"externalId\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "84d6d4b0-87b1-4861-81dd-379d39331d7f",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "bff02d40-3ba5-43cb-a440-55f176fe8626",
+      "name": "Update a practice - default",
+      "request": {
+        "urlPathTemplate": "/v1/practices/{practiceId}",
+        "method": "PATCH",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "practiceId": {
+            "equalTo": "prac_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"prac_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"name\": \"name\",\n  \"phone\": \"phone\",\n  \"address\": {\n    \"line1\": \"line1\",\n    \"line2\": \"line2\",\n    \"city\": \"city\",\n    \"state\": \"state\",\n    \"postalCode\": \"postalCode\"\n  },\n  \"liveEnabled\": true,\n  \"createdAt\": \"2024-01-15T09:30:00Z\",\n  \"externalId\": \"externalId\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "bff02d40-3ba5-43cb-a440-55f176fe8626",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "1b262976-feab-44d3-9255-3f840ce566fc",
+      "name": "List webhook endpoints of the current mode - default",
+      "request": {
+        "urlPathTemplate": "/v1/webhook-endpoints",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": [\n    {\n      \"createdAt\": \"2024-01-15T09:30:00Z\",\n      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n      \"mode\": \"test\",\n      \"id\": \"whe_01j2y8m6jcc9tt24af5pw9x1bc\",\n      \"url\": \"url\"\n    }\n  ],\n  \"hasMore\": true,\n  \"nextCursor\": \"nextCursor\",\n  \"object\": \"list\",\n  \"url\": \"url\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "1b262976-feab-44d3-9255-3f840ce566fc",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "2160c4e1-98a5-4833-9463-8afa9e3c4429",
+      "name": "Add a webhook endpoint - default",
+      "request": {
+        "urlPathTemplate": "/v1/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"createdAt\": \"2024-01-15T09:30:00Z\",\n  \"updatedAt\": \"2024-01-15T09:30:00Z\",\n  \"mode\": \"test\",\n  \"id\": \"whe_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"url\": \"url\",\n  \"secret\": \"secret\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "2160c4e1-98a5-4833-9463-8afa9e3c4429",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "3c58ce51-800f-4d67-bb63-3e4b3ed9de11",
+      "name": "Delete a webhook endpoint - default",
+      "request": {
+        "urlPathTemplate": "/v1/webhook-endpoints/{webhookEndpointId}",
+        "method": "DELETE",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "webhookEndpointId": {
+            "equalTo": "whe_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"deleted\": true,\n  \"id\": \"whe_01j2y8m6jcc9tt24af5pw9x1bc\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "3c58ce51-800f-4d67-bb63-3e4b3ed9de11",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "8e8b8e20-99b6-4668-8be8-ee2e9adde59b",
+      "name": "Change a webhook endpoint's URL - default",
+      "request": {
+        "urlPathTemplate": "/v1/webhook-endpoints/{webhookEndpointId}",
+        "method": "PATCH",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "webhookEndpointId": {
+            "equalTo": "whe_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"createdAt\": \"2024-01-15T09:30:00Z\",\n  \"updatedAt\": \"2024-01-15T09:30:00Z\",\n  \"mode\": \"test\",\n  \"id\": \"whe_01j2y8m6jcc9tt24af5pw9x1bc\",\n  \"url\": \"url\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "8e8b8e20-99b6-4668-8be8-ee2e9adde59b",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "79f9f413-deb4-4f6f-8121-ea3d0daf727c",
+      "name": "Resend failed webhook deliveries - default",
+      "request": {
+        "urlPathTemplate": "/v1/webhook-endpoints/{webhookEndpointId}/resend-failed",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "webhookEndpointId": {
+            "equalTo": "whe_01j2y8m6jcc9tt24af5pw9x1bc"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"queued\": 1\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "79f9f413-deb4-4f6f-8121-ea3d0daf727c",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "total": 17
+  }
+}

@@ -7,30 +7,6 @@ import (
 	core "github.com/affinity-health/affinity-go/core"
 )
 
-// HTTP 502
-type BadGatewayError struct {
-	*core.APIError
-	Body *Problem
-}
-
-func (b *BadGatewayError) UnmarshalJSON(data []byte) error {
-	var body *Problem
-	if err := json.Unmarshal(data, &body); err != nil {
-		return err
-	}
-	b.StatusCode = 502
-	b.Body = body
-	return nil
-}
-
-func (b *BadGatewayError) MarshalJSON() ([]byte, error) {
-	return json.Marshal(b.Body)
-}
-
-func (b *BadGatewayError) Unwrap() error {
-	return b.APIError
-}
-
 // HTTP 400
 type BadRequestError struct {
 	*core.APIError
@@ -55,14 +31,21 @@ func (b *BadRequestError) Unwrap() error {
 	return b.APIError
 }
 
+func (b *BadRequestError) GetBody() *Problem {
+	if b == nil {
+		return nil
+	}
+	return b.Body
+}
+
 // HTTP 409
 type ConflictError struct {
 	*core.APIError
-	Body *Problem
+	Body *Problem409
 }
 
 func (c *ConflictError) UnmarshalJSON(data []byte) error {
-	var body *Problem
+	var body *Problem409
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
@@ -77,6 +60,44 @@ func (c *ConflictError) MarshalJSON() ([]byte, error) {
 
 func (c *ConflictError) Unwrap() error {
 	return c.APIError
+}
+
+func (c *ConflictError) GetBody() *Problem409 {
+	if c == nil {
+		return nil
+	}
+	return c.Body
+}
+
+// HTTP 413
+type ContentTooLargeError struct {
+	*core.APIError
+	Body any
+}
+
+func (c *ContentTooLargeError) UnmarshalJSON(data []byte) error {
+	var body any
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	c.StatusCode = 413
+	c.Body = body
+	return nil
+}
+
+func (c *ContentTooLargeError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(c.Body)
+}
+
+func (c *ContentTooLargeError) Unwrap() error {
+	return c.APIError
+}
+
+func (c *ContentTooLargeError) GetBody() any {
+	if c == nil {
+		return nil
+	}
+	return c.Body
 }
 
 // HTTP 403
@@ -103,6 +124,75 @@ func (f *ForbiddenError) Unwrap() error {
 	return f.APIError
 }
 
+func (f *ForbiddenError) GetBody() *Problem {
+	if f == nil {
+		return nil
+	}
+	return f.Body
+}
+
+// HTTP 500
+type InternalServerError struct {
+	*core.APIError
+	Body *Problem
+}
+
+func (i *InternalServerError) UnmarshalJSON(data []byte) error {
+	var body *Problem
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	i.StatusCode = 500
+	i.Body = body
+	return nil
+}
+
+func (i *InternalServerError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(i.Body)
+}
+
+func (i *InternalServerError) Unwrap() error {
+	return i.APIError
+}
+
+func (i *InternalServerError) GetBody() *Problem {
+	if i == nil {
+		return nil
+	}
+	return i.Body
+}
+
+// HTTP 405
+type MethodNotAllowedError struct {
+	*core.APIError
+	Body *Problem
+}
+
+func (m *MethodNotAllowedError) UnmarshalJSON(data []byte) error {
+	var body *Problem
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	m.StatusCode = 405
+	m.Body = body
+	return nil
+}
+
+func (m *MethodNotAllowedError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(m.Body)
+}
+
+func (m *MethodNotAllowedError) Unwrap() error {
+	return m.APIError
+}
+
+func (m *MethodNotAllowedError) GetBody() *Problem {
+	if m == nil {
+		return nil
+	}
+	return m.Body
+}
+
 // HTTP 404
 type NotFoundError struct {
 	*core.APIError
@@ -127,14 +217,21 @@ func (n *NotFoundError) Unwrap() error {
 	return n.APIError
 }
 
+func (n *NotFoundError) GetBody() *Problem {
+	if n == nil {
+		return nil
+	}
+	return n.Body
+}
+
 // HTTP 503
 type ServiceUnavailableError struct {
 	*core.APIError
-	Body *Problem
+	Body *ServiceUnavailableErrorBody
 }
 
 func (s *ServiceUnavailableError) UnmarshalJSON(data []byte) error {
-	var body *Problem
+	var body *ServiceUnavailableErrorBody
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
@@ -151,14 +248,21 @@ func (s *ServiceUnavailableError) Unwrap() error {
 	return s.APIError
 }
 
+func (s *ServiceUnavailableError) GetBody() *ServiceUnavailableErrorBody {
+	if s == nil {
+		return nil
+	}
+	return s.Body
+}
+
 // HTTP 429
 type TooManyRequestsError struct {
 	*core.APIError
-	Body *Problem
+	Body *Problem429
 }
 
 func (t *TooManyRequestsError) UnmarshalJSON(data []byte) error {
-	var body *Problem
+	var body *Problem429
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
@@ -173,6 +277,13 @@ func (t *TooManyRequestsError) MarshalJSON() ([]byte, error) {
 
 func (t *TooManyRequestsError) Unwrap() error {
 	return t.APIError
+}
+
+func (t *TooManyRequestsError) GetBody() *Problem429 {
+	if t == nil {
+		return nil
+	}
+	return t.Body
 }
 
 // HTTP 401
@@ -199,6 +310,13 @@ func (u *UnauthorizedError) Unwrap() error {
 	return u.APIError
 }
 
+func (u *UnauthorizedError) GetBody() *Problem {
+	if u == nil {
+		return nil
+	}
+	return u.Body
+}
+
 // HTTP 422
 type UnprocessableEntityError struct {
 	*core.APIError
@@ -221,4 +339,42 @@ func (u *UnprocessableEntityError) MarshalJSON() ([]byte, error) {
 
 func (u *UnprocessableEntityError) Unwrap() error {
 	return u.APIError
+}
+
+func (u *UnprocessableEntityError) GetBody() *Problem {
+	if u == nil {
+		return nil
+	}
+	return u.Body
+}
+
+// Unsupported Media Type
+type UnsupportedMediaTypeError struct {
+	*core.APIError
+	Body any
+}
+
+func (u *UnsupportedMediaTypeError) UnmarshalJSON(data []byte) error {
+	var body any
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	u.StatusCode = 415
+	u.Body = body
+	return nil
+}
+
+func (u *UnsupportedMediaTypeError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(u.Body)
+}
+
+func (u *UnsupportedMediaTypeError) Unwrap() error {
+	return u.APIError
+}
+
+func (u *UnsupportedMediaTypeError) GetBody() any {
+	if u == nil {
+		return nil
+	}
+	return u.Body
 }

@@ -1,14 +1,34 @@
 name: CI
-on: [push, pull_request]
+
+on:
+  push:
+  pull_request:
+
 permissions:
   contents: read
+
 jobs:
-  verify:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-go@v6
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          go-version: '1.26.1'
-      - run: go build ./...
-      - run: ./tests/with-fixtures.sh go test ./smoke
+          go-version: "1.23"
+      - name: Build
+        run: go build ./...
+      - name: Vet
+        run: go vet ./...
+      # Fern's wire tests in the */..._test packages need a WireMock server; they are left out.
+      - name: Unit tests
+        run: go test $(go list ./... | grep -v '_test$')
+
+  generate-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Regenerate and compare
+        run: scripts/generate-check.sh

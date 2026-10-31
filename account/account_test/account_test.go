@@ -10,7 +10,6 @@ import (
 	os "os"
 	testing "testing"
 
-	affinity "github.com/affinity-health/affinity-go"
 	client "github.com/affinity-health/affinity-go/client"
 	option "github.com/affinity-health/affinity-go/option"
 	require "github.com/stretchr/testify/require"
@@ -86,21 +85,15 @@ func TestAccountGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
+		option.WithToken("test-token"),
 	)
-	request := &affinity.GetAccountRequest{
-		OrgID: affinity.String(
-			"acct_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-	}
 	_, invocationErr := client.Account.Get(
 		context.TODO(),
-		request,
 		option.WithHTTPHeader(
 			http.Header{"X-Test-Id": []string{"TestAccountGetWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestAccountGetWithWireMock", "GET", "/v1/account", map[string]interface{}{"orgId": "acct_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
+	VerifyRequestCount(t, "TestAccountGetWithWireMock", "GET", "/v1/account", nil, 1)
 }

@@ -3,34 +3,24 @@
 package client
 
 import (
-	http "net/http"
-	time "time"
 	account "github.com/affinity-health/affinity-go/account"
-	apikeys "github.com/affinity-health/affinity-go/apikeys"
-	catalogclient "github.com/affinity-health/affinity-go/catalog/client"
 	core "github.com/affinity-health/affinity-go/core"
+	feedback "github.com/affinity-health/affinity-go/feedback"
 	internal "github.com/affinity-health/affinity-go/internal"
-	locations "github.com/affinity-health/affinity-go/locations"
+	medications "github.com/affinity-health/affinity-go/medications"
 	option "github.com/affinity-health/affinity-go/option"
-	client "github.com/affinity-health/affinity-go/orders/client"
-	patientsclient "github.com/affinity-health/affinity-go/patients/client"
-	pharmacies "github.com/affinity-health/affinity-go/pharmacies"
+	orders "github.com/affinity-health/affinity-go/orders"
 	practices "github.com/affinity-health/affinity-go/practices"
-	teamclient "github.com/affinity-health/affinity-go/team/client"
-	webhooksclient "github.com/affinity-health/affinity-go/webhooks/client"
+	webhooks "github.com/affinity-health/affinity-go/webhooks"
 )
 
 type Client struct {
-	Locations  *locations.Client
-	APIKeys    *apikeys.Client
-	Account    *account.Client
-	Pharmacies *pharmacies.Client
-	Orders     *client.Client
-	Team       *teamclient.Client
-	Practices  *practices.Client
-	Patients   *patientsclient.Client
-	Catalog    *catalogclient.Client
-	Webhooks   *webhooksclient.Client
+	Account     *account.Client
+	Feedback    *feedback.Client
+	Medications *medications.Client
+	Orders      *orders.Client
+	Practices   *practices.Client
+	Webhooks    *webhooks.Client
 
 	options *core.RequestOptions
 	baseURL string
@@ -38,22 +28,16 @@ type Client struct {
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
-	version := "2026-09-28"
-	defaults := []option.RequestOption{option.WithAffinityVersion(&version), option.WithMaxAttempts(1), option.WithHTTPClient(&http.Client{Timeout: 60 * time.Second})}
-	options := core.NewRequestOptions(append(defaults, opts...)...)
+	options := core.NewRequestOptions(opts...)
 	return &Client{
-		Locations:  locations.NewClient(options),
-		APIKeys:    apikeys.NewClient(options),
-		Account:    account.NewClient(options),
-		Pharmacies: pharmacies.NewClient(options),
-		Orders:     client.NewClient(options),
-		Team:       teamclient.NewClient(options),
-		Practices:  practices.NewClient(options),
-		Patients:   patientsclient.NewClient(options),
-		Catalog:    catalogclient.NewClient(options),
-		Webhooks:   webhooksclient.NewClient(options),
-		options:    options,
-		baseURL:    options.BaseURL,
+		Account:     account.NewClient(options),
+		Feedback:    feedback.NewClient(options),
+		Medications: medications.NewClient(options),
+		Orders:      orders.NewClient(options),
+		Practices:   practices.NewClient(options),
+		Webhooks:    webhooks.NewClient(options),
+		options:     options,
+		baseURL:     options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
 				Client:         options.HTTPClient,

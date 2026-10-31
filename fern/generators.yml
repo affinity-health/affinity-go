@@ -1,0 +1,20 @@
+# Fern generates the Go SDK from spec/affinity.openapi.json; scripts/generate.sh adds the
+# x-fern names and pagination first. Pinned: change a version only with a regenerated, tested SDK.
+api:
+  specs:
+    - openapi: ./openapi.json
+      settings:
+        respect-nullable-schemas: true
+groups:
+  go:
+    generators:
+      - name: fernapi/fern-go-sdk
+        version: 1.70.16
+        output:
+          location: local-file-system
+          path: ../.fern-output
+        config:
+          packageName: affinity
+          module:
+            path: github.com/affinity-health/affinity-go
+            version: "1.21"

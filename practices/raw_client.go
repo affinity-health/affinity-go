@@ -3,7 +3,6 @@
 package practices
 
 import (
- "github.com/google/uuid"
 	context "context"
 	http "net/http"
 
@@ -33,60 +32,11 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 	}
 }
 
-func (r *RawClient) List(
-	ctx context.Context,
-	request *affinity.ListPracticesRequest,
-	opts ...option.RequestOption,
-) (*core.Response[*affinity.ListPracticesResponse], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		r.baseURL,
-		"https://api.affinityrx.com",
-	)
-	endpointURL := baseURL + "/v1/practices"
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
-	headers := internal.MergeHeaders(
-		r.options.ToHeader(),
-		options.ToHeader(),
-	)
-	var response *affinity.ListPracticesResponse
-	raw, err := r.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			DisableRetries:  options.DisableRetries,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-			ErrorDecoder:    internal.NewErrorDecoder(affinity.ErrorCodes),
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	return &core.Response[*affinity.ListPracticesResponse]{
-		StatusCode: raw.StatusCode,
-		Header:     raw.Header,
-		Body:       response,
-	}, nil
-}
-
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *affinity.CreatePracticeRequest,
+	request *affinity.CreatePracticesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*affinity.CreatePracticeResponse], error) {
+) (*core.Response[*affinity.Practice], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -98,11 +48,9 @@ func (r *RawClient) Create(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	if request.IdempotencyKey != nil {
-		headers.Add("Idempotency-Key", *request.IdempotencyKey)
-	}
+	headers.Add("Idempotency-Key", request.IdempotencyKey)
 	headers.Add("Content-Type", "application/json")
-	var response *affinity.CreatePracticeResponse
+	var response *affinity.Practice
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -122,7 +70,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*affinity.CreatePracticeResponse]{
+	return &core.Response[*affinity.Practice]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -133,7 +81,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *affinity.GetPracticesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*affinity.GetPracticeResponse], error) {
+) (*core.Response[*affinity.Practice], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -148,7 +96,7 @@ func (r *RawClient) Get(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *affinity.GetPracticeResponse
+	var response *affinity.Practice
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -167,7 +115,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*affinity.GetPracticeResponse]{
+	return &core.Response[*affinity.Practice]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -176,9 +124,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	request *affinity.UpdatePracticeRequest,
+	request *affinity.UpdatePracticesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*affinity.UpdatePracticeResponse], error) {
+) (*core.Response[*affinity.Practice], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -193,11 +141,9 @@ func (r *RawClient) Update(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	if request.IdempotencyKey != nil {
- headers.Add("Idempotency-Key", *request.IdempotencyKey)
- } else { headers.Add("Idempotency-Key", uuid.NewString()) } // affinity-sdk-auto-key
+	headers.Add("Idempotency-Key", request.IdempotencyKey)
 	headers.Add("Content-Type", "application/json")
-	var response *affinity.UpdatePracticeResponse
+	var response *affinity.Practice
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -217,7 +163,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*affinity.UpdatePracticeResponse]{
+	return &core.Response[*affinity.Practice]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

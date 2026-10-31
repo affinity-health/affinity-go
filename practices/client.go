@@ -4,6 +4,7 @@ package practices
 
 import (
 	context "context"
+	http "net/http"
 
 	affinity "github.com/affinity-health/affinity-go"
 	core "github.com/affinity-health/affinity-go/core"
@@ -34,29 +35,99 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Returns the practices that belong to the platform. The default Affinity-Version is 2026-09-28.
+// List the platform's practices, newest first. Available to platforms only. `sort` takes `name` or `location` (A to Z, practices without a location last), `mode` (Test before Live) or `created` (oldest first); a leading `-` reverses.
+//
+// Example:
+//
+//	request := &affinity.ListPracticesRequest{}
+//	_, err := client.Practices.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *affinity.ListPracticesRequest,
 	opts ...option.RequestOption,
-) (*affinity.ListPracticesResponse, error) {
-	response, err := c.WithRawResponse.List(
-		ctx,
-		request,
-		opts...,
+) (*core.Page[*string, *affinity.Practice, *affinity.PracticeList], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://api.affinityrx.com",
 	)
+	endpointURL := baseURL + "/v1/practices"
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
-	return response.Body, nil
+	headers := internal.MergeHeaders(
+		c.options.ToHeader(),
+		options.ToHeader(),
+	)
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
+		if pageRequest.Cursor != nil {
+			queryParams.Set("startingAfter", *pageRequest.Cursor)
+		}
+		nextURL := endpointURL
+		if len(queryParams) > 0 {
+			nextURL += "?" + queryParams.Encode()
+		}
+		return &internal.CallParams{
+			URL:             nextURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        pageRequest.Response,
+			ErrorDecoder:    internal.NewErrorDecoder(affinity.ErrorCodes),
+		}
+	}
+	readPageResponse := func(response *affinity.PracticeList) *core.PageResponse[*string, *affinity.Practice, *affinity.PracticeList] {
+		var zeroValue *string
+		next := response.GetNextCursor()
+		results := response.GetData()
+		return &core.PageResponse[*string, *affinity.Practice, *affinity.PracticeList]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue || *next == "",
+		}
+	}
+	pager := internal.NewCursorPager(
+		c.caller,
+		prepareCall,
+		readPageResponse,
+	)
+	return pager.GetPage(ctx, request.StartingAfter)
 }
 
-// Creates a practice owned by the platform. Set liveEnabled to true to enable Live access at creation with an approved platform and a Live request. Defaults to false. Requires practices:write. Send Idempotency-Key when you retry the same request.
+// Platforms only. Name, phone and address are required. The practice starts in Test; `liveEnabled: true` also allows new Live orders, which needs a platform with Live access and a Live caller: a Live key, or a session in Live mode. Turning Live off later preserves access to existing records. A retry with the same key and body returns the stored first response, even if the practice has changed. Use GET /v1/practices/{practiceId} to read the current practice.
+//
+// Example:
+//
+//	request := &affinity.CreatePracticesRequest{
+//	    IdempotencyKey: "Idempotency-Key",
+//	    Address: &affinity.AddressInput{
+//	        Line1: "line1",
+//	        City: "city",
+//	        State: "state",
+//	        PostalCode: "postalCode",
+//	    },
+//	    Name: "name",
+//	    Phone: "phone",
+//	}
+//	_, err := client.Practices.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
-	request *affinity.CreatePracticeRequest,
+	request *affinity.CreatePracticesRequest,
 	opts ...option.RequestOption,
-) (*affinity.CreatePracticeResponse, error) {
+) (*affinity.Practice, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -68,12 +139,22 @@ func (c *Client) Create(
 	return response.Body, nil
 }
 
-// Returns one practice that belongs to the platform.
+// Read one practice accessible to the API key. A platform can read its own practices.
+//
+// Example:
+//
+//	request := &affinity.GetPracticesRequest{
+//	    PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+//	}
+//	_, err := client.Practices.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *affinity.GetPracticesRequest,
 	opts ...option.RequestOption,
-) (*affinity.GetPracticeResponse, error) {
+) (*affinity.Practice, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -85,12 +166,23 @@ func (c *Client) Get(
 	return response.Body, nil
 }
 
-// Updates one practice owned by the platform. Set liveEnabled to true or false to control Live access with an approved platform and a Live request. Affinity Admin decisions take precedence. Requires practices:write. Send Idempotency-Key when you retry the same request.
+// `liveEnabled` allows or refuses new Live orders. Existing records, cancellation, webhooks and billing keep working. Only its platform changes it; enabling requires platform Live access, and either change needs a Live caller: a Live key (403 live_key_required otherwise) or a session in Live mode (403 live_mode_required otherwise). Live orders send `name`, `phone` and `address` to the pharmacy, so a practice with Live access changes them only with a Live key (403 live_mode_required otherwise). A retry with the same key and body returns the stored first response, even if the practice has changed. Use GET /v1/practices/{practiceId} to read the current practice.
+//
+// Example:
+//
+//	request := &affinity.UpdatePracticesRequest{
+//	    PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+//	    IdempotencyKey: "Idempotency-Key",
+//	}
+//	_, err := client.Practices.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
-	request *affinity.UpdatePracticeRequest,
+	request *affinity.UpdatePracticesRequest,
 	opts ...option.RequestOption,
-) (*affinity.UpdatePracticeResponse, error) {
+) (*affinity.Practice, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,

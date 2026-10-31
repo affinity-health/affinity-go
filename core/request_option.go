@@ -28,8 +28,8 @@ type RequestOptions struct {
 	MaxStreamReconnectAttempts uint
 	DisableStreamReconnection  bool
 	DisableRetries             bool
-	APIKey                     string
-	AffinityVersion            *string
+	Token                      string
+	TokenFunc                  func() (string, error)
 }
 
 // NewRequestOptions returns a new *RequestOptions value.
@@ -52,12 +52,14 @@ func NewRequestOptions(opts ...RequestOption) *RequestOptions {
 // for the request(s).
 func (r *RequestOptions) ToHeader() http.Header {
 	header := r.cloneHeader()
-	if r.APIKey != "" {
-		header.Set("x-affinity-api-key", fmt.Sprintf("%v", r.APIKey))
+	if r.Token != "" {
+		header.Set("Authorization", "Bearer "+r.Token)
+	} else if r.TokenFunc != nil {
+		if token, err := r.TokenFunc(); err == nil && token != "" {
+			header.Set("Authorization", "Bearer "+token)
+		}
 	}
-	if r.AffinityVersion != nil {
-		header.Set("Affinity-Version", fmt.Sprintf("%v", *r.AffinityVersion))
-	}
+	header.Set("Affinity-Version", fmt.Sprintf("%v", "2026-10-28"))
 	return header
 }
 
@@ -65,8 +67,8 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/affinity-health/affinity-go")
-	headers.Set("X-Fern-SDK-Version", "v0.3.0")
-	headers.Set("User-Agent", "github.com/affinity-health/affinity-go/0.3.0")
+	headers.Set("X-Fern-SDK-Version", "v0.4.0")
+	headers.Set("User-Agent", "github.com/affinity-health/affinity-go/0.4.0")
 	return headers
 }
 
@@ -156,20 +158,20 @@ func (w *WithoutRetriesOption) applyRequestOptions(opts *RequestOptions) {
 	opts.DisableRetries = true
 }
 
-// APIKeyOption implements the RequestOption interface.
-type APIKeyOption struct {
-	APIKey string
+// TokenOption implements the RequestOption interface.
+type TokenOption struct {
+	Token string
 }
 
-func (a *APIKeyOption) applyRequestOptions(opts *RequestOptions) {
-	opts.APIKey = a.APIKey
+func (t *TokenOption) applyRequestOptions(opts *RequestOptions) {
+	opts.Token = t.Token
 }
 
-// AffinityVersionOption implements the RequestOption interface.
-type AffinityVersionOption struct {
-	AffinityVersion *string
+// TokenFuncOption implements the RequestOption interface.
+type TokenFuncOption struct {
+	TokenFunc func() (string, error)
 }
 
-func (a *AffinityVersionOption) applyRequestOptions(opts *RequestOptions) {
-	opts.AffinityVersion = a.AffinityVersion
+func (t *TokenFuncOption) applyRequestOptions(opts *RequestOptions) {
+	opts.TokenFunc = t.TokenFunc
 }

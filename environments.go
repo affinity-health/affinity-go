@@ -7,7 +7,7 @@ package affinity
 // RequestOption to override the client's default environment,
 // if any.
 var Environments = struct {
-	Production string
+	Default string
 }{
-	Production: "https://api.affinityrx.com",
+	Default: "https://api.affinityrx.com",
 }

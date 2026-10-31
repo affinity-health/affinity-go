@@ -34,9 +34,8 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *affinity.GetAccountRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*affinity.GetAccountResponse], error) {
+) (*core.Response[*affinity.Account], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,18 +43,11 @@ func (r *RawClient) Get(
 		"https://api.affinityrx.com",
 	)
 	endpointURL := baseURL + "/v1/account"
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *affinity.GetAccountResponse
+	var response *affinity.Account
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -74,7 +66,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*affinity.GetAccountResponse]{
+	return &core.Response[*affinity.Account]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

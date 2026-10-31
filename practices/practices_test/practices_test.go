@@ -86,16 +86,9 @@ func TestPracticesListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
+		option.WithToken("test-token"),
 	)
-	request := &affinity.ListPracticesRequest{
-		EndingBefore: affinity.String(
-			"prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-		StartingAfter: affinity.String(
-			"prac_01j2y8m6jcc9tt24af5pw9x1bc",
-		),
-	}
+	request := &affinity.ListPracticesRequest{}
 	_, invocationErr := client.Practices.List(
 		context.TODO(),
 		request,
@@ -105,7 +98,7 @@ func TestPracticesListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPracticesListWithWireMock", "GET", "/v1/practices", map[string]interface{}{"endingBefore": "prac_01j2y8m6jcc9tt24af5pw9x1bc", "startingAfter": "prac_01j2y8m6jcc9tt24af5pw9x1bc"}, 1)
+	VerifyRequestCount(t, "TestPracticesListWithWireMock", "GET", "/v1/practices", nil, 1)
 }
 
 func TestPracticesCreateWithWireMock(
@@ -117,53 +110,18 @@ func TestPracticesCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
+		option.WithToken("test-token"),
 	)
-	request := &affinity.CreatePracticeRequest{
-		Address: &affinity.CreatePracticeRequestAddress{
-			City: "Los Angeles",
-			Country: affinity.String(
-				"US",
-			),
-			Line1:      "100 Practice Way",
-			PostalCode: "90001",
-			State:      "CA",
+	request := &affinity.CreatePracticesRequest{
+		IdempotencyKey: "Idempotency-Key",
+		Address: &affinity.AddressInput{
+			Line1:      "line1",
+			City:       "city",
+			State:      "state",
+			PostalCode: "postalCode",
 		},
-		Attestations: &affinity.CreatePracticeRequestAttestations{
-			AuthorizedPracticeRelationship: true,
-			AuthorizedPhiTransfer:          true,
-			MinimumNecessaryPhi:            true,
-			ProviderDataAccuracy:           true,
-		},
-		ExternalID: affinity.String(
-			"practice_123",
-		),
-		LegalName: affinity.String(
-			"Example Medical Group PLLC",
-		),
-		Metadata: map[string]any{
-			"key": "value",
-		},
-		Name: "Example Medical Group",
-		Prescribers: []*affinity.CreatePracticeRequestPrescribersItem{
-			&affinity.CreatePracticeRequestPrescribersItem{
-				Credentials: affinity.String(
-					"MD",
-				),
-				LicenseStates: []string{
-					"CA",
-				},
-				Name: "Alex Morgan",
-				Npi:  "1234567893",
-			},
-		},
-		PrimaryContact: &affinity.CreatePracticeRequestPrimaryContact{
-			Email: "operations@example-practice.com",
-			Name:  "Jordan Lee",
-		},
-		SupportEmail: affinity.String(
-			"support@example-practice.com",
-		),
+		Name:  "name",
+		Phone: "phone",
 	}
 	_, invocationErr := client.Practices.Create(
 		context.TODO(),
@@ -186,7 +144,7 @@ func TestPracticesGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
+		option.WithToken("test-token"),
 	)
 	request := &affinity.GetPracticesRequest{
 		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
@@ -212,10 +170,11 @@ func TestPracticesUpdateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
-		option.WithAPIKey("test-value"),
+		option.WithToken("test-token"),
 	)
-	request := &affinity.UpdatePracticeRequest{
-		PracticeID: "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+	request := &affinity.UpdatePracticesRequest{
+		PracticeID:     "prac_01j2y8m6jcc9tt24af5pw9x1bc",
+		IdempotencyKey: "Idempotency-Key",
 	}
 	_, invocationErr := client.Practices.Update(
 		context.TODO(),

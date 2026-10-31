@@ -34,15 +34,19 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Returns the platform organization, request livemode, and effective access. API keys report scopes and the service_key role; dashboard sessions report membership permissions. operatingMode describes organization Live access, not the credential's Test/Live mode.
+// Read the organization and Test or Live mode selected by the API key.
+//
+// Example:
+//
+//	_, err := client.Account.Get(
+//	    context.TODO(),
+//	)
 func (c *Client) Get(
 	ctx context.Context,
-	request *affinity.GetAccountRequest,
 	opts ...option.RequestOption,
-) (*affinity.GetAccountResponse, error) {
+) (*affinity.Account, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
-		request,
 		opts...,
 	)
 	if err != nil {

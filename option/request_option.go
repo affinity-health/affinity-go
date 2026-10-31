@@ -95,18 +95,16 @@ func WithoutRetries() *core.WithoutRetriesOption {
 	return &core.WithoutRetriesOption{}
 }
 
-// WithAPIKey sets the apiKey auth request header.
-func WithAPIKey(apiKey string) *core.APIKeyOption {
-	return &core.APIKeyOption{
-		APIKey: apiKey,
+// WithToken sets the 'Authorization: Bearer <token>' request header.
+func WithToken(token string) *core.TokenOption {
+	return &core.TokenOption{
+		Token: token,
 	}
 }
 
-// WithAffinityVersion sets the affinityVersion request header.
-//
-// Selects the HTTP API contract for this request only. When omitted, API-key requests use their service account’s stored version. Does not change the stored default.
-func WithAffinityVersion(affinityVersion *string) *core.AffinityVersionOption {
-	return &core.AffinityVersionOption{
-		AffinityVersion: affinityVersion,
+// WithTokenFunc sets a function that returns the 'Authorization: Bearer' token at request time.
+func WithTokenFunc(fn func() (string, error)) *core.TokenFuncOption {
+	return &core.TokenFuncOption{
+		TokenFunc: fn,
 	}
 }
