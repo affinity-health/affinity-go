@@ -6,6 +6,22 @@ break the interface.
 
 ## Unreleased
 
+## 0.5.0 - 2026-11-01
+
+This release targets API `2026-11-01`, which breaks `2026-10-28`.
+
+### Changed
+
+- Every request sends `Affinity-Version: 2026-11-01`.
+- A descending sort is `<field>_desc`, such as `affinity.ListPracticesRequestSortCreatedDesc`: `created_desc` and `patient_desc`
+  for orders, and `name_desc`, `location_desc`, `mode_desc` and `created_desc` for practices. The
+  `-created` values are gone; the API refuses them.
+
+### Added
+
+- The `awaiting_approval` order status, in orders, webhook orders and the `orders.list` status
+  filter.
+
 ## 0.4.2 - 2026-11-01
 
 ### Fixed

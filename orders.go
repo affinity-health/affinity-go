@@ -208,7 +208,7 @@ var (
 type ListOrdersRequest struct {
 	// Maximum records per page, from 1 to 100. Defaults to 25.
 	Limit *int `json:"-" url:"limit,omitempty"`
-	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode. Use only one cursor parameter.
+	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode.
 	StartingAfter *string `json:"-" url:"startingAfter,omitempty"`
 	// Match the external order ID exactly, including case. Combine with practiceId when your platform reuses IDs across practices.
 	ExternalOrderID *string `json:"-" url:"externalOrderId,omitempty"`
@@ -226,7 +226,7 @@ type ListOrdersRequest struct {
 	CancelRequested *ListOrdersRequestCancelRequested `json:"-" url:"cancelRequested,omitempty"`
 	// true returns only orders whose status is shipped and that shipped in the last 60 days; delivered orders are excluded. false leaves those orders out. Omit to include both.
 	RecentlyShipped *ListOrdersRequestRecentlyShipped `json:"-" url:"recentlyShipped,omitempty"`
-	// patient sorts the lowercase text firstName + space + lastName A to Z, then order ID; created sorts oldest first. A leading - reverses the order. Defaults to -created. Restart pagination after changing sort.
+	// patient sorts the lowercase text firstName + space + lastName A to Z, then order ID; created sorts oldest first. A _desc suffix reverses the order. Defaults to created_desc. Restart pagination after changing sort.
 	Sort *ListOrdersRequestSort `json:"-" url:"sort,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1656,16 +1656,19 @@ func (o *OrderShippingOption) String() string {
 type OrderStatus string
 
 const (
-	OrderStatusSubmitted  OrderStatus = "submitted"
-	OrderStatusProcessing OrderStatus = "processing"
-	OrderStatusShipped    OrderStatus = "shipped"
-	OrderStatusDelivered  OrderStatus = "delivered"
-	OrderStatusCancelled  OrderStatus = "cancelled"
-	OrderStatusFailed     OrderStatus = "failed"
+	OrderStatusAwaitingApproval OrderStatus = "awaiting_approval"
+	OrderStatusSubmitted        OrderStatus = "submitted"
+	OrderStatusProcessing       OrderStatus = "processing"
+	OrderStatusShipped          OrderStatus = "shipped"
+	OrderStatusDelivered        OrderStatus = "delivered"
+	OrderStatusCancelled        OrderStatus = "cancelled"
+	OrderStatusFailed           OrderStatus = "failed"
 )
 
 func NewOrderStatusFromString(s string) (OrderStatus, error) {
 	switch s {
+	case "awaiting_approval":
+		return OrderStatusAwaitingApproval, nil
 	case "submitted":
 		return OrderStatusSubmitted, nil
 	case "processing":
@@ -3046,6 +3049,7 @@ var prescriptionMedicationNullableFields = map[string]*big.Int{
 
 // The medication details saved when the order was signed.
 type PrescriptionMedication struct {
+	// What the pharmacy dispenses for one price, or null when the complete fill is unknown.
 	Fill *Fill `json:"fill,omitempty" url:"fill,omitempty"`
 	// The dosage form, or null when it is unknown.
 	Form *string `json:"form,omitempty" url:"form,omitempty"`
@@ -3218,16 +3222,19 @@ func (p *PrescriptionMedication) String() string {
 type PrescriptionStatus string
 
 const (
-	PrescriptionStatusSubmitted  PrescriptionStatus = "submitted"
-	PrescriptionStatusProcessing PrescriptionStatus = "processing"
-	PrescriptionStatusShipped    PrescriptionStatus = "shipped"
-	PrescriptionStatusDelivered  PrescriptionStatus = "delivered"
-	PrescriptionStatusCancelled  PrescriptionStatus = "cancelled"
-	PrescriptionStatusFailed     PrescriptionStatus = "failed"
+	PrescriptionStatusAwaitingApproval PrescriptionStatus = "awaiting_approval"
+	PrescriptionStatusSubmitted        PrescriptionStatus = "submitted"
+	PrescriptionStatusProcessing       PrescriptionStatus = "processing"
+	PrescriptionStatusShipped          PrescriptionStatus = "shipped"
+	PrescriptionStatusDelivered        PrescriptionStatus = "delivered"
+	PrescriptionStatusCancelled        PrescriptionStatus = "cancelled"
+	PrescriptionStatusFailed           PrescriptionStatus = "failed"
 )
 
 func NewPrescriptionStatusFromString(s string) (PrescriptionStatus, error) {
 	switch s {
+	case "awaiting_approval":
+		return PrescriptionStatusAwaitingApproval, nil
 	case "submitted":
 		return PrescriptionStatusSubmitted, nil
 	case "processing":
@@ -3620,12 +3627,98 @@ func (s *ShippingDestinationAddress) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+var (
+	shippingDestinationAddressInputFieldAddress = big.NewInt(1 << 0)
+)
+
+type ShippingDestinationAddressInput struct {
+	Address *AddressInput `json:"address" url:"address"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *ShippingDestinationAddressInput) GetAddress() *AddressInput {
+	if s == nil {
+		return nil
+	}
+	return s.Address
+}
+
+func (s *ShippingDestinationAddressInput) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
+	return s.extraProperties
+}
+
+func (s *ShippingDestinationAddressInput) require(field *big.Int) {
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
+	}
+	next.Or(next, field)
+	s.explicitFields = next
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ShippingDestinationAddressInput) SetAddress(address *AddressInput) {
+	s.Address = address
+	s.require(shippingDestinationAddressInputFieldAddress)
+}
+
+func (s *ShippingDestinationAddressInput) UnmarshalJSON(data []byte) error {
+	type unmarshaler ShippingDestinationAddressInput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = ShippingDestinationAddressInput(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ShippingDestinationAddressInput) MarshalJSON() ([]byte, error) {
+	type embed ShippingDestinationAddressInput
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (s *ShippingDestinationAddressInput) String() string {
+	if s == nil {
+		return "<nil>"
+	}
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 // Defaults to the patient's address. State restrictions and pharmacy coverage use the destination's state.
 type ShippingDestinationInput struct {
 	Type     string
-	Patient  *ShippingDestinationInputPatient
-	Practice *ShippingDestinationInputPractice
-	Address  *ShippingDestinationInputAddress
+	Patient  *ShippingDestinationPatientInput
+	Practice *ShippingDestinationPracticeInput
+	Address  *ShippingDestinationAddressInput
 
 	rawJSON json.RawMessage
 }
@@ -3637,21 +3730,21 @@ func (s *ShippingDestinationInput) GetType() string {
 	return s.Type
 }
 
-func (s *ShippingDestinationInput) GetPatient() *ShippingDestinationInputPatient {
+func (s *ShippingDestinationInput) GetPatient() *ShippingDestinationPatientInput {
 	if s == nil {
 		return nil
 	}
 	return s.Patient
 }
 
-func (s *ShippingDestinationInput) GetPractice() *ShippingDestinationInputPractice {
+func (s *ShippingDestinationInput) GetPractice() *ShippingDestinationPracticeInput {
 	if s == nil {
 		return nil
 	}
 	return s.Practice
 }
 
-func (s *ShippingDestinationInput) GetAddress() *ShippingDestinationInputAddress {
+func (s *ShippingDestinationInput) GetAddress() *ShippingDestinationAddressInput {
 	if s == nil {
 		return nil
 	}
@@ -3671,19 +3764,19 @@ func (s *ShippingDestinationInput) UnmarshalJSON(data []byte) error {
 	}
 	switch unmarshaler.Type {
 	case "patient":
-		value := new(ShippingDestinationInputPatient)
+		value := new(ShippingDestinationPatientInput)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		s.Patient = value
 	case "practice":
-		value := new(ShippingDestinationInputPractice)
+		value := new(ShippingDestinationPracticeInput)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		s.Practice = value
 	case "address":
-		value := new(ShippingDestinationInputAddress)
+		value := new(ShippingDestinationAddressInput)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
@@ -3713,9 +3806,9 @@ func (s ShippingDestinationInput) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingDestinationInputVisitor interface {
-	VisitPatient(*ShippingDestinationInputPatient) error
-	VisitPractice(*ShippingDestinationInputPractice) error
-	VisitAddress(*ShippingDestinationInputAddress) error
+	VisitPatient(*ShippingDestinationPatientInput) error
+	VisitPractice(*ShippingDestinationPracticeInput) error
+	VisitAddress(*ShippingDestinationAddressInput) error
 }
 
 func (s *ShippingDestinationInput) Accept(visitor ShippingDestinationInputVisitor) error {
@@ -3769,226 +3862,6 @@ func (s *ShippingDestinationInput) validate() error {
 		}
 	}
 	return nil
-}
-
-var (
-	shippingDestinationInputAddressFieldAddress = big.NewInt(1 << 0)
-)
-
-type ShippingDestinationInputAddress struct {
-	Address *AddressInput `json:"address" url:"address"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (s *ShippingDestinationInputAddress) GetAddress() *AddressInput {
-	if s == nil {
-		return nil
-	}
-	return s.Address
-}
-
-func (s *ShippingDestinationInputAddress) GetExtraProperties() map[string]interface{} {
-	if s == nil {
-		return nil
-	}
-	return s.extraProperties
-}
-
-func (s *ShippingDestinationInputAddress) require(field *big.Int) {
-	next := new(big.Int)
-	if s.explicitFields != nil {
-		next.Set(s.explicitFields)
-	}
-	next.Or(next, field)
-	s.explicitFields = next
-}
-
-// SetAddress sets the Address field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (s *ShippingDestinationInputAddress) SetAddress(address *AddressInput) {
-	s.Address = address
-	s.require(shippingDestinationInputAddressFieldAddress)
-}
-
-func (s *ShippingDestinationInputAddress) UnmarshalJSON(data []byte) error {
-	type unmarshaler ShippingDestinationInputAddress
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*s = ShippingDestinationInputAddress(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *s)
-	if err != nil {
-		return err
-	}
-	s.extraProperties = extraProperties
-	s.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (s *ShippingDestinationInputAddress) MarshalJSON() ([]byte, error) {
-	type embed ShippingDestinationInputAddress
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*s),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (s *ShippingDestinationInputAddress) String() string {
-	if s == nil {
-		return "<nil>"
-	}
-	if len(s.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(s); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", s)
-}
-
-type ShippingDestinationInputPatient struct {
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (s *ShippingDestinationInputPatient) GetExtraProperties() map[string]interface{} {
-	if s == nil {
-		return nil
-	}
-	return s.extraProperties
-}
-
-func (s *ShippingDestinationInputPatient) require(field *big.Int) {
-	next := new(big.Int)
-	if s.explicitFields != nil {
-		next.Set(s.explicitFields)
-	}
-	next.Or(next, field)
-	s.explicitFields = next
-}
-
-func (s *ShippingDestinationInputPatient) UnmarshalJSON(data []byte) error {
-	type unmarshaler ShippingDestinationInputPatient
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*s = ShippingDestinationInputPatient(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *s)
-	if err != nil {
-		return err
-	}
-	s.extraProperties = extraProperties
-	s.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (s *ShippingDestinationInputPatient) MarshalJSON() ([]byte, error) {
-	type embed ShippingDestinationInputPatient
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*s),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (s *ShippingDestinationInputPatient) String() string {
-	if s == nil {
-		return "<nil>"
-	}
-	if len(s.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(s); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", s)
-}
-
-type ShippingDestinationInputPractice struct {
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (s *ShippingDestinationInputPractice) GetExtraProperties() map[string]interface{} {
-	if s == nil {
-		return nil
-	}
-	return s.extraProperties
-}
-
-func (s *ShippingDestinationInputPractice) require(field *big.Int) {
-	next := new(big.Int)
-	if s.explicitFields != nil {
-		next.Set(s.explicitFields)
-	}
-	next.Or(next, field)
-	s.explicitFields = next
-}
-
-func (s *ShippingDestinationInputPractice) UnmarshalJSON(data []byte) error {
-	type unmarshaler ShippingDestinationInputPractice
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*s = ShippingDestinationInputPractice(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *s)
-	if err != nil {
-		return err
-	}
-	s.extraProperties = extraProperties
-	s.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (s *ShippingDestinationInputPractice) MarshalJSON() ([]byte, error) {
-	type embed ShippingDestinationInputPractice
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*s),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (s *ShippingDestinationInputPractice) String() string {
-	if s == nil {
-		return "<nil>"
-	}
-	if len(s.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(s); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", s)
 }
 
 type ShippingDestinationPatient struct {
@@ -4058,6 +3931,73 @@ func (s *ShippingDestinationPatient) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+type ShippingDestinationPatientInput struct {
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *ShippingDestinationPatientInput) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
+	return s.extraProperties
+}
+
+func (s *ShippingDestinationPatientInput) require(field *big.Int) {
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
+	}
+	next.Or(next, field)
+	s.explicitFields = next
+}
+
+func (s *ShippingDestinationPatientInput) UnmarshalJSON(data []byte) error {
+	type unmarshaler ShippingDestinationPatientInput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = ShippingDestinationPatientInput(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ShippingDestinationPatientInput) MarshalJSON() ([]byte, error) {
+	type embed ShippingDestinationPatientInput
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (s *ShippingDestinationPatientInput) String() string {
+	if s == nil {
+		return "<nil>"
+	}
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 type ShippingDestinationPractice struct {
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -4111,6 +4051,73 @@ func (s *ShippingDestinationPractice) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ShippingDestinationPractice) String() string {
+	if s == nil {
+		return "<nil>"
+	}
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type ShippingDestinationPracticeInput struct {
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *ShippingDestinationPracticeInput) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
+	return s.extraProperties
+}
+
+func (s *ShippingDestinationPracticeInput) require(field *big.Int) {
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
+	}
+	next.Or(next, field)
+	s.explicitFields = next
+}
+
+func (s *ShippingDestinationPracticeInput) UnmarshalJSON(data []byte) error {
+	type unmarshaler ShippingDestinationPracticeInput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = ShippingDestinationPracticeInput(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ShippingDestinationPracticeInput) MarshalJSON() ([]byte, error) {
+	type embed ShippingDestinationPracticeInput
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (s *ShippingDestinationPracticeInput) String() string {
 	if s == nil {
 		return "<nil>"
 	}
@@ -4241,16 +4248,19 @@ func (s *StatusHistoryEntry) String() string {
 type StatusHistoryEntryStatus string
 
 const (
-	StatusHistoryEntryStatusSubmitted  StatusHistoryEntryStatus = "submitted"
-	StatusHistoryEntryStatusProcessing StatusHistoryEntryStatus = "processing"
-	StatusHistoryEntryStatusShipped    StatusHistoryEntryStatus = "shipped"
-	StatusHistoryEntryStatusDelivered  StatusHistoryEntryStatus = "delivered"
-	StatusHistoryEntryStatusCancelled  StatusHistoryEntryStatus = "cancelled"
-	StatusHistoryEntryStatusFailed     StatusHistoryEntryStatus = "failed"
+	StatusHistoryEntryStatusAwaitingApproval StatusHistoryEntryStatus = "awaiting_approval"
+	StatusHistoryEntryStatusSubmitted        StatusHistoryEntryStatus = "submitted"
+	StatusHistoryEntryStatusProcessing       StatusHistoryEntryStatus = "processing"
+	StatusHistoryEntryStatusShipped          StatusHistoryEntryStatus = "shipped"
+	StatusHistoryEntryStatusDelivered        StatusHistoryEntryStatus = "delivered"
+	StatusHistoryEntryStatusCancelled        StatusHistoryEntryStatus = "cancelled"
+	StatusHistoryEntryStatusFailed           StatusHistoryEntryStatus = "failed"
 )
 
 func NewStatusHistoryEntryStatusFromString(s string) (StatusHistoryEntryStatus, error) {
 	switch s {
+	case "awaiting_approval":
+		return StatusHistoryEntryStatusAwaitingApproval, nil
 	case "submitted":
 		return StatusHistoryEntryStatusSubmitted, nil
 	case "processing":
@@ -4318,26 +4328,26 @@ func (l ListOrdersRequestRecentlyShipped) Ptr() *ListOrdersRequestRecentlyShippe
 	return &l
 }
 
-// patient sorts the lowercase text firstName + space + lastName A to Z, then order ID; created sorts oldest first. A leading - reverses the order. Defaults to -created. Restart pagination after changing sort.
+// patient sorts the lowercase text firstName + space + lastName A to Z, then order ID; created sorts oldest first. A _desc suffix reverses the order. Defaults to created_desc. Restart pagination after changing sort.
 type ListOrdersRequestSort string
 
 const (
-	ListOrdersRequestSortPatient           ListOrdersRequestSort = "patient"
-	ListOrdersRequestSortPatientDescending ListOrdersRequestSort = "-patient"
-	ListOrdersRequestSortCreated           ListOrdersRequestSort = "created"
-	ListOrdersRequestSortCreatedDescending ListOrdersRequestSort = "-created"
+	ListOrdersRequestSortPatient     ListOrdersRequestSort = "patient"
+	ListOrdersRequestSortPatientDesc ListOrdersRequestSort = "patient_desc"
+	ListOrdersRequestSortCreated     ListOrdersRequestSort = "created"
+	ListOrdersRequestSortCreatedDesc ListOrdersRequestSort = "created_desc"
 )
 
 func NewListOrdersRequestSortFromString(s string) (ListOrdersRequestSort, error) {
 	switch s {
 	case "patient":
 		return ListOrdersRequestSortPatient, nil
-	case "-patient":
-		return ListOrdersRequestSortPatientDescending, nil
+	case "patient_desc":
+		return ListOrdersRequestSortPatientDesc, nil
 	case "created":
 		return ListOrdersRequestSortCreated, nil
-	case "-created":
-		return ListOrdersRequestSortCreatedDescending, nil
+	case "created_desc":
+		return ListOrdersRequestSortCreatedDesc, nil
 	}
 	var t ListOrdersRequestSort
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -4351,16 +4361,19 @@ func (l ListOrdersRequestSort) Ptr() *ListOrdersRequestSort {
 type ListOrdersRequestStatus string
 
 const (
-	ListOrdersRequestStatusSubmitted  ListOrdersRequestStatus = "submitted"
-	ListOrdersRequestStatusProcessing ListOrdersRequestStatus = "processing"
-	ListOrdersRequestStatusShipped    ListOrdersRequestStatus = "shipped"
-	ListOrdersRequestStatusDelivered  ListOrdersRequestStatus = "delivered"
-	ListOrdersRequestStatusCancelled  ListOrdersRequestStatus = "cancelled"
-	ListOrdersRequestStatusFailed     ListOrdersRequestStatus = "failed"
+	ListOrdersRequestStatusAwaitingApproval ListOrdersRequestStatus = "awaiting_approval"
+	ListOrdersRequestStatusSubmitted        ListOrdersRequestStatus = "submitted"
+	ListOrdersRequestStatusProcessing       ListOrdersRequestStatus = "processing"
+	ListOrdersRequestStatusShipped          ListOrdersRequestStatus = "shipped"
+	ListOrdersRequestStatusDelivered        ListOrdersRequestStatus = "delivered"
+	ListOrdersRequestStatusCancelled        ListOrdersRequestStatus = "cancelled"
+	ListOrdersRequestStatusFailed           ListOrdersRequestStatus = "failed"
 )
 
 func NewListOrdersRequestStatusFromString(s string) (ListOrdersRequestStatus, error) {
 	switch s {
+	case "awaiting_approval":
+		return ListOrdersRequestStatusAwaitingApproval, nil
 	case "submitted":
 		return ListOrdersRequestStatusSubmitted, nil
 	case "processing":

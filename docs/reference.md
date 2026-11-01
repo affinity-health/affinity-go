@@ -200,7 +200,7 @@ _, err := client.Medications.List(
 <dl>
 <dd>
 
-**startingAfter:** `*string` — Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode. Use only one cursor parameter.
+**startingAfter:** `*string` — Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode.
     
 </dd>
 </dl>
@@ -304,7 +304,7 @@ _, err := client.Medications.Get(
 <dl>
 <dd>
 
-List accessible orders in the current mode, newest first. `externalOrderId` matches exactly, including case. `updatedAfter` accepts an ISO 8601 timestamp with a timezone and returns strictly later updates. Keep filters fixed while paging. `sort` takes `patient` (lowercase firstName + space + lastName A to Z, then order ID) or `created` (oldest first); a leading `-` reverses. Creation time or patient name and the order ID determine cursor order, even when updatedAt changes.
+List accessible orders in the current mode, newest first. `externalOrderId` matches exactly, including case. `updatedAfter` accepts an ISO 8601 timestamp with a timezone and returns strictly later updates. Keep filters fixed while paging. `sort` takes `patient` (lowercase firstName + space + lastName A to Z, then order ID) or `created` (oldest first); a `_desc` suffix reverses. Creation time or patient name and the order ID determine cursor order, even when updatedAt changes.
 </dd>
 </dl>
 </dd>
@@ -353,7 +353,7 @@ _, err := client.Orders.List(
 <dl>
 <dd>
 
-**startingAfter:** `*string` — Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode. Use only one cursor parameter.
+**startingAfter:** `*string` — Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode.
     
 </dd>
 </dl>
@@ -425,7 +425,7 @@ _, err := client.Orders.List(
 <dl>
 <dd>
 
-**sort:** `*affinity.ListOrdersRequestSort` — patient sorts the lowercase text firstName + space + lastName A to Z, then order ID; created sorts oldest first. A leading - reverses the order. Defaults to -created. Restart pagination after changing sort.
+**sort:** `*affinity.ListOrdersRequestSort` — patient sorts the lowercase text firstName + space + lastName A to Z, then order ID; created sorts oldest first. A _desc suffix reverses the order. Defaults to created_desc. Restart pagination after changing sort.
     
 </dd>
 </dl>
@@ -727,7 +727,7 @@ _, err := client.Orders.Cancel(
 <dl>
 <dd>
 
-List the platform's practices, newest first. Available to platforms only. `sort` takes `name` or `location` (A to Z, practices without a location last), `mode` (Test before Live) or `created` (oldest first); a leading `-` reverses.
+List the platform's practices, newest first. Available to platforms only. `sort` takes `name` or `location` (A to Z, practices without a location last), `mode` (Test before Live) or `created` (oldest first); a `_desc` suffix reverses.
 </dd>
 </dl>
 </dd>
@@ -769,7 +769,7 @@ _, err := client.Practices.List(
 <dl>
 <dd>
 
-**startingAfter:** `*string` — Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode. Use only one cursor parameter.
+**startingAfter:** `*string` — Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode.
     
 </dd>
 </dl>
@@ -793,7 +793,7 @@ _, err := client.Practices.List(
 <dl>
 <dd>
 
-**sort:** `*affinity.ListPracticesRequestSort` — name and location sort A to Z; mode sorts Test before Live; created sorts oldest first. A leading - reverses the order. Defaults to -created. Missing locations sort last. Restart pagination after changing sort.
+**sort:** `*affinity.ListPracticesRequestSort` — name and location sort A to Z; mode sorts Test before Live; created sorts oldest first. A _desc suffix reverses the order. Defaults to created_desc. Missing locations sort last. Restart pagination after changing sort.
     
 </dd>
 </dl>
@@ -1137,7 +1137,7 @@ _, err := client.Webhooks.List(
 <dl>
 <dd>
 
-**startingAfter:** `*string` — Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode. Use only one cursor parameter.
+**startingAfter:** `*string` — Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode.
     
 </dd>
 </dl>

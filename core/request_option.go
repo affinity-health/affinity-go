@@ -59,7 +59,7 @@ func (r *RequestOptions) ToHeader() http.Header {
 			header.Set("Authorization", "Bearer "+token)
 		}
 	}
-	header.Set("Affinity-Version", fmt.Sprintf("%v", "2026-10-28"))
+	header.Set("Affinity-Version", fmt.Sprintf("%v", "2026-11-01"))
 	return header
 }
 
@@ -67,8 +67,8 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/affinity-health/affinity-go")
-	headers.Set("X-Fern-SDK-Version", "v0.4.2")
-	headers.Set("User-Agent", "github.com/affinity-health/affinity-go/0.4.2")
+	headers.Set("X-Fern-SDK-Version", "v0.5.0")
+	headers.Set("User-Agent", "github.com/affinity-health/affinity-go/0.5.0")
 	return headers
 }
 

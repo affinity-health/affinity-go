@@ -8952,6 +8952,99 @@ func TestEnumContentTooLargeErrorBodyCodeCode(t *testing.T) {
 	})
 }
 
+func TestEnumOrderEventType(t *testing.T) {
+	t.Run("NewFromString_order_cancelled", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrderEventTypeFromString("order.cancelled")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrderEventType("order.cancelled"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_order_delivered", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrderEventTypeFromString("order.delivered")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrderEventType("order.delivered"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_order_failed", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrderEventTypeFromString("order.failed")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrderEventType("order.failed"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_order_processing", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrderEventTypeFromString("order.processing")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrderEventType("order.processing"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_order_shipped", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrderEventTypeFromString("order.shipped")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrderEventType("order.shipped"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_order_submitted", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrderEventTypeFromString("order.submitted")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrderEventType("order.submitted"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_order_updated", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrderEventTypeFromString("order.updated")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrderEventType("order.updated"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewOrderEventTypeFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewOrderEventTypeFromString("order.cancelled")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
+func TestEnumPrescriptionEventType(t *testing.T) {
+	t.Run("NewFromString_prescription_failed", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPrescriptionEventTypeFromString("prescription.failed")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PrescriptionEventType("prescription.failed"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_prescription_cancelled", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPrescriptionEventTypeFromString("prescription.cancelled")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PrescriptionEventType("prescription.cancelled"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewPrescriptionEventTypeFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewPrescriptionEventTypeFromString("prescription.failed")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
 func TestEnumServiceUnavailableErrorBodyCodeCode(t *testing.T) {
 	t.Run("NewFromString_service_unavailable", func(t *testing.T) {
 		t.Parallel()
@@ -8967,6 +9060,72 @@ func TestEnumServiceUnavailableErrorBodyCodeCode(t *testing.T) {
 
 	t.Run("Ptr", func(t *testing.T) {
 		val, err := NewServiceUnavailableErrorBodyCodeCodeFromString("service_unavailable")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
+func TestEnumShippingDestinationAddressType(t *testing.T) {
+	t.Run("NewFromString_address", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewShippingDestinationAddressTypeFromString("address")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ShippingDestinationAddressType("address"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewShippingDestinationAddressTypeFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewShippingDestinationAddressTypeFromString("address")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
+func TestEnumShippingDestinationPatientType(t *testing.T) {
+	t.Run("NewFromString_patient", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewShippingDestinationPatientTypeFromString("patient")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ShippingDestinationPatientType("patient"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewShippingDestinationPatientTypeFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewShippingDestinationPatientTypeFromString("patient")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
+func TestEnumShippingDestinationPracticeType(t *testing.T) {
+	t.Run("NewFromString_practice", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewShippingDestinationPracticeTypeFromString("practice")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ShippingDestinationPracticeType("practice"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewShippingDestinationPracticeTypeFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewShippingDestinationPracticeTypeFromString("practice")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -8996,7 +9155,36 @@ func TestEnumUnsupportedMediaTypeErrorBodyCode(t *testing.T) {
 	})
 }
 
+func TestEnumWebhookEndpointTestEventType(t *testing.T) {
+	t.Run("NewFromString_webhook_endpoint_test", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewWebhookEndpointTestEventTypeFromString("webhook_endpoint.test")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, WebhookEndpointTestEventType("webhook_endpoint.test"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewWebhookEndpointTestEventTypeFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewWebhookEndpointTestEventTypeFromString("webhook_endpoint.test")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
 func TestEnumWebhookOrderPrescriptionsItemStatus(t *testing.T) {
+	t.Run("NewFromString_awaiting_approval", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewWebhookOrderPrescriptionsItemStatusFromString("awaiting_approval")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, WebhookOrderPrescriptionsItemStatus("awaiting_approval"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_submitted", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewWebhookOrderPrescriptionsItemStatusFromString("submitted")
@@ -9045,7 +9233,7 @@ func TestEnumWebhookOrderPrescriptionsItemStatus(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewWebhookOrderPrescriptionsItemStatusFromString("submitted")
+		val, err := NewWebhookOrderPrescriptionsItemStatusFromString("awaiting_approval")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -9054,6 +9242,13 @@ func TestEnumWebhookOrderPrescriptionsItemStatus(t *testing.T) {
 }
 
 func TestEnumWebhookOrderStatus(t *testing.T) {
+	t.Run("NewFromString_awaiting_approval", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewWebhookOrderStatusFromString("awaiting_approval")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, WebhookOrderStatus("awaiting_approval"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_submitted", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewWebhookOrderStatusFromString("submitted")
@@ -9102,7 +9297,7 @@ func TestEnumWebhookOrderStatus(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewWebhookOrderStatusFromString("submitted")
+		val, err := NewWebhookOrderStatusFromString("awaiting_approval")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)

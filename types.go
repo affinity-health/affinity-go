@@ -669,6 +669,7 @@ var fillNullableFields = map[string]*big.Int{
 	"volume":    fillFieldVolume,
 }
 
+// What the pharmacy dispenses for one price. A quantity counts `unit`, not fills, and is a whole number of fills: for a fill of 30 tablets, quantity 60 is two fills and costs twice the price. For a vial product, one fill is one vial and quantity counts vials.
 type Fill struct {
 	// How much one fill holds, in `unit`.
 	Amount int `json:"amount" url:"amount"`
@@ -1270,6 +1271,44 @@ func (o *OrderEventData) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
+// The event type; ignore event types that you do not recognize.
+type OrderEventType string
+
+const (
+	OrderEventTypeOrderCancelled  OrderEventType = "order.cancelled"
+	OrderEventTypeOrderDelivered  OrderEventType = "order.delivered"
+	OrderEventTypeOrderFailed     OrderEventType = "order.failed"
+	OrderEventTypeOrderProcessing OrderEventType = "order.processing"
+	OrderEventTypeOrderShipped    OrderEventType = "order.shipped"
+	OrderEventTypeOrderSubmitted  OrderEventType = "order.submitted"
+	OrderEventTypeOrderUpdated    OrderEventType = "order.updated"
+)
+
+func NewOrderEventTypeFromString(s string) (OrderEventType, error) {
+	switch s {
+	case "order.cancelled":
+		return OrderEventTypeOrderCancelled, nil
+	case "order.delivered":
+		return OrderEventTypeOrderDelivered, nil
+	case "order.failed":
+		return OrderEventTypeOrderFailed, nil
+	case "order.processing":
+		return OrderEventTypeOrderProcessing, nil
+	case "order.shipped":
+		return OrderEventTypeOrderShipped, nil
+	case "order.submitted":
+		return OrderEventTypeOrderSubmitted, nil
+	case "order.updated":
+		return OrderEventTypeOrderUpdated, nil
+	}
+	var t OrderEventType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OrderEventType) Ptr() *OrderEventType {
+	return &o
+}
+
 var (
 	pharmacyReferenceFieldID   = big.NewInt(1 << 0)
 	pharmacyReferenceFieldName = big.NewInt(1 << 1)
@@ -1612,6 +1651,29 @@ func (p *PrescriptionEventData) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
+}
+
+// The event type; ignore event types that you do not recognize.
+type PrescriptionEventType string
+
+const (
+	PrescriptionEventTypePrescriptionFailed    PrescriptionEventType = "prescription.failed"
+	PrescriptionEventTypePrescriptionCancelled PrescriptionEventType = "prescription.cancelled"
+)
+
+func NewPrescriptionEventTypeFromString(s string) (PrescriptionEventType, error) {
+	switch s {
+	case "prescription.failed":
+		return PrescriptionEventTypePrescriptionFailed, nil
+	case "prescription.cancelled":
+		return PrescriptionEventTypePrescriptionCancelled, nil
+	}
+	var t PrescriptionEventType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PrescriptionEventType) Ptr() *PrescriptionEventType {
+	return &p
 }
 
 var (
@@ -2983,6 +3045,66 @@ func (s ServiceUnavailableErrorBodyCodeCode) Ptr() *ServiceUnavailableErrorBodyC
 	return &s
 }
 
+// Use patient, practice or address to select the shipping destination.
+type ShippingDestinationAddressType string
+
+const (
+	ShippingDestinationAddressTypeAddress ShippingDestinationAddressType = "address"
+)
+
+func NewShippingDestinationAddressTypeFromString(s string) (ShippingDestinationAddressType, error) {
+	switch s {
+	case "address":
+		return ShippingDestinationAddressTypeAddress, nil
+	}
+	var t ShippingDestinationAddressType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (s ShippingDestinationAddressType) Ptr() *ShippingDestinationAddressType {
+	return &s
+}
+
+// Use patient, practice or address to select the shipping destination.
+type ShippingDestinationPatientType string
+
+const (
+	ShippingDestinationPatientTypePatient ShippingDestinationPatientType = "patient"
+)
+
+func NewShippingDestinationPatientTypeFromString(s string) (ShippingDestinationPatientType, error) {
+	switch s {
+	case "patient":
+		return ShippingDestinationPatientTypePatient, nil
+	}
+	var t ShippingDestinationPatientType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (s ShippingDestinationPatientType) Ptr() *ShippingDestinationPatientType {
+	return &s
+}
+
+// Use patient, practice or address to select the shipping destination.
+type ShippingDestinationPracticeType string
+
+const (
+	ShippingDestinationPracticeTypePractice ShippingDestinationPracticeType = "practice"
+)
+
+func NewShippingDestinationPracticeTypeFromString(s string) (ShippingDestinationPracticeType, error) {
+	switch s {
+	case "practice":
+		return ShippingDestinationPracticeTypePractice, nil
+	}
+	var t ShippingDestinationPracticeType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (s ShippingDestinationPracticeType) Ptr() *ShippingDestinationPracticeType {
+	return &s
+}
+
 var (
 	unsupportedMediaTypeErrorBodyFieldCode      = big.NewInt(1 << 0)
 	unsupportedMediaTypeErrorBodyFieldDetail    = big.NewInt(1 << 1)
@@ -3328,6 +3450,26 @@ func (w *WebhookEndpointTestEvent) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", w)
+}
+
+// The event type; ignore event types that you do not recognize.
+type WebhookEndpointTestEventType string
+
+const (
+	WebhookEndpointTestEventTypeWebhookEndpointTest WebhookEndpointTestEventType = "webhook_endpoint.test"
+)
+
+func NewWebhookEndpointTestEventTypeFromString(s string) (WebhookEndpointTestEventType, error) {
+	switch s {
+	case "webhook_endpoint.test":
+		return WebhookEndpointTestEventTypeWebhookEndpointTest, nil
+	}
+	var t WebhookEndpointTestEventType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (w WebhookEndpointTestEventType) Ptr() *WebhookEndpointTestEventType {
+	return &w
 }
 
 type WebhookEvent struct {
@@ -4042,16 +4184,19 @@ func (w *WebhookOrderPrescriptionsItem) String() string {
 type WebhookOrderPrescriptionsItemStatus string
 
 const (
-	WebhookOrderPrescriptionsItemStatusSubmitted  WebhookOrderPrescriptionsItemStatus = "submitted"
-	WebhookOrderPrescriptionsItemStatusProcessing WebhookOrderPrescriptionsItemStatus = "processing"
-	WebhookOrderPrescriptionsItemStatusShipped    WebhookOrderPrescriptionsItemStatus = "shipped"
-	WebhookOrderPrescriptionsItemStatusDelivered  WebhookOrderPrescriptionsItemStatus = "delivered"
-	WebhookOrderPrescriptionsItemStatusCancelled  WebhookOrderPrescriptionsItemStatus = "cancelled"
-	WebhookOrderPrescriptionsItemStatusFailed     WebhookOrderPrescriptionsItemStatus = "failed"
+	WebhookOrderPrescriptionsItemStatusAwaitingApproval WebhookOrderPrescriptionsItemStatus = "awaiting_approval"
+	WebhookOrderPrescriptionsItemStatusSubmitted        WebhookOrderPrescriptionsItemStatus = "submitted"
+	WebhookOrderPrescriptionsItemStatusProcessing       WebhookOrderPrescriptionsItemStatus = "processing"
+	WebhookOrderPrescriptionsItemStatusShipped          WebhookOrderPrescriptionsItemStatus = "shipped"
+	WebhookOrderPrescriptionsItemStatusDelivered        WebhookOrderPrescriptionsItemStatus = "delivered"
+	WebhookOrderPrescriptionsItemStatusCancelled        WebhookOrderPrescriptionsItemStatus = "cancelled"
+	WebhookOrderPrescriptionsItemStatusFailed           WebhookOrderPrescriptionsItemStatus = "failed"
 )
 
 func NewWebhookOrderPrescriptionsItemStatusFromString(s string) (WebhookOrderPrescriptionsItemStatus, error) {
 	switch s {
+	case "awaiting_approval":
+		return WebhookOrderPrescriptionsItemStatusAwaitingApproval, nil
 	case "submitted":
 		return WebhookOrderPrescriptionsItemStatusSubmitted, nil
 	case "processing":
@@ -4077,16 +4222,19 @@ func (w WebhookOrderPrescriptionsItemStatus) Ptr() *WebhookOrderPrescriptionsIte
 type WebhookOrderStatus string
 
 const (
-	WebhookOrderStatusSubmitted  WebhookOrderStatus = "submitted"
-	WebhookOrderStatusProcessing WebhookOrderStatus = "processing"
-	WebhookOrderStatusShipped    WebhookOrderStatus = "shipped"
-	WebhookOrderStatusDelivered  WebhookOrderStatus = "delivered"
-	WebhookOrderStatusCancelled  WebhookOrderStatus = "cancelled"
-	WebhookOrderStatusFailed     WebhookOrderStatus = "failed"
+	WebhookOrderStatusAwaitingApproval WebhookOrderStatus = "awaiting_approval"
+	WebhookOrderStatusSubmitted        WebhookOrderStatus = "submitted"
+	WebhookOrderStatusProcessing       WebhookOrderStatus = "processing"
+	WebhookOrderStatusShipped          WebhookOrderStatus = "shipped"
+	WebhookOrderStatusDelivered        WebhookOrderStatus = "delivered"
+	WebhookOrderStatusCancelled        WebhookOrderStatus = "cancelled"
+	WebhookOrderStatusFailed           WebhookOrderStatus = "failed"
 )
 
 func NewWebhookOrderStatusFromString(s string) (WebhookOrderStatus, error) {
 	switch s {
+	case "awaiting_approval":
+		return WebhookOrderStatusAwaitingApproval, nil
 	case "submitted":
 		return WebhookOrderStatusSubmitted, nil
 	case "processing":

@@ -67,7 +67,7 @@ type ListMedicationsRequest struct {
 	PracticeID *string `json:"-" url:"practiceId,omitempty"`
 	// Maximum records per page, from 1 to 100. Defaults to 25.
 	Limit *int `json:"-" url:"limit,omitempty"`
-	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode. Use only one cursor parameter.
+	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode.
 	StartingAfter *string `json:"-" url:"startingAfter,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -143,7 +143,8 @@ type Medication struct {
 	CompoundingReasons []string `json:"compoundingReasons" url:"compoundingReasons"`
 	// The catalog's default directions, or null when none are supplied.
 	DefaultDirections *string `json:"defaultDirections,omitempty" url:"defaultDirections,omitempty"`
-	Fill              *Fill   `json:"fill,omitempty" url:"fill,omitempty"`
+	// What the pharmacy dispenses for one price, or null when the complete fill is unknown.
+	Fill *Fill `json:"fill,omitempty" url:"fill,omitempty"`
 	// The dosage form, or null when it is unknown.
 	Form *string `json:"form,omitempty" url:"form,omitempty"`
 	// The name with each ingredient's salt where the catalog records one, such as Enclomiphene Citrate. Equals name otherwise.
@@ -902,7 +903,8 @@ type GetMedicationsResponse struct {
 	CompoundingReasons []string `json:"compoundingReasons" url:"compoundingReasons"`
 	// The catalog's default directions, or null when none are supplied.
 	DefaultDirections *string `json:"defaultDirections,omitempty" url:"defaultDirections,omitempty"`
-	Fill              *Fill   `json:"fill,omitempty" url:"fill,omitempty"`
+	// What the pharmacy dispenses for one price, or null when the complete fill is unknown.
+	Fill *Fill `json:"fill,omitempty" url:"fill,omitempty"`
 	// The dosage form, or null when it is unknown.
 	Form *string `json:"form,omitempty" url:"form,omitempty"`
 	// The name with each ingredient's salt where the catalog records one, such as Enclomiphene Citrate. Equals name otherwise.

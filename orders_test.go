@@ -7481,6 +7481,87 @@ func TestSettersMarkExplicitShippingDestinationAddress(t *testing.T) {
 
 }
 
+func TestSettersShippingDestinationAddressInput(t *testing.T) {
+	t.Run("SetAddress", func(t *testing.T) {
+		obj := &ShippingDestinationAddressInput{}
+		var fernTestValueAddress *AddressInput
+		obj.SetAddress(fernTestValueAddress)
+		assert.Equal(t, fernTestValueAddress, obj.Address)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+}
+
+func TestGettersShippingDestinationAddressInput(t *testing.T) {
+	t.Run("GetAddress", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ShippingDestinationAddressInput{}
+		var expected *AddressInput
+		obj.Address = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetAddress(), "getter should return the property value")
+	})
+
+	t.Run("GetAddress_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ShippingDestinationAddressInput{}
+		obj.Address = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetAddress(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetAddress_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ShippingDestinationAddressInput
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetAddress() // Should return zero value
+	})
+
+}
+
+func TestSettersMarkExplicitShippingDestinationAddressInput(t *testing.T) {
+	t.Run("SetAddress_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ShippingDestinationAddressInput{}
+		var fernTestValueAddress *AddressInput
+
+		// Act
+		obj.SetAddress(fernTestValueAddress)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+}
+
 func TestGettersShippingDestinationInput(t *testing.T) {
 	t.Run("GetType", func(t *testing.T) {
 		t.Parallel()
@@ -7509,7 +7590,7 @@ func TestGettersShippingDestinationInput(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ShippingDestinationInput{}
-		var expected *ShippingDestinationInputPatient
+		var expected *ShippingDestinationPatientInput
 		obj.Patient = expected
 
 		// Act & Assert
@@ -7542,7 +7623,7 @@ func TestGettersShippingDestinationInput(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ShippingDestinationInput{}
-		var expected *ShippingDestinationInputPractice
+		var expected *ShippingDestinationPracticeInput
 		obj.Practice = expected
 
 		// Act & Assert
@@ -7575,7 +7656,7 @@ func TestGettersShippingDestinationInput(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &ShippingDestinationInput{}
-		var expected *ShippingDestinationInputAddress
+		var expected *ShippingDestinationAddressInput
 		obj.Address = expected
 
 		// Act & Assert
@@ -7602,87 +7683,6 @@ func TestGettersShippingDestinationInput(t *testing.T) {
 			}
 		}()
 		_ = obj.GetAddress() // Should return zero value
-	})
-
-}
-
-func TestSettersShippingDestinationInputAddress(t *testing.T) {
-	t.Run("SetAddress", func(t *testing.T) {
-		obj := &ShippingDestinationInputAddress{}
-		var fernTestValueAddress *AddressInput
-		obj.SetAddress(fernTestValueAddress)
-		assert.Equal(t, fernTestValueAddress, obj.Address)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-}
-
-func TestGettersShippingDestinationInputAddress(t *testing.T) {
-	t.Run("GetAddress", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ShippingDestinationInputAddress{}
-		var expected *AddressInput
-		obj.Address = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetAddress(), "getter should return the property value")
-	})
-
-	t.Run("GetAddress_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ShippingDestinationInputAddress{}
-		obj.Address = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetAddress(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetAddress_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *ShippingDestinationInputAddress
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetAddress() // Should return zero value
-	})
-
-}
-
-func TestSettersMarkExplicitShippingDestinationInputAddress(t *testing.T) {
-	t.Run("SetAddress_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ShippingDestinationInputAddress{}
-		var fernTestValueAddress *AddressInput
-
-		// Act
-		obj.SetAddress(fernTestValueAddress)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
 }
@@ -8524,11 +8524,11 @@ func TestJSONMarshalingShippingDestinationAddress(t *testing.T) {
 	})
 }
 
-func TestJSONMarshalingShippingDestinationInputAddress(t *testing.T) {
+func TestJSONMarshalingShippingDestinationAddressInput(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &ShippingDestinationInputAddress{}
+		obj := &ShippingDestinationAddressInput{}
 
 		// Act - Marshal to JSON
 		data, err := json.Marshal(obj)
@@ -8537,87 +8537,21 @@ func TestJSONMarshalingShippingDestinationInputAddress(t *testing.T) {
 		assert.NotEmpty(t, data, "marshaled data should not be empty")
 
 		// Unmarshal back and verify round-trip
-		var unmarshaled ShippingDestinationInputAddress
+		var unmarshaled ShippingDestinationAddressInput
 		err = json.Unmarshal(data, &unmarshaled)
 		assert.NoError(t, err, "round-trip unmarshal should succeed")
 	})
 
 	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
 		t.Parallel()
-		var obj ShippingDestinationInputAddress
+		var obj ShippingDestinationAddressInput
 		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
 		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
 	})
 
 	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
 		t.Parallel()
-		var obj ShippingDestinationInputAddress
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
-func TestJSONMarshalingShippingDestinationInputPatient(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ShippingDestinationInputPatient{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled ShippingDestinationInputPatient
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj ShippingDestinationInputPatient
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj ShippingDestinationInputPatient
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
-func TestJSONMarshalingShippingDestinationInputPractice(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &ShippingDestinationInputPractice{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled ShippingDestinationInputPractice
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj ShippingDestinationInputPractice
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj ShippingDestinationInputPractice
+		var obj ShippingDestinationAddressInput
 		err := json.Unmarshal([]byte(`{}`), &obj)
 		assert.NoError(t, err, "unmarshaling empty object should succeed")
 	})
@@ -8656,6 +8590,39 @@ func TestJSONMarshalingShippingDestinationPatient(t *testing.T) {
 	})
 }
 
+func TestJSONMarshalingShippingDestinationPatientInput(t *testing.T) {
+	t.Run("MarshalUnmarshal", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ShippingDestinationPatientInput{}
+
+		// Act - Marshal to JSON
+		data, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed")
+		assert.NotNil(t, data, "marshaled data should not be nil")
+		assert.NotEmpty(t, data, "marshaled data should not be empty")
+
+		// Unmarshal back and verify round-trip
+		var unmarshaled ShippingDestinationPatientInput
+		err = json.Unmarshal(data, &unmarshaled)
+		assert.NoError(t, err, "round-trip unmarshal should succeed")
+	})
+
+	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
+		t.Parallel()
+		var obj ShippingDestinationPatientInput
+		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
+		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
+	})
+
+	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
+		t.Parallel()
+		var obj ShippingDestinationPatientInput
+		err := json.Unmarshal([]byte(`{}`), &obj)
+		assert.NoError(t, err, "unmarshaling empty object should succeed")
+	})
+}
+
 func TestJSONMarshalingShippingDestinationPractice(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
@@ -8684,6 +8651,39 @@ func TestJSONMarshalingShippingDestinationPractice(t *testing.T) {
 	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
 		t.Parallel()
 		var obj ShippingDestinationPractice
+		err := json.Unmarshal([]byte(`{}`), &obj)
+		assert.NoError(t, err, "unmarshaling empty object should succeed")
+	})
+}
+
+func TestJSONMarshalingShippingDestinationPracticeInput(t *testing.T) {
+	t.Run("MarshalUnmarshal", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ShippingDestinationPracticeInput{}
+
+		// Act - Marshal to JSON
+		data, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed")
+		assert.NotNil(t, data, "marshaled data should not be nil")
+		assert.NotEmpty(t, data, "marshaled data should not be empty")
+
+		// Unmarshal back and verify round-trip
+		var unmarshaled ShippingDestinationPracticeInput
+		err = json.Unmarshal(data, &unmarshaled)
+		assert.NoError(t, err, "round-trip unmarshal should succeed")
+	})
+
+	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
+		t.Parallel()
+		var obj ShippingDestinationPracticeInput
+		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
+		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
+	})
+
+	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
+		t.Parallel()
+		var obj ShippingDestinationPracticeInput
 		err := json.Unmarshal([]byte(`{}`), &obj)
 		assert.NoError(t, err, "unmarshaling empty object should succeed")
 	})
@@ -9524,49 +9524,17 @@ func TestStringShippingDestinationAddress(t *testing.T) {
 	})
 }
 
-func TestStringShippingDestinationInputAddress(t *testing.T) {
+func TestStringShippingDestinationAddressInput(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()
-		obj := &ShippingDestinationInputAddress{}
+		obj := &ShippingDestinationAddressInput{}
 		result := obj.String()
 		assert.NotEmpty(t, result, "String() should return a non-empty representation")
 	})
 
 	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
 		t.Parallel()
-		var obj *ShippingDestinationInputAddress
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
-func TestStringShippingDestinationInputPatient(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &ShippingDestinationInputPatient{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *ShippingDestinationInputPatient
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
-func TestStringShippingDestinationInputPractice(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &ShippingDestinationInputPractice{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *ShippingDestinationInputPractice
+		var obj *ShippingDestinationAddressInput
 		result := obj.String()
 		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
 	})
@@ -9588,6 +9556,22 @@ func TestStringShippingDestinationPatient(t *testing.T) {
 	})
 }
 
+func TestStringShippingDestinationPatientInput(t *testing.T) {
+	t.Run("StringMethod", func(t *testing.T) {
+		t.Parallel()
+		obj := &ShippingDestinationPatientInput{}
+		result := obj.String()
+		assert.NotEmpty(t, result, "String() should return a non-empty representation")
+	})
+
+	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ShippingDestinationPatientInput
+		result := obj.String()
+		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
+	})
+}
+
 func TestStringShippingDestinationPractice(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()
@@ -9599,6 +9583,22 @@ func TestStringShippingDestinationPractice(t *testing.T) {
 	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ShippingDestinationPractice
+		result := obj.String()
+		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
+	})
+}
+
+func TestStringShippingDestinationPracticeInput(t *testing.T) {
+	t.Run("StringMethod", func(t *testing.T) {
+		t.Parallel()
+		obj := &ShippingDestinationPracticeInput{}
+		result := obj.String()
+		assert.NotEmpty(t, result, "String() should return a non-empty representation")
+	})
+
+	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ShippingDestinationPracticeInput
 		result := obj.String()
 		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
 	})
@@ -9750,11 +9750,11 @@ func TestEnumListOrdersRequestSort(t *testing.T) {
 		assert.Equal(t, ListOrdersRequestSort("patient"), val, "enum value should match expected wire value")
 	})
 
-	t.Run("NewFromString__patient", func(t *testing.T) {
+	t.Run("NewFromString_patient_desc", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewListOrdersRequestSortFromString("-patient")
+		val, err := NewListOrdersRequestSortFromString("patient_desc")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListOrdersRequestSort("-patient"), val, "enum value should match expected wire value")
+		assert.Equal(t, ListOrdersRequestSort("patient_desc"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_created", func(t *testing.T) {
@@ -9764,11 +9764,11 @@ func TestEnumListOrdersRequestSort(t *testing.T) {
 		assert.Equal(t, ListOrdersRequestSort("created"), val, "enum value should match expected wire value")
 	})
 
-	t.Run("NewFromString__created", func(t *testing.T) {
+	t.Run("NewFromString_created_desc", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewListOrdersRequestSortFromString("-created")
+		val, err := NewListOrdersRequestSortFromString("created_desc")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListOrdersRequestSort("-created"), val, "enum value should match expected wire value")
+		assert.Equal(t, ListOrdersRequestSort("created_desc"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
@@ -9786,6 +9786,13 @@ func TestEnumListOrdersRequestSort(t *testing.T) {
 }
 
 func TestEnumListOrdersRequestStatus(t *testing.T) {
+	t.Run("NewFromString_awaiting_approval", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewListOrdersRequestStatusFromString("awaiting_approval")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ListOrdersRequestStatus("awaiting_approval"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_submitted", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewListOrdersRequestStatusFromString("submitted")
@@ -9834,7 +9841,7 @@ func TestEnumListOrdersRequestStatus(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewListOrdersRequestStatusFromString("submitted")
+		val, err := NewListOrdersRequestStatusFromString("awaiting_approval")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -9894,6 +9901,13 @@ func TestEnumOrderMode(t *testing.T) {
 }
 
 func TestEnumOrderStatus(t *testing.T) {
+	t.Run("NewFromString_awaiting_approval", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewOrderStatusFromString("awaiting_approval")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, OrderStatus("awaiting_approval"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_submitted", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewOrderStatusFromString("submitted")
@@ -9942,7 +9956,7 @@ func TestEnumOrderStatus(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewOrderStatusFromString("submitted")
+		val, err := NewOrderStatusFromString("awaiting_approval")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -10087,6 +10101,13 @@ func TestEnumPatientSex(t *testing.T) {
 }
 
 func TestEnumPrescriptionStatus(t *testing.T) {
+	t.Run("NewFromString_awaiting_approval", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewPrescriptionStatusFromString("awaiting_approval")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, PrescriptionStatus("awaiting_approval"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_submitted", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewPrescriptionStatusFromString("submitted")
@@ -10135,7 +10156,7 @@ func TestEnumPrescriptionStatus(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewPrescriptionStatusFromString("submitted")
+		val, err := NewPrescriptionStatusFromString("awaiting_approval")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -10144,6 +10165,13 @@ func TestEnumPrescriptionStatus(t *testing.T) {
 }
 
 func TestEnumStatusHistoryEntryStatus(t *testing.T) {
+	t.Run("NewFromString_awaiting_approval", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewStatusHistoryEntryStatusFromString("awaiting_approval")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, StatusHistoryEntryStatus("awaiting_approval"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_submitted", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewStatusHistoryEntryStatusFromString("submitted")
@@ -10192,7 +10220,7 @@ func TestEnumStatusHistoryEntryStatus(t *testing.T) {
 	})
 
 	t.Run("Ptr", func(t *testing.T) {
-		val, err := NewStatusHistoryEntryStatusFromString("submitted")
+		val, err := NewStatusHistoryEntryStatusFromString("awaiting_approval")
 		assert.NoError(t, err)
 		ptr := val.Ptr()
 		assert.NotNil(t, ptr)
@@ -10591,10 +10619,10 @@ func TestExtraPropertiesShippingDestinationAddress(t *testing.T) {
 	})
 }
 
-func TestExtraPropertiesShippingDestinationInputAddress(t *testing.T) {
+func TestExtraPropertiesShippingDestinationAddressInput(t *testing.T) {
 	t.Run("GetExtraProperties", func(t *testing.T) {
 		t.Parallel()
-		obj := &ShippingDestinationInputAddress{}
+		obj := &ShippingDestinationAddressInput{}
 		// Should not panic when calling GetExtraProperties()
 		defer func() {
 			if r := recover(); r != nil {
@@ -10608,53 +10636,7 @@ func TestExtraPropertiesShippingDestinationInputAddress(t *testing.T) {
 
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
-		var obj *ShippingDestinationInputAddress
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesShippingDestinationInputPatient(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &ShippingDestinationInputPatient{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *ShippingDestinationInputPatient
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesShippingDestinationInputPractice(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &ShippingDestinationInputPractice{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *ShippingDestinationInputPractice
+		var obj *ShippingDestinationAddressInput
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})
@@ -10683,6 +10665,29 @@ func TestExtraPropertiesShippingDestinationPatient(t *testing.T) {
 	})
 }
 
+func TestExtraPropertiesShippingDestinationPatientInput(t *testing.T) {
+	t.Run("GetExtraProperties", func(t *testing.T) {
+		t.Parallel()
+		obj := &ShippingDestinationPatientInput{}
+		// Should not panic when calling GetExtraProperties()
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("GetExtraProperties() panicked: %v", r)
+			}
+		}()
+		extraProps := obj.GetExtraProperties()
+		// Result can be nil or an empty/non-empty map
+		_ = extraProps
+	})
+
+	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ShippingDestinationPatientInput
+		extraProps := obj.GetExtraProperties()
+		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
+	})
+}
+
 func TestExtraPropertiesShippingDestinationPractice(t *testing.T) {
 	t.Run("GetExtraProperties", func(t *testing.T) {
 		t.Parallel()
@@ -10701,6 +10706,29 @@ func TestExtraPropertiesShippingDestinationPractice(t *testing.T) {
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *ShippingDestinationPractice
+		extraProps := obj.GetExtraProperties()
+		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
+	})
+}
+
+func TestExtraPropertiesShippingDestinationPracticeInput(t *testing.T) {
+	t.Run("GetExtraProperties", func(t *testing.T) {
+		t.Parallel()
+		obj := &ShippingDestinationPracticeInput{}
+		// Should not panic when calling GetExtraProperties()
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("GetExtraProperties() panicked: %v", r)
+			}
+		}()
+		extraProps := obj.GetExtraProperties()
+		// Result can be nil or an empty/non-empty map
+		_ = extraProps
+	})
+
+	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *ShippingDestinationPracticeInput
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})

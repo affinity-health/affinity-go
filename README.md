@@ -1,15 +1,15 @@
 # Affinity Go SDK
 
-Typed server-side Go client for the Affinity API. Requires Go 1.21 or later. It targets API version `2026-10-28` and sends it in `Affinity-Version` on every request.
+Typed server-side Go client for the Affinity API. Requires Go 1.21 or later. It targets API version `2026-11-01` and sends it in `Affinity-Version` on every request.
 
 Keep API keys on the server. Never put them in browser code, mobile applications or public configuration.
 
 ## Install
 
-Install from GitHub at tag `v0.4.2`. The module is not published to a registry other than GitHub.
+Install from GitHub at tag `v0.5.0`. The module is not published to a registry other than GitHub.
 
 ```sh
-go get github.com/affinity-health/affinity-go@v0.4.2
+go get github.com/affinity-health/affinity-go@v0.5.0
 ```
 
 ## Use
@@ -94,7 +94,7 @@ Every problem body has `RequestID`. For a successful call, `WithRawResponse` giv
 ### Defaults
 
 - Base URL `https://api.affinityrx.com` (`affinity.Environments.Default`). Change it with `option.WithBaseURL`.
-- `Affinity-Version: 2026-10-28` on every request.
+- `Affinity-Version: 2026-11-01` on every request.
 - Retries: 2 retries (3 attempts) for 408, 429 and 5xx responses, with exponential backoff that honors `Retry-After`. A retry sends the same request, with the same `IdempotencyKey`. Network errors are not retried: retry them yourself with the same key. Change it with `option.WithMaxAttempts(n)` or turn it off with `option.WithoutRetries()`.
 - Timeout: 60 seconds per attempt (`client.DefaultTimeout`). Replace it with `option.WithHTTPClient(&http.Client{Timeout: ...})`, or set a deadline on the context.
 

@@ -77,7 +77,7 @@ var (
 type ListWebhooksRequest struct {
 	// Maximum records per page, from 1 to 100. Defaults to 25.
 	Limit *int `json:"-" url:"limit,omitempty"`
-	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode. Use only one cursor parameter.
+	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode.
 	StartingAfter *string `json:"-" url:"startingAfter,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -755,6 +755,7 @@ var (
 )
 
 type RemoveWebhooksResponse struct {
+	// Always true.
 	Deleted bool   `json:"deleted" url:"deleted"`
 	ID      string `json:"id" url:"id"`
 

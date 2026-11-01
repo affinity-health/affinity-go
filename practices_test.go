@@ -2242,11 +2242,11 @@ func TestEnumListPracticesRequestSort(t *testing.T) {
 		assert.Equal(t, ListPracticesRequestSort("name"), val, "enum value should match expected wire value")
 	})
 
-	t.Run("NewFromString__name", func(t *testing.T) {
+	t.Run("NewFromString_name_desc", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewListPracticesRequestSortFromString("-name")
+		val, err := NewListPracticesRequestSortFromString("name_desc")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListPracticesRequestSort("-name"), val, "enum value should match expected wire value")
+		assert.Equal(t, ListPracticesRequestSort("name_desc"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_location", func(t *testing.T) {
@@ -2256,11 +2256,11 @@ func TestEnumListPracticesRequestSort(t *testing.T) {
 		assert.Equal(t, ListPracticesRequestSort("location"), val, "enum value should match expected wire value")
 	})
 
-	t.Run("NewFromString__location", func(t *testing.T) {
+	t.Run("NewFromString_location_desc", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewListPracticesRequestSortFromString("-location")
+		val, err := NewListPracticesRequestSortFromString("location_desc")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListPracticesRequestSort("-location"), val, "enum value should match expected wire value")
+		assert.Equal(t, ListPracticesRequestSort("location_desc"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_mode", func(t *testing.T) {
@@ -2270,11 +2270,11 @@ func TestEnumListPracticesRequestSort(t *testing.T) {
 		assert.Equal(t, ListPracticesRequestSort("mode"), val, "enum value should match expected wire value")
 	})
 
-	t.Run("NewFromString__mode", func(t *testing.T) {
+	t.Run("NewFromString_mode_desc", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewListPracticesRequestSortFromString("-mode")
+		val, err := NewListPracticesRequestSortFromString("mode_desc")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListPracticesRequestSort("-mode"), val, "enum value should match expected wire value")
+		assert.Equal(t, ListPracticesRequestSort("mode_desc"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_created", func(t *testing.T) {
@@ -2284,11 +2284,11 @@ func TestEnumListPracticesRequestSort(t *testing.T) {
 		assert.Equal(t, ListPracticesRequestSort("created"), val, "enum value should match expected wire value")
 	})
 
-	t.Run("NewFromString__created", func(t *testing.T) {
+	t.Run("NewFromString_created_desc", func(t *testing.T) {
 		t.Parallel()
-		val, err := NewListPracticesRequestSortFromString("-created")
+		val, err := NewListPracticesRequestSortFromString("created_desc")
 		assert.NoError(t, err, "valid enum value should not return error")
-		assert.Equal(t, ListPracticesRequestSort("-created"), val, "enum value should match expected wire value")
+		assert.Equal(t, ListPracticesRequestSort("created_desc"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {

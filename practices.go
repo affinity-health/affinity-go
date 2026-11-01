@@ -144,13 +144,13 @@ var (
 type ListPracticesRequest struct {
 	// Maximum records per page, from 1 to 100. Defaults to 25.
 	Limit *int `json:"-" url:"limit,omitempty"`
-	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode. Use only one cursor parameter.
+	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode.
 	StartingAfter *string `json:"-" url:"startingAfter,omitempty"`
 	// Match the external practice ID exactly, including case. Keep this filter unchanged while paging.
 	ExternalID *string `json:"-" url:"externalId,omitempty"`
 	// Match practice names containing this text, ignoring case. Restart pagination after changing query.
 	Query *string `json:"-" url:"query,omitempty"`
-	// name and location sort A to Z; mode sorts Test before Live; created sorts oldest first. A leading - reverses the order. Defaults to -created. Missing locations sort last. Restart pagination after changing sort.
+	// name and location sort A to Z; mode sorts Test before Live; created sorts oldest first. A _desc suffix reverses the order. Defaults to created_desc. Missing locations sort last. Restart pagination after changing sort.
 	Sort *ListPracticesRequestSort `json:"-" url:"sort,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -593,38 +593,38 @@ func (p PracticeListObject) Ptr() *PracticeListObject {
 	return &p
 }
 
-// name and location sort A to Z; mode sorts Test before Live; created sorts oldest first. A leading - reverses the order. Defaults to -created. Missing locations sort last. Restart pagination after changing sort.
+// name and location sort A to Z; mode sorts Test before Live; created sorts oldest first. A _desc suffix reverses the order. Defaults to created_desc. Missing locations sort last. Restart pagination after changing sort.
 type ListPracticesRequestSort string
 
 const (
-	ListPracticesRequestSortName               ListPracticesRequestSort = "name"
-	ListPracticesRequestSortNameDescending     ListPracticesRequestSort = "-name"
-	ListPracticesRequestSortLocation           ListPracticesRequestSort = "location"
-	ListPracticesRequestSortLocationDescending ListPracticesRequestSort = "-location"
-	ListPracticesRequestSortMode               ListPracticesRequestSort = "mode"
-	ListPracticesRequestSortModeDescending     ListPracticesRequestSort = "-mode"
-	ListPracticesRequestSortCreated            ListPracticesRequestSort = "created"
-	ListPracticesRequestSortCreatedDescending  ListPracticesRequestSort = "-created"
+	ListPracticesRequestSortName         ListPracticesRequestSort = "name"
+	ListPracticesRequestSortNameDesc     ListPracticesRequestSort = "name_desc"
+	ListPracticesRequestSortLocation     ListPracticesRequestSort = "location"
+	ListPracticesRequestSortLocationDesc ListPracticesRequestSort = "location_desc"
+	ListPracticesRequestSortMode         ListPracticesRequestSort = "mode"
+	ListPracticesRequestSortModeDesc     ListPracticesRequestSort = "mode_desc"
+	ListPracticesRequestSortCreated      ListPracticesRequestSort = "created"
+	ListPracticesRequestSortCreatedDesc  ListPracticesRequestSort = "created_desc"
 )
 
 func NewListPracticesRequestSortFromString(s string) (ListPracticesRequestSort, error) {
 	switch s {
 	case "name":
 		return ListPracticesRequestSortName, nil
-	case "-name":
-		return ListPracticesRequestSortNameDescending, nil
+	case "name_desc":
+		return ListPracticesRequestSortNameDesc, nil
 	case "location":
 		return ListPracticesRequestSortLocation, nil
-	case "-location":
-		return ListPracticesRequestSortLocationDescending, nil
+	case "location_desc":
+		return ListPracticesRequestSortLocationDesc, nil
 	case "mode":
 		return ListPracticesRequestSortMode, nil
-	case "-mode":
-		return ListPracticesRequestSortModeDescending, nil
+	case "mode_desc":
+		return ListPracticesRequestSortModeDesc, nil
 	case "created":
 		return ListPracticesRequestSortCreated, nil
-	case "-created":
-		return ListPracticesRequestSortCreatedDescending, nil
+	case "created_desc":
+		return ListPracticesRequestSortCreatedDesc, nil
 	}
 	var t ListPracticesRequestSort
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
