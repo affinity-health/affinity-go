@@ -6,6 +6,19 @@ break the interface.
 
 ## Unreleased
 
+## 0.6.0 - 2026-11-02
+
+This release is generated from the API `2026-11-01` contract that production serves. That contract
+marks each response object and response value list as open: a later API version can add a field or
+a value.
+
+### Changed
+
+- Response values keep their known-value types, such as `OrderStatus` and `AllergyCategory`. A response with an
+  unknown value or an added field, at the root or nested, decodes without an error: the unknown value is kept as a string.
+- Every response type has a public `ExtraProperties` map with the fields this SDK does not know
+  (before, only the webhook types had it). Marshaling a response type writes them back.
+
 ## 0.5.0 - 2026-11-01
 
 This release targets API `2026-11-01`, which breaks `2026-10-28`.

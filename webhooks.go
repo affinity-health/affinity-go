@@ -194,8 +194,9 @@ type WebhookEndpoint struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (w *WebhookEndpoint) GetCreatedAt() time.Time {
@@ -237,7 +238,7 @@ func (w *WebhookEndpoint) GetExtraProperties() map[string]interface{} {
 	if w == nil {
 		return nil
 	}
-	return w.extraProperties
+	return w.ExtraProperties
 }
 
 func (w *WebhookEndpoint) require(field *big.Int) {
@@ -303,7 +304,7 @@ func (w *WebhookEndpoint) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	w.extraProperties = extraProperties
+	w.ExtraProperties = extraProperties
 	w.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -320,7 +321,7 @@ func (w *WebhookEndpoint) MarshalJSON() ([]byte, error) {
 		UpdatedAt: internal.NewDateTime(w.UpdatedAt),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, w.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, w.ExtraProperties)
 }
 
 func (w *WebhookEndpoint) String() string {
@@ -361,8 +362,9 @@ type WebhookEndpointList struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (w *WebhookEndpointList) GetData() []*WebhookEndpoint {
@@ -404,7 +406,7 @@ func (w *WebhookEndpointList) GetExtraProperties() map[string]interface{} {
 	if w == nil {
 		return nil
 	}
-	return w.extraProperties
+	return w.ExtraProperties
 }
 
 func (w *WebhookEndpointList) require(field *big.Int) {
@@ -452,17 +454,21 @@ func (w *WebhookEndpointList) SetURL(url string) {
 }
 
 func (w *WebhookEndpointList) UnmarshalJSON(data []byte) error {
-	type unmarshaler WebhookEndpointList
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed WebhookEndpointList
+	var unmarshaler = struct {
+		embed
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*w = WebhookEndpointList(value)
+	*w = WebhookEndpointList(unmarshaler.embed)
 	extraProperties, err := internal.ExtractExtraProperties(data, *w)
 	if err != nil {
 		return err
 	}
-	w.extraProperties = extraProperties
+	w.ExtraProperties = extraProperties
 	presentFields, err := internal.ExplicitFieldsFromJSON(data, webhookEndpointListNullableFields)
 	if err != nil {
 		return err
@@ -482,7 +488,7 @@ func (w *WebhookEndpointList) MarshalJSON() ([]byte, error) {
 		embed: embed(*w),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, w.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, w.ExtraProperties)
 }
 
 func (w *WebhookEndpointList) String() string {
@@ -568,8 +574,9 @@ type CreateWebhooksResponse struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (c *CreateWebhooksResponse) GetCreatedAt() time.Time {
@@ -618,7 +625,7 @@ func (c *CreateWebhooksResponse) GetExtraProperties() map[string]interface{} {
 	if c == nil {
 		return nil
 	}
-	return c.extraProperties
+	return c.ExtraProperties
 }
 
 func (c *CreateWebhooksResponse) require(field *big.Int) {
@@ -691,7 +698,7 @@ func (c *CreateWebhooksResponse) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	c.extraProperties = extraProperties
+	c.ExtraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -708,7 +715,7 @@ func (c *CreateWebhooksResponse) MarshalJSON() ([]byte, error) {
 		UpdatedAt: internal.NewDateTime(c.UpdatedAt),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, c.ExtraProperties)
 }
 
 func (c *CreateWebhooksResponse) String() string {
@@ -762,8 +769,9 @@ type RemoveWebhooksResponse struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (r *RemoveWebhooksResponse) GetDeleted() bool {
@@ -784,7 +792,7 @@ func (r *RemoveWebhooksResponse) GetExtraProperties() map[string]interface{} {
 	if r == nil {
 		return nil
 	}
-	return r.extraProperties
+	return r.ExtraProperties
 }
 
 func (r *RemoveWebhooksResponse) require(field *big.Int) {
@@ -811,17 +819,21 @@ func (r *RemoveWebhooksResponse) SetID(id string) {
 }
 
 func (r *RemoveWebhooksResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler RemoveWebhooksResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed RemoveWebhooksResponse
+	var unmarshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*r = RemoveWebhooksResponse(value)
+	*r = RemoveWebhooksResponse(unmarshaler.embed)
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
-	r.extraProperties = extraProperties
+	r.ExtraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -834,7 +846,7 @@ func (r *RemoveWebhooksResponse) MarshalJSON() ([]byte, error) {
 		embed: embed(*r),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, r.ExtraProperties)
 }
 
 func (r *RemoveWebhooksResponse) String() string {
@@ -863,8 +875,9 @@ type ResendFailedWebhooksResponse struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (r *ResendFailedWebhooksResponse) GetQueued() int {
@@ -878,7 +891,7 @@ func (r *ResendFailedWebhooksResponse) GetExtraProperties() map[string]interface
 	if r == nil {
 		return nil
 	}
-	return r.extraProperties
+	return r.ExtraProperties
 }
 
 func (r *ResendFailedWebhooksResponse) require(field *big.Int) {
@@ -898,17 +911,21 @@ func (r *ResendFailedWebhooksResponse) SetQueued(queued int) {
 }
 
 func (r *ResendFailedWebhooksResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler ResendFailedWebhooksResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed ResendFailedWebhooksResponse
+	var unmarshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*r = ResendFailedWebhooksResponse(value)
+	*r = ResendFailedWebhooksResponse(unmarshaler.embed)
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
-	r.extraProperties = extraProperties
+	r.ExtraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -921,7 +938,7 @@ func (r *ResendFailedWebhooksResponse) MarshalJSON() ([]byte, error) {
 		embed: embed(*r),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, r.ExtraProperties)
 }
 
 func (r *ResendFailedWebhooksResponse) String() string {

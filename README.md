@@ -6,10 +6,10 @@ Keep API keys on the server. Never put them in browser code, mobile applications
 
 ## Install
 
-Install from GitHub at tag `v0.5.0`. The module is not published to a registry other than GitHub.
+Install from GitHub at tag `v0.6.0`. The module is not published to a registry other than GitHub.
 
 ```sh
-go get github.com/affinity-health/affinity-go@v0.5.0
+go get github.com/affinity-health/affinity-go@v0.6.0
 ```
 
 ## Use

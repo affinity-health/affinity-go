@@ -96,8 +96,9 @@ type CreateFeedbackResponse struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (c *CreateFeedbackResponse) GetID() string {
@@ -111,7 +112,7 @@ func (c *CreateFeedbackResponse) GetExtraProperties() map[string]interface{} {
 	if c == nil {
 		return nil
 	}
-	return c.extraProperties
+	return c.ExtraProperties
 }
 
 func (c *CreateFeedbackResponse) require(field *big.Int) {
@@ -131,17 +132,21 @@ func (c *CreateFeedbackResponse) SetID(id string) {
 }
 
 func (c *CreateFeedbackResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler CreateFeedbackResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed CreateFeedbackResponse
+	var unmarshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*c = CreateFeedbackResponse(value)
+	*c = CreateFeedbackResponse(unmarshaler.embed)
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
-	c.extraProperties = extraProperties
+	c.ExtraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -154,7 +159,7 @@ func (c *CreateFeedbackResponse) MarshalJSON() ([]byte, error) {
 		embed: embed(*c),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, c.ExtraProperties)
 }
 
 func (c *CreateFeedbackResponse) String() string {

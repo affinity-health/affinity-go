@@ -48,8 +48,9 @@ type Account struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (a *Account) GetID() string {
@@ -112,7 +113,7 @@ func (a *Account) GetExtraProperties() map[string]interface{} {
 	if a == nil {
 		return nil
 	}
-	return a.extraProperties
+	return a.ExtraProperties
 }
 
 func (a *Account) require(field *big.Int) {
@@ -197,7 +198,7 @@ func (a *Account) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	a.extraProperties = extraProperties
+	a.ExtraProperties = extraProperties
 	presentFields, err := internal.ExplicitFieldsFromJSON(data, accountNullableFields)
 	if err != nil {
 		return err
@@ -219,7 +220,7 @@ func (a *Account) MarshalJSON() ([]byte, error) {
 		CreatedAt: internal.NewDateTime(a.CreatedAt),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, a.ExtraProperties)
 }
 
 func (a *Account) String() string {

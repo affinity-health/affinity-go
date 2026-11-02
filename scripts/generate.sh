@@ -10,7 +10,7 @@ cd "$root"
 fern_version="$(jq -r .version fern/fern.config.json)"
 generator="fernapi/fern-go-sdk"
 generator_version="$(awk '/fern-go-sdk/ { getline; print $2 }' fern/generators.yml)"
-sdk_version="0.5.0"
+sdk_version="0.6.0"
 output="$root/.fern-output"
 
 # Hand-written files and directories. Everything else at the root is Fern output.

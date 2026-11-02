@@ -174,8 +174,9 @@ type Medication struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (m *Medication) GetCategory() MedicationCategory {
@@ -308,7 +309,7 @@ func (m *Medication) GetExtraProperties() map[string]interface{} {
 	if m == nil {
 		return nil
 	}
-	return m.extraProperties
+	return m.ExtraProperties
 }
 
 func (m *Medication) require(field *big.Int) {
@@ -447,17 +448,21 @@ func (m *Medication) SetStrength(strength *string) {
 }
 
 func (m *Medication) UnmarshalJSON(data []byte) error {
-	type unmarshaler Medication
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed Medication
+	var unmarshaler = struct {
+		embed
+	}{
+		embed: embed(*m),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*m = Medication(value)
+	*m = Medication(unmarshaler.embed)
 	extraProperties, err := internal.ExtractExtraProperties(data, *m)
 	if err != nil {
 		return err
 	}
-	m.extraProperties = extraProperties
+	m.ExtraProperties = extraProperties
 	presentFields, err := internal.ExplicitFieldsFromJSON(data, medicationNullableFields)
 	if err != nil {
 		return err
@@ -477,7 +482,7 @@ func (m *Medication) MarshalJSON() ([]byte, error) {
 		embed: embed(*m),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, m.ExtraProperties)
 }
 
 func (m *Medication) String() string {
@@ -565,8 +570,9 @@ type MedicationList struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (m *MedicationList) GetData() []*Medication {
@@ -608,7 +614,7 @@ func (m *MedicationList) GetExtraProperties() map[string]interface{} {
 	if m == nil {
 		return nil
 	}
-	return m.extraProperties
+	return m.ExtraProperties
 }
 
 func (m *MedicationList) require(field *big.Int) {
@@ -656,17 +662,21 @@ func (m *MedicationList) SetURL(url string) {
 }
 
 func (m *MedicationList) UnmarshalJSON(data []byte) error {
-	type unmarshaler MedicationList
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed MedicationList
+	var unmarshaler = struct {
+		embed
+	}{
+		embed: embed(*m),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*m = MedicationList(value)
+	*m = MedicationList(unmarshaler.embed)
 	extraProperties, err := internal.ExtractExtraProperties(data, *m)
 	if err != nil {
 		return err
 	}
-	m.extraProperties = extraProperties
+	m.ExtraProperties = extraProperties
 	presentFields, err := internal.ExplicitFieldsFromJSON(data, medicationListNullableFields)
 	if err != nil {
 		return err
@@ -686,7 +696,7 @@ func (m *MedicationList) MarshalJSON() ([]byte, error) {
 		embed: embed(*m),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, m.ExtraProperties)
 }
 
 func (m *MedicationList) String() string {
@@ -740,8 +750,9 @@ type ShippingOption struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (s *ShippingOption) GetID() string {
@@ -769,7 +780,7 @@ func (s *ShippingOption) GetExtraProperties() map[string]interface{} {
 	if s == nil {
 		return nil
 	}
-	return s.extraProperties
+	return s.ExtraProperties
 }
 
 func (s *ShippingOption) require(field *big.Int) {
@@ -803,17 +814,21 @@ func (s *ShippingOption) SetPrice(price int) {
 }
 
 func (s *ShippingOption) UnmarshalJSON(data []byte) error {
-	type unmarshaler ShippingOption
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed ShippingOption
+	var unmarshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*s = ShippingOption(value)
+	*s = ShippingOption(unmarshaler.embed)
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
-	s.extraProperties = extraProperties
+	s.ExtraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -826,7 +841,7 @@ func (s *ShippingOption) MarshalJSON() ([]byte, error) {
 		embed: embed(*s),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, s.ExtraProperties)
 }
 
 func (s *ShippingOption) String() string {
@@ -936,8 +951,9 @@ type GetMedicationsResponse struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (g *GetMedicationsResponse) GetCategory() GetMedicationsResponseCategory {
@@ -1077,7 +1093,7 @@ func (g *GetMedicationsResponse) GetExtraProperties() map[string]interface{} {
 	if g == nil {
 		return nil
 	}
-	return g.extraProperties
+	return g.ExtraProperties
 }
 
 func (g *GetMedicationsResponse) require(field *big.Int) {
@@ -1223,17 +1239,21 @@ func (g *GetMedicationsResponse) SetVariants(variants []*Medication) {
 }
 
 func (g *GetMedicationsResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler GetMedicationsResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed GetMedicationsResponse
+	var unmarshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*g = GetMedicationsResponse(value)
+	*g = GetMedicationsResponse(unmarshaler.embed)
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
-	g.extraProperties = extraProperties
+	g.ExtraProperties = extraProperties
 	presentFields, err := internal.ExplicitFieldsFromJSON(data, getMedicationsResponseNullableFields)
 	if err != nil {
 		return err
@@ -1253,7 +1273,7 @@ func (g *GetMedicationsResponse) MarshalJSON() ([]byte, error) {
 		embed: embed(*g),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, g.ExtraProperties)
 }
 
 func (g *GetMedicationsResponse) String() string {

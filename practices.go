@@ -237,8 +237,9 @@ type Practice struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (p *Practice) GetID() string {
@@ -294,7 +295,7 @@ func (p *Practice) GetExtraProperties() map[string]interface{} {
 	if p == nil {
 		return nil
 	}
-	return p.extraProperties
+	return p.ExtraProperties
 }
 
 func (p *Practice) require(field *big.Int) {
@@ -372,7 +373,7 @@ func (p *Practice) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	p.extraProperties = extraProperties
+	p.ExtraProperties = extraProperties
 	presentFields, err := internal.ExplicitFieldsFromJSON(data, practiceNullableFields)
 	if err != nil {
 		return err
@@ -394,7 +395,7 @@ func (p *Practice) MarshalJSON() ([]byte, error) {
 		CreatedAt: internal.NewDateTime(p.CreatedAt),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, p.ExtraProperties)
 }
 
 func (p *Practice) String() string {
@@ -435,8 +436,9 @@ type PracticeList struct {
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `json:"-" url:"-"`
+
+	rawJSON json.RawMessage
 }
 
 func (p *PracticeList) GetData() []*Practice {
@@ -478,7 +480,7 @@ func (p *PracticeList) GetExtraProperties() map[string]interface{} {
 	if p == nil {
 		return nil
 	}
-	return p.extraProperties
+	return p.ExtraProperties
 }
 
 func (p *PracticeList) require(field *big.Int) {
@@ -526,17 +528,21 @@ func (p *PracticeList) SetURL(url string) {
 }
 
 func (p *PracticeList) UnmarshalJSON(data []byte) error {
-	type unmarshaler PracticeList
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed PracticeList
+	var unmarshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*p = PracticeList(value)
+	*p = PracticeList(unmarshaler.embed)
 	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
 	}
-	p.extraProperties = extraProperties
+	p.ExtraProperties = extraProperties
 	presentFields, err := internal.ExplicitFieldsFromJSON(data, practiceListNullableFields)
 	if err != nil {
 		return err
@@ -556,7 +562,7 @@ func (p *PracticeList) MarshalJSON() ([]byte, error) {
 		embed: embed(*p),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
-	return json.Marshal(explicitMarshaler)
+	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, p.ExtraProperties)
 }
 
 func (p *PracticeList) String() string {
@@ -649,7 +655,7 @@ var updatePracticesRequestAddressNullableFields = map[string]*big.Int{
 
 type UpdatePracticesRequestAddress struct {
 	Line1 *string `json:"line1,omitempty" url:"line1,omitempty"`
-	// The apartment or suite, or null when there is none. Empty text counts as null.
+	// The apartment or suite. Send null or empty text to remove it. An omitted `line2` keeps the saved suite, also when `line1` changes.
 	Line2 *string `json:"line2,omitempty" url:"line2,omitempty"`
 	City  *string `json:"city,omitempty" url:"city,omitempty"`
 	// The two-letter US state or territory code, such as TX, in any letter case. Affinity stores and returns it in upper case.
@@ -814,10 +820,12 @@ type UpdatePracticesRequest struct {
 	IdempotencyKey string `json:"-" url:"-"`
 	PracticeID     string `json:"-" url:"-"`
 	// Your practice identifier, unique among your platform's active practices. Send null to clear it.
-	ExternalID  *string                        `json:"externalId,omitempty" url:"-"`
-	Address     *UpdatePracticesRequestAddress `json:"address,omitempty" url:"-"`
-	LiveEnabled *bool                          `json:"liveEnabled,omitempty" url:"-"`
-	Name        *string                        `json:"name,omitempty" url:"-"`
+	ExternalID *string `json:"externalId,omitempty" url:"-"`
+	// Affinity merges the address parts you send into the saved address. An omitted part keeps its saved value. To move to an address with no suite, send `"line2": null` with the new `line1`, `city`, `state` and `postalCode`.
+	Address *UpdatePracticesRequestAddress `json:"address,omitempty" url:"-"`
+	// Omit it or send null to leave Live unchanged.
+	LiveEnabled *bool   `json:"liveEnabled,omitempty" url:"-"`
+	Name        *string `json:"name,omitempty" url:"-"`
 	// A US phone number: 10 digits, with or without +1 or 1 before them. Spaces, dashes, dots and parentheses are allowed, such as (512) 555-0100. Affinity stores and returns +15125550100. Empty text counts as null.
 	Phone *string `json:"phone,omitempty" url:"-"`
 

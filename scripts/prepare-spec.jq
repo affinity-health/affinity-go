@@ -14,3 +14,8 @@
         | .value["x-fern-pagination"] = {cursor: "$request.startingAfter", next_cursor: "$response.nextCursor", results: "$response.data"}
       else . end
   else . end))
+# The contract publishes each response value list open: `type: string` with its known values in
+# `x-extensible-enum`. Type the known values again. Each SDK must still decode an unknown value
+# (tests cover it); the TypeScript SDK's scripts/generate.ts has the same rule.
+| walk(if type == "object" and has("x-extensible-enum") and (has("enum") | not)
+    then .enum = .["x-extensible-enum"] | del(.["x-extensible-enum"]) else . end)

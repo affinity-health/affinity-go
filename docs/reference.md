@@ -657,7 +657,7 @@ _, err := client.Orders.Get(
 <dl>
 <dd>
 
-200 with status cancelled when the cancel is confirmed. 202 with cancelRequestedAt when the pharmacy has not confirmed yet: you get order.cancelled when it confirms, or, when it refuses, cancelRequestedAt becomes null and you get order.updated. 409 when the pharmacy refuses or the order has shipped.
+200 with status cancelled when the cancel is confirmed. 202 with cancelRequestedAt when the pharmacy has not confirmed yet: you get order.cancelled when it confirms, or, when it refuses, cancelRequestedAt becomes null and you get order.updated. If an earlier ask may have reached the pharmacy, a refusal keeps cancelRequestedAt and sends no event until the pharmacy ends the order (order.cancelled or order.shipped). 409 when the pharmacy refuses or the order has shipped.
 </dd>
 </dl>
 </dd>
@@ -1046,7 +1046,7 @@ _, err := client.Practices.Update(
 <dl>
 <dd>
 
-**address:** `*affinity.UpdatePracticesRequestAddress` 
+**address:** `*affinity.UpdatePracticesRequestAddress` — Affinity merges the address parts you send into the saved address. An omitted part keeps its saved value. To move to an address with no suite, send `"line2": null` with the new `line1`, `city`, `state` and `postalCode`.
     
 </dd>
 </dl>
@@ -1054,7 +1054,7 @@ _, err := client.Practices.Update(
 <dl>
 <dd>
 
-**liveEnabled:** `*bool` 
+**liveEnabled:** `*bool` — Omit it or send null to leave Live unchanged.
     
 </dd>
 </dl>
