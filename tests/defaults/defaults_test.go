@@ -48,7 +48,7 @@ func create(c *client.Client) error {
 		IdempotencyKey: "saved-key",
 		Name:           "Synthetic",
 		Phone:          "+15125550100",
-		Address:        &affinity.AddressInput{Line1: "100 Congress Ave", City: "Austin", State: "TX", PostalCode: "78701"},
+		Address:        &affinity.PracticeAddressInput{Line1: "100 Congress Ave", City: "Austin", State: "TX", PostalCode: "78701"},
 	})
 	return err
 }

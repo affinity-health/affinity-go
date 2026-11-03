@@ -163,7 +163,7 @@ func run(ctx context.Context, c *client.Client, baseURL, webhookURL string, orde
 		IdempotencyKey: key(),
 		Name:           label,
 		Phone:          "+15125550100",
-		Address:        &affinity.AddressInput{Line1: "100 Congress Ave", City: "Austin", State: "TX", PostalCode: "78701"},
+		Address:        &affinity.PracticeAddressInput{Line1: "100 Congress Ave", City: "Austin", State: "TX", PostalCode: "78701"},
 	})
 	record("practices.create", err, idOf(practice))
 	if err != nil {
