@@ -18,7 +18,8 @@ var (
 type CancelOrdersRequest struct {
 	// A unique key per operation, 1 to 255 printable ASCII characters without spaces. Retry the same key and body to avoid repeating the action. The replay response depends on the operation. See https://docs.affinityrx.com/guides/#retry-safely.
 	IdempotencyKey string `json:"-" url:"-"`
-	OrderID        string `json:"-" url:"-"`
+	// The order ID.
+	OrderID string `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -61,7 +62,7 @@ var (
 type OrderInput struct {
 	// A unique key per operation, 1 to 255 printable ASCII characters without spaces. Retry the same key and body to avoid repeating the action. The replay response depends on the operation. See https://docs.affinityrx.com/guides/#retry-safely.
 	IdempotencyKey string `json:"-" url:"-"`
-	// Your order identifier, unique within the practice and mode.
+	// Your order identifier, unique within the practice and mode. A failed or cancelled order keeps it, so send a new one for a replacement order.
 	ExternalOrderID *string       `json:"externalOrderId,omitempty" url:"-"`
 	Patient         *PatientInput `json:"patient" url:"-"`
 	// Required with a platform API key. Send a child practice ID. Independent practice keys can omit this field to use their own practice.
@@ -169,6 +170,7 @@ var (
 )
 
 type GetOrdersRequest struct {
+	// The order ID.
 	OrderID string `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -503,9 +505,9 @@ type Order struct {
 	CancelRequestedAt *time.Time `json:"cancelRequestedAt,omitempty" url:"cancelRequestedAt,omitempty"`
 	// When the record was created.
 	CreatedAt time.Time `json:"createdAt" url:"createdAt"`
-	// Your order identifier, unique within the practice and mode.
+	// Your order identifier, unique within the practice and mode. A failed or cancelled order keeps it.
 	ExternalOrderID *string `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
-	// The failure or cancellation refusal reason, or null when there is none.
+	// Why the order failed, for a person to read. Null unless the order failed; a refused cancel leaves it null.
 	FailureReason *string `json:"failureReason,omitempty" url:"failureReason,omitempty"`
 	// The public record identifier.
 	ID string `json:"id" url:"id"`
@@ -528,7 +530,7 @@ type Order struct {
 	Shipments []*Shipment `json:"shipments" url:"shipments"`
 	// The current fulfillment status.
 	Status OrderStatus `json:"status" url:"status"`
-	// The carrier's tracking page for the newest package, or null before the order ships.
+	// The carrier's tracking page for the newest package. Null when there is no package yet or the carrier has no tracking page.
 	TrackingURL *string `json:"trackingUrl,omitempty" url:"trackingUrl,omitempty"`
 	// The order's status changes, oldest first.
 	StatusHistory []*StatusHistoryEntry `json:"statusHistory" url:"statusHistory"`
@@ -1564,7 +1566,7 @@ type OrderShippingOption struct {
 	ID string `json:"id" url:"id"`
 	// The name.
 	Name string `json:"name" url:"name"`
-	// The price in integer cents.
+	// The shipping price charged, in integer cents.
 	Price int `json:"price" url:"price"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1988,11 +1990,13 @@ type PatientInput struct {
 	// A real calendar date in YYYY-MM-DD format, with a year from 1900 through 2099, today or earlier in UTC. Surrounding spaces are removed.
 	DateOfBirth string `json:"dateOfBirth" url:"dateOfBirth"`
 	// The patient's email address.
-	Email     string `json:"email" url:"email"`
+	Email string `json:"email" url:"email"`
+	// The first name.
 	FirstName string `json:"firstName" url:"firstName"`
 	// The patient's sex as sent to the pharmacy.
-	Sex      PatientInputSex `json:"sex" url:"sex"`
-	LastName string          `json:"lastName" url:"lastName"`
+	Sex PatientInputSex `json:"sex" url:"sex"`
+	// The last name.
+	LastName string `json:"lastName" url:"lastName"`
 	// The patient's middle name, or null when there is none. Empty text counts as null.
 	MiddleName *string `json:"middleName,omitempty" url:"middleName,omitempty"`
 	// A US phone number: 10 digits, with or without +1 or 1 before them. Spaces, dashes, dots and parentheses are allowed, such as (512) 555-0100. Affinity stores and returns +15125550100.
@@ -2220,7 +2224,8 @@ var (
 type PatientInputAllergiesItem struct {
 	// The allergy category.
 	Category PatientInputAllergiesItemCategory `json:"category" url:"category"`
-	Display  string                            `json:"display" url:"display"`
+	// The reported allergy name.
+	Display string `json:"display" url:"display"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2421,10 +2426,12 @@ var prescriberInputNullableFields = map[string]*big.Int{
 // Required with an API key. Send the prescribing clinician's NPI, firstName and lastName. Session callers can omit this field to sign with their own profile.
 type PrescriberInput struct {
 	// A US phone number: 10 digits, with or without +1 or 1 before them. Spaces, dashes, dots and parentheses are allowed, such as (512) 555-0100. Affinity stores and returns +15125550100. Empty text counts as null. When the phone is omitted, null or blank, the order uses the practice phone.
-	Phone     *string       `json:"phone,omitempty" url:"phone,omitempty"`
-	Address   *AddressInput `json:"address,omitempty" url:"address,omitempty"`
-	FirstName string        `json:"firstName" url:"firstName"`
-	LastName  string        `json:"lastName" url:"lastName"`
+	Phone   *string       `json:"phone,omitempty" url:"phone,omitempty"`
+	Address *AddressInput `json:"address,omitempty" url:"address,omitempty"`
+	// The first name.
+	FirstName string `json:"firstName" url:"firstName"`
+	// The last name.
+	LastName string `json:"lastName" url:"lastName"`
 	// The prescribing clinician's 10-digit National Provider Identifier (NPI). Surrounding spaces are removed.
 	Npi string `json:"npi" url:"npi"`
 
@@ -2600,15 +2607,15 @@ type Prescription struct {
 	// The public record identifier.
 	ID       string             `json:"id" url:"id"`
 	Pharmacy *PharmacyReference `json:"pharmacy" url:"pharmacy"`
-	// The current fulfillment status.
+	// The order's current status; every prescription of the order has the same value.
 	Status PrescriptionStatus `json:"status" url:"status"`
-	// The failure or cancellation refusal reason, or null when there is none.
+	// Why the order failed, for a person to read; every prescription of the order has the same value. Null unless the order failed; a refused cancel leaves it null.
 	FailureReason *string `json:"failureReason,omitempty" url:"failureReason,omitempty"`
 	// The medication details saved when the order was signed.
 	Medication *PrescriptionMedication `json:"medication" url:"medication"`
 	// The prescriber's additional notes to the pharmacy.
 	Notes *string `json:"notes,omitempty" url:"notes,omitempty"`
-	// The price in integer cents.
+	// The prescription's price in integer cents: with a fill, the price per fill times the number of fills.
 	Price int `json:"price" url:"price"`
 	// The prescribed quantity in quantityUnit, not a count of fills. With a fill, it is a whole number of fills in units: two fills of 30 tablets is 60. A vial's unit is vial, so 2 is two vials.
 	Quantity int `json:"quantity" url:"quantity"`
@@ -2881,7 +2888,8 @@ var prescriptionInputNullableFields = map[string]*big.Int{
 type PrescriptionInput struct {
 	// The reason for compounding, required when the medication's requirements include it. Empty text counts as null.
 	CompoundingReason *string `json:"compoundingReason,omitempty" url:"compoundingReason,omitempty"`
-	Directions        string  `json:"directions" url:"directions"`
+	// The prescriber's directions for use.
+	Directions string `json:"directions" url:"directions"`
 	// The medication's public identifier from the current catalog.
 	MedicationID string `json:"medicationId" url:"medicationId"`
 	// The prescriber's additional notes to the pharmacy. Empty text counts as null.
@@ -3256,7 +3264,7 @@ func (p *PrescriptionMedication) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// The current fulfillment status.
+// The order's current status; every prescription of the order has the same value.
 type PrescriptionStatus string
 
 const (

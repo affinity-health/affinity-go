@@ -28,11 +28,6 @@ var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{
 			APIError: apiError,
 		}
 	},
-	405: func(apiError *core.APIError) error {
-		return &MethodNotAllowedError{
-			APIError: apiError,
-		}
-	},
 	413: func(apiError *core.APIError) error {
 		return &ContentTooLargeError{
 			APIError: apiError,

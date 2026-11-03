@@ -16,6 +16,7 @@ var (
 )
 
 type GetMedicationsRequest struct {
+	// The medication ID.
 	MedicationID string `json:"-" url:"-"`
 	// Quote prices and availability for this practice. A platform may select only its own child practices; a practice may select only itself. Omit to use the caller's organization.
 	PracticeID *string `json:"-" url:"practiceId,omitempty"`

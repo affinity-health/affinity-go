@@ -112,6 +112,7 @@ var (
 )
 
 type RemoveWebhooksRequest struct {
+	// The webhook endpoint ID.
 	WebhookEndpointID string `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -141,7 +142,8 @@ var (
 
 type ResendFailedWebhooksRequest struct {
 	// A unique key per operation, 1 to 255 printable ASCII characters without spaces. Retry the same key and body to avoid repeating the action. The replay response depends on the operation. See https://docs.affinityrx.com/guides/#retry-safely.
-	IdempotencyKey    string `json:"-" url:"-"`
+	IdempotencyKey string `json:"-" url:"-"`
+	// The webhook endpoint ID.
 	WebhookEndpointID string `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -964,7 +966,8 @@ var (
 
 type UpdateWebhooksRequest struct {
 	// A unique key per operation, 1 to 255 printable ASCII characters without spaces. Retry the same key and body to avoid repeating the action. The replay response depends on the operation. See https://docs.affinityrx.com/guides/#retry-safely.
-	IdempotencyKey    string `json:"-" url:"-"`
+	IdempotencyKey string `json:"-" url:"-"`
+	// The webhook endpoint ID.
 	WebhookEndpointID string `json:"-" url:"-"`
 	URL               string `json:"url" url:"-"`
 

@@ -7,7 +7,7 @@ import (
 	core "github.com/affinity-health/affinity-go/core"
 )
 
-// HTTP 400
+// Bad Request
 type BadRequestError struct {
 	*core.APIError
 	Body *Problem
@@ -38,7 +38,7 @@ func (b *BadRequestError) GetBody() *Problem {
 	return b.Body
 }
 
-// HTTP 409
+// Conflict
 type ConflictError struct {
 	*core.APIError
 	Body *Problem409
@@ -69,14 +69,14 @@ func (c *ConflictError) GetBody() *Problem409 {
 	return c.Body
 }
 
-// HTTP 413
+// Content Too Large
 type ContentTooLargeError struct {
 	*core.APIError
-	Body any
+	Body *Problem
 }
 
 func (c *ContentTooLargeError) UnmarshalJSON(data []byte) error {
-	var body any
+	var body *Problem
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
@@ -93,14 +93,14 @@ func (c *ContentTooLargeError) Unwrap() error {
 	return c.APIError
 }
 
-func (c *ContentTooLargeError) GetBody() any {
+func (c *ContentTooLargeError) GetBody() *Problem {
 	if c == nil {
 		return nil
 	}
 	return c.Body
 }
 
-// HTTP 403
+// Forbidden
 type ForbiddenError struct {
 	*core.APIError
 	Body *Problem
@@ -131,7 +131,7 @@ func (f *ForbiddenError) GetBody() *Problem {
 	return f.Body
 }
 
-// HTTP 500
+// Internal Server Error
 type InternalServerError struct {
 	*core.APIError
 	Body *Problem
@@ -162,38 +162,7 @@ func (i *InternalServerError) GetBody() *Problem {
 	return i.Body
 }
 
-// HTTP 405
-type MethodNotAllowedError struct {
-	*core.APIError
-	Body *Problem
-}
-
-func (m *MethodNotAllowedError) UnmarshalJSON(data []byte) error {
-	var body *Problem
-	if err := json.Unmarshal(data, &body); err != nil {
-		return err
-	}
-	m.StatusCode = 405
-	m.Body = body
-	return nil
-}
-
-func (m *MethodNotAllowedError) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.Body)
-}
-
-func (m *MethodNotAllowedError) Unwrap() error {
-	return m.APIError
-}
-
-func (m *MethodNotAllowedError) GetBody() *Problem {
-	if m == nil {
-		return nil
-	}
-	return m.Body
-}
-
-// HTTP 404
+// Not Found
 type NotFoundError struct {
 	*core.APIError
 	Body *Problem
@@ -224,14 +193,14 @@ func (n *NotFoundError) GetBody() *Problem {
 	return n.Body
 }
 
-// HTTP 503
+// Service Unavailable
 type ServiceUnavailableError struct {
 	*core.APIError
-	Body *ServiceUnavailableErrorBody
+	Body *Problem
 }
 
 func (s *ServiceUnavailableError) UnmarshalJSON(data []byte) error {
-	var body *ServiceUnavailableErrorBody
+	var body *Problem
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
@@ -248,14 +217,14 @@ func (s *ServiceUnavailableError) Unwrap() error {
 	return s.APIError
 }
 
-func (s *ServiceUnavailableError) GetBody() *ServiceUnavailableErrorBody {
+func (s *ServiceUnavailableError) GetBody() *Problem {
 	if s == nil {
 		return nil
 	}
 	return s.Body
 }
 
-// HTTP 429
+// Too Many Requests
 type TooManyRequestsError struct {
 	*core.APIError
 	Body *Problem429
@@ -286,7 +255,7 @@ func (t *TooManyRequestsError) GetBody() *Problem429 {
 	return t.Body
 }
 
-// HTTP 401
+// Unauthorized
 type UnauthorizedError struct {
 	*core.APIError
 	Body *Problem
@@ -317,7 +286,7 @@ func (u *UnauthorizedError) GetBody() *Problem {
 	return u.Body
 }
 
-// HTTP 422
+// Unprocessable Content
 type UnprocessableEntityError struct {
 	*core.APIError
 	Body *Problem

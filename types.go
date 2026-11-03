@@ -198,10 +198,12 @@ var addressInputNullableFields = map[string]*big.Int{
 
 // The US mailing address.
 type AddressInput struct {
+	// The street address.
 	Line1 string `json:"line1" url:"line1"`
 	// The apartment or suite, or null when there is none. Empty text counts as null.
 	Line2 *string `json:"line2,omitempty" url:"line2,omitempty"`
-	City  string  `json:"city" url:"city"`
+	// The city name.
+	City string `json:"city" url:"city"`
 	// The two-letter US state or territory code, such as TX, in any letter case. Affinity stores and returns it in upper case.
 	State string `json:"state" url:"state"`
 	// The US ZIP code: 78701, or ZIP+4 as 78701-1234, 78701 1234 or 787011234. Affinity stores and returns 78701 or 78701-1234.
@@ -347,290 +349,6 @@ func (a *AddressInput) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", a)
-}
-
-type ContentTooLargeErrorBody struct {
-	Problem                      *Problem
-	ContentTooLargeErrorBodyCode *ContentTooLargeErrorBodyCode
-
-	typ string
-}
-
-func (c *ContentTooLargeErrorBody) GetProblem() *Problem {
-	if c == nil {
-		return nil
-	}
-	return c.Problem
-}
-
-func (c *ContentTooLargeErrorBody) GetContentTooLargeErrorBodyCode() *ContentTooLargeErrorBodyCode {
-	if c == nil {
-		return nil
-	}
-	return c.ContentTooLargeErrorBodyCode
-}
-
-func (c *ContentTooLargeErrorBody) UnmarshalJSON(data []byte) error {
-	valueProblem := new(Problem)
-	if err := json.Unmarshal(data, &valueProblem); err == nil {
-		c.typ = "Problem"
-		c.Problem = valueProblem
-		return nil
-	}
-	valueContentTooLargeErrorBodyCode := new(ContentTooLargeErrorBodyCode)
-	if err := json.Unmarshal(data, &valueContentTooLargeErrorBodyCode); err == nil {
-		c.typ = "ContentTooLargeErrorBodyCode"
-		c.ContentTooLargeErrorBodyCode = valueContentTooLargeErrorBodyCode
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
-}
-
-func (c ContentTooLargeErrorBody) MarshalJSON() ([]byte, error) {
-	if c.typ == "Problem" || c.Problem != nil {
-		return json.Marshal(c.Problem)
-	}
-	if c.typ == "ContentTooLargeErrorBodyCode" || c.ContentTooLargeErrorBodyCode != nil {
-		return json.Marshal(c.ContentTooLargeErrorBodyCode)
-	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
-}
-
-type ContentTooLargeErrorBodyVisitor interface {
-	VisitProblem(*Problem) error
-	VisitContentTooLargeErrorBodyCode(*ContentTooLargeErrorBodyCode) error
-}
-
-func (c *ContentTooLargeErrorBody) Accept(visitor ContentTooLargeErrorBodyVisitor) error {
-	if c.typ == "Problem" || c.Problem != nil {
-		return visitor.VisitProblem(c.Problem)
-	}
-	if c.typ == "ContentTooLargeErrorBodyCode" || c.ContentTooLargeErrorBodyCode != nil {
-		return visitor.VisitContentTooLargeErrorBodyCode(c.ContentTooLargeErrorBodyCode)
-	}
-	return fmt.Errorf("type %T does not include a non-empty union type", c)
-}
-
-var (
-	contentTooLargeErrorBodyCodeFieldCode      = big.NewInt(1 << 0)
-	contentTooLargeErrorBodyCodeFieldDetail    = big.NewInt(1 << 1)
-	contentTooLargeErrorBodyCodeFieldTitle     = big.NewInt(1 << 2)
-	contentTooLargeErrorBodyCodeFieldType      = big.NewInt(1 << 3)
-	contentTooLargeErrorBodyCodeFieldInstance  = big.NewInt(1 << 4)
-	contentTooLargeErrorBodyCodeFieldRequestID = big.NewInt(1 << 5)
-	contentTooLargeErrorBodyCodeFieldStatus    = big.NewInt(1 << 6)
-	contentTooLargeErrorBodyCodeFieldTraceID   = big.NewInt(1 << 7)
-)
-
-type ContentTooLargeErrorBodyCode struct {
-	Code      ContentTooLargeErrorBodyCodeCode `json:"code" url:"code"`
-	Detail    string                           `json:"detail" url:"detail"`
-	Title     string                           `json:"title" url:"title"`
-	Type      string                           `json:"type" url:"type"`
-	Instance  string                           `json:"instance" url:"instance"`
-	RequestID string                           `json:"requestId" url:"requestId"`
-	Status    int                              `json:"status" url:"status"`
-	TraceID   *string                          `json:"traceId,omitempty" url:"traceId,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	ExtraProperties map[string]interface{} `json:"-" url:"-"`
-
-	rawJSON json.RawMessage
-}
-
-func (c *ContentTooLargeErrorBodyCode) GetCode() ContentTooLargeErrorBodyCodeCode {
-	if c == nil {
-		return ""
-	}
-	return c.Code
-}
-
-func (c *ContentTooLargeErrorBodyCode) GetDetail() string {
-	if c == nil {
-		return ""
-	}
-	return c.Detail
-}
-
-func (c *ContentTooLargeErrorBodyCode) GetTitle() string {
-	if c == nil {
-		return ""
-	}
-	return c.Title
-}
-
-func (c *ContentTooLargeErrorBodyCode) GetType() string {
-	if c == nil {
-		return ""
-	}
-	return c.Type
-}
-
-func (c *ContentTooLargeErrorBodyCode) GetInstance() string {
-	if c == nil {
-		return ""
-	}
-	return c.Instance
-}
-
-func (c *ContentTooLargeErrorBodyCode) GetRequestID() string {
-	if c == nil {
-		return ""
-	}
-	return c.RequestID
-}
-
-func (c *ContentTooLargeErrorBodyCode) GetStatus() int {
-	if c == nil {
-		return 0
-	}
-	return c.Status
-}
-
-func (c *ContentTooLargeErrorBodyCode) GetTraceID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.TraceID
-}
-
-func (c *ContentTooLargeErrorBodyCode) GetExtraProperties() map[string]interface{} {
-	if c == nil {
-		return nil
-	}
-	return c.ExtraProperties
-}
-
-func (c *ContentTooLargeErrorBodyCode) require(field *big.Int) {
-	next := new(big.Int)
-	if c.explicitFields != nil {
-		next.Set(c.explicitFields)
-	}
-	next.Or(next, field)
-	c.explicitFields = next
-}
-
-// SetCode sets the Code field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContentTooLargeErrorBodyCode) SetCode(code ContentTooLargeErrorBodyCodeCode) {
-	c.Code = code
-	c.require(contentTooLargeErrorBodyCodeFieldCode)
-}
-
-// SetDetail sets the Detail field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContentTooLargeErrorBodyCode) SetDetail(detail string) {
-	c.Detail = detail
-	c.require(contentTooLargeErrorBodyCodeFieldDetail)
-}
-
-// SetTitle sets the Title field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContentTooLargeErrorBodyCode) SetTitle(title string) {
-	c.Title = title
-	c.require(contentTooLargeErrorBodyCodeFieldTitle)
-}
-
-// SetType sets the Type field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContentTooLargeErrorBodyCode) SetType(type_ string) {
-	c.Type = type_
-	c.require(contentTooLargeErrorBodyCodeFieldType)
-}
-
-// SetInstance sets the Instance field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContentTooLargeErrorBodyCode) SetInstance(instance string) {
-	c.Instance = instance
-	c.require(contentTooLargeErrorBodyCodeFieldInstance)
-}
-
-// SetRequestID sets the RequestID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContentTooLargeErrorBodyCode) SetRequestID(requestID string) {
-	c.RequestID = requestID
-	c.require(contentTooLargeErrorBodyCodeFieldRequestID)
-}
-
-// SetStatus sets the Status field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContentTooLargeErrorBodyCode) SetStatus(status int) {
-	c.Status = status
-	c.require(contentTooLargeErrorBodyCodeFieldStatus)
-}
-
-// SetTraceID sets the TraceID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContentTooLargeErrorBodyCode) SetTraceID(traceID *string) {
-	c.TraceID = traceID
-	c.require(contentTooLargeErrorBodyCodeFieldTraceID)
-}
-
-func (c *ContentTooLargeErrorBodyCode) UnmarshalJSON(data []byte) error {
-	type embed ContentTooLargeErrorBodyCode
-	var unmarshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*c = ContentTooLargeErrorBodyCode(unmarshaler.embed)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.ExtraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *ContentTooLargeErrorBodyCode) MarshalJSON() ([]byte, error) {
-	type embed ContentTooLargeErrorBodyCode
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, c.ExtraProperties)
-}
-
-func (c *ContentTooLargeErrorBodyCode) String() string {
-	if c == nil {
-		return "<nil>"
-	}
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-type ContentTooLargeErrorBodyCodeCode string
-
-const (
-	ContentTooLargeErrorBodyCodeCodePayloadTooLarge ContentTooLargeErrorBodyCodeCode = "payload_too_large"
-)
-
-func NewContentTooLargeErrorBodyCodeCodeFromString(s string) (ContentTooLargeErrorBodyCodeCode, error) {
-	switch s {
-	case "payload_too_large":
-		return ContentTooLargeErrorBodyCodeCodePayloadTooLarge, nil
-	}
-	var t ContentTooLargeErrorBodyCodeCode
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (c ContentTooLargeErrorBodyCodeCode) Ptr() *ContentTooLargeErrorBodyCodeCode {
-	return &c
 }
 
 var (
@@ -1418,6 +1136,7 @@ var (
 	prescriptionEventFieldData      = big.NewInt(1 << 2)
 )
 
+// An event about one prescription of an order. Affinity does not send these yet: no released pharmacy reports a prescription apart from its order. Handle them so that a later release does not break your receiver.
 type PrescriptionEvent struct {
 	// The event identifier; retries and resends keep the same identifier.
 	ID string `json:"id" url:"id"`
@@ -1687,15 +1406,24 @@ var (
 )
 
 type Problem struct {
-	Code      string               `json:"code" url:"code"`
-	Detail    string               `json:"detail" url:"detail"`
-	Title     string               `json:"title" url:"title"`
-	Type      string               `json:"type" url:"type"`
-	Issues    []*ProblemIssuesItem `json:"issues,omitempty" url:"issues,omitempty"`
-	Instance  string               `json:"instance" url:"instance"`
-	RequestID string               `json:"requestId" url:"requestId"`
-	Status    int                  `json:"status" url:"status"`
-	TraceID   *string              `json:"traceId,omitempty" url:"traceId,omitempty"`
+	// A stable code for the problem. Branch on it, not on detail.
+	Code string `json:"code" url:"code"`
+	// What went wrong and what to do, for a person to read.
+	Detail string `json:"detail" url:"detail"`
+	// A short summary of the problem's type.
+	Title string `json:"title" url:"title"`
+	// A URI that names the problem's type.
+	Type string `json:"type" url:"type"`
+	// One entry for each field that the request got wrong, when the problem is about fields.
+	Issues []*ProblemIssuesItem `json:"issues,omitempty" url:"issues,omitempty"`
+	// The path of the request.
+	Instance string `json:"instance" url:"instance"`
+	// Identifies the request, as its X-Request-Id header does. Send it when you report a problem.
+	RequestID string `json:"requestId" url:"requestId"`
+	// The HTTP status code of the response.
+	Status int `json:"status" url:"status"`
+	// The request trace ID.
+	TraceID *string `json:"traceId,omitempty" url:"traceId,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1907,16 +1635,25 @@ var (
 )
 
 type Problem409 struct {
-	Code      string               `json:"code" url:"code"`
-	Detail    string               `json:"detail" url:"detail"`
-	Title     string               `json:"title" url:"title"`
-	Type      string               `json:"type" url:"type"`
-	Issues    []*ProblemIssuesItem `json:"issues,omitempty" url:"issues,omitempty"`
-	Instance  string               `json:"instance" url:"instance"`
-	RequestID string               `json:"requestId" url:"requestId"`
-	Status    int                  `json:"status" url:"status"`
-	TraceID   *string              `json:"traceId,omitempty" url:"traceId,omitempty"`
-	Data      *Problem409Data      `json:"data,omitempty" url:"data,omitempty"`
+	// A stable code for the problem. Branch on it, not on detail.
+	Code string `json:"code" url:"code"`
+	// What went wrong and what to do, for a person to read.
+	Detail string `json:"detail" url:"detail"`
+	// A short summary of the problem's type.
+	Title string `json:"title" url:"title"`
+	// A URI that names the problem's type.
+	Type string `json:"type" url:"type"`
+	// One entry for each field that the request got wrong, when the problem is about fields.
+	Issues []*ProblemIssuesItem `json:"issues,omitempty" url:"issues,omitempty"`
+	// The path of the request.
+	Instance string `json:"instance" url:"instance"`
+	// Identifies the request, as its X-Request-Id header does. Send it when you report a problem.
+	RequestID string `json:"requestId" url:"requestId"`
+	// The HTTP status code of the response.
+	Status int `json:"status" url:"status"`
+	// The request trace ID.
+	TraceID *string         `json:"traceId,omitempty" url:"traceId,omitempty"`
+	Data    *Problem409Data `json:"data,omitempty" url:"data,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2244,16 +1981,25 @@ var (
 )
 
 type Problem429 struct {
-	Code      string               `json:"code" url:"code"`
-	Detail    string               `json:"detail" url:"detail"`
-	Title     string               `json:"title" url:"title"`
-	Type      string               `json:"type" url:"type"`
-	Issues    []*ProblemIssuesItem `json:"issues,omitempty" url:"issues,omitempty"`
-	Instance  string               `json:"instance" url:"instance"`
-	RequestID string               `json:"requestId" url:"requestId"`
-	Status    int                  `json:"status" url:"status"`
-	TraceID   *string              `json:"traceId,omitempty" url:"traceId,omitempty"`
-	Data      *Problem429Data      `json:"data,omitempty" url:"data,omitempty"`
+	// A stable code for the problem. Branch on it, not on detail.
+	Code string `json:"code" url:"code"`
+	// What went wrong and what to do, for a person to read.
+	Detail string `json:"detail" url:"detail"`
+	// A short summary of the problem's type.
+	Title string `json:"title" url:"title"`
+	// A URI that names the problem's type.
+	Type string `json:"type" url:"type"`
+	// One entry for each field that the request got wrong, when the problem is about fields.
+	Issues []*ProblemIssuesItem `json:"issues,omitempty" url:"issues,omitempty"`
+	// The path of the request.
+	Instance string `json:"instance" url:"instance"`
+	// Identifies the request, as its X-Request-Id header does. Send it when you report a problem.
+	RequestID string `json:"requestId" url:"requestId"`
+	// The HTTP status code of the response.
+	Status int `json:"status" url:"status"`
+	// The request trace ID.
+	TraceID *string         `json:"traceId,omitempty" url:"traceId,omitempty"`
+	Data    *Problem429Data `json:"data,omitempty" url:"data,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2559,10 +2305,14 @@ var (
 )
 
 type ProblemIssuesItem struct {
-	Code    string                       `json:"code" url:"code"`
-	Field   string                       `json:"field" url:"field"`
-	Message string                       `json:"message" url:"message"`
-	Path    []*ProblemIssuesItemPathItem `json:"path" url:"path"`
+	// A stable code for this field's problem.
+	Code string `json:"code" url:"code"`
+	// The field as one string, such as `patient.address.state` or `prescriptions[0].quantity`.
+	Field string `json:"field" url:"field"`
+	// What is wrong with the field and what to send, for a person to read.
+	Message string `json:"message" url:"message"`
+	// The field as a list of property names and array indexes.
+	Path []*ProblemIssuesItemPathItem `json:"path" url:"path"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2752,290 +2502,6 @@ func (p *ProblemIssuesItemPathItem) Accept(visitor ProblemIssuesItemPathItemVisi
 	return fmt.Errorf("type %T does not include a non-empty union type", p)
 }
 
-type ServiceUnavailableErrorBody struct {
-	Problem                         *Problem
-	ServiceUnavailableErrorBodyCode *ServiceUnavailableErrorBodyCode
-
-	typ string
-}
-
-func (s *ServiceUnavailableErrorBody) GetProblem() *Problem {
-	if s == nil {
-		return nil
-	}
-	return s.Problem
-}
-
-func (s *ServiceUnavailableErrorBody) GetServiceUnavailableErrorBodyCode() *ServiceUnavailableErrorBodyCode {
-	if s == nil {
-		return nil
-	}
-	return s.ServiceUnavailableErrorBodyCode
-}
-
-func (s *ServiceUnavailableErrorBody) UnmarshalJSON(data []byte) error {
-	valueProblem := new(Problem)
-	if err := json.Unmarshal(data, &valueProblem); err == nil {
-		s.typ = "Problem"
-		s.Problem = valueProblem
-		return nil
-	}
-	valueServiceUnavailableErrorBodyCode := new(ServiceUnavailableErrorBodyCode)
-	if err := json.Unmarshal(data, &valueServiceUnavailableErrorBodyCode); err == nil {
-		s.typ = "ServiceUnavailableErrorBodyCode"
-		s.ServiceUnavailableErrorBodyCode = valueServiceUnavailableErrorBodyCode
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, s)
-}
-
-func (s ServiceUnavailableErrorBody) MarshalJSON() ([]byte, error) {
-	if s.typ == "Problem" || s.Problem != nil {
-		return json.Marshal(s.Problem)
-	}
-	if s.typ == "ServiceUnavailableErrorBodyCode" || s.ServiceUnavailableErrorBodyCode != nil {
-		return json.Marshal(s.ServiceUnavailableErrorBodyCode)
-	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", s)
-}
-
-type ServiceUnavailableErrorBodyVisitor interface {
-	VisitProblem(*Problem) error
-	VisitServiceUnavailableErrorBodyCode(*ServiceUnavailableErrorBodyCode) error
-}
-
-func (s *ServiceUnavailableErrorBody) Accept(visitor ServiceUnavailableErrorBodyVisitor) error {
-	if s.typ == "Problem" || s.Problem != nil {
-		return visitor.VisitProblem(s.Problem)
-	}
-	if s.typ == "ServiceUnavailableErrorBodyCode" || s.ServiceUnavailableErrorBodyCode != nil {
-		return visitor.VisitServiceUnavailableErrorBodyCode(s.ServiceUnavailableErrorBodyCode)
-	}
-	return fmt.Errorf("type %T does not include a non-empty union type", s)
-}
-
-var (
-	serviceUnavailableErrorBodyCodeFieldCode      = big.NewInt(1 << 0)
-	serviceUnavailableErrorBodyCodeFieldDetail    = big.NewInt(1 << 1)
-	serviceUnavailableErrorBodyCodeFieldTitle     = big.NewInt(1 << 2)
-	serviceUnavailableErrorBodyCodeFieldType      = big.NewInt(1 << 3)
-	serviceUnavailableErrorBodyCodeFieldInstance  = big.NewInt(1 << 4)
-	serviceUnavailableErrorBodyCodeFieldRequestID = big.NewInt(1 << 5)
-	serviceUnavailableErrorBodyCodeFieldStatus    = big.NewInt(1 << 6)
-	serviceUnavailableErrorBodyCodeFieldTraceID   = big.NewInt(1 << 7)
-)
-
-type ServiceUnavailableErrorBodyCode struct {
-	Code      ServiceUnavailableErrorBodyCodeCode `json:"code" url:"code"`
-	Detail    string                              `json:"detail" url:"detail"`
-	Title     string                              `json:"title" url:"title"`
-	Type      string                              `json:"type" url:"type"`
-	Instance  string                              `json:"instance" url:"instance"`
-	RequestID string                              `json:"requestId" url:"requestId"`
-	Status    int                                 `json:"status" url:"status"`
-	TraceID   *string                             `json:"traceId,omitempty" url:"traceId,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	ExtraProperties map[string]interface{} `json:"-" url:"-"`
-
-	rawJSON json.RawMessage
-}
-
-func (s *ServiceUnavailableErrorBodyCode) GetCode() ServiceUnavailableErrorBodyCodeCode {
-	if s == nil {
-		return ""
-	}
-	return s.Code
-}
-
-func (s *ServiceUnavailableErrorBodyCode) GetDetail() string {
-	if s == nil {
-		return ""
-	}
-	return s.Detail
-}
-
-func (s *ServiceUnavailableErrorBodyCode) GetTitle() string {
-	if s == nil {
-		return ""
-	}
-	return s.Title
-}
-
-func (s *ServiceUnavailableErrorBodyCode) GetType() string {
-	if s == nil {
-		return ""
-	}
-	return s.Type
-}
-
-func (s *ServiceUnavailableErrorBodyCode) GetInstance() string {
-	if s == nil {
-		return ""
-	}
-	return s.Instance
-}
-
-func (s *ServiceUnavailableErrorBodyCode) GetRequestID() string {
-	if s == nil {
-		return ""
-	}
-	return s.RequestID
-}
-
-func (s *ServiceUnavailableErrorBodyCode) GetStatus() int {
-	if s == nil {
-		return 0
-	}
-	return s.Status
-}
-
-func (s *ServiceUnavailableErrorBodyCode) GetTraceID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.TraceID
-}
-
-func (s *ServiceUnavailableErrorBodyCode) GetExtraProperties() map[string]interface{} {
-	if s == nil {
-		return nil
-	}
-	return s.ExtraProperties
-}
-
-func (s *ServiceUnavailableErrorBodyCode) require(field *big.Int) {
-	next := new(big.Int)
-	if s.explicitFields != nil {
-		next.Set(s.explicitFields)
-	}
-	next.Or(next, field)
-	s.explicitFields = next
-}
-
-// SetCode sets the Code field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (s *ServiceUnavailableErrorBodyCode) SetCode(code ServiceUnavailableErrorBodyCodeCode) {
-	s.Code = code
-	s.require(serviceUnavailableErrorBodyCodeFieldCode)
-}
-
-// SetDetail sets the Detail field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (s *ServiceUnavailableErrorBodyCode) SetDetail(detail string) {
-	s.Detail = detail
-	s.require(serviceUnavailableErrorBodyCodeFieldDetail)
-}
-
-// SetTitle sets the Title field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (s *ServiceUnavailableErrorBodyCode) SetTitle(title string) {
-	s.Title = title
-	s.require(serviceUnavailableErrorBodyCodeFieldTitle)
-}
-
-// SetType sets the Type field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (s *ServiceUnavailableErrorBodyCode) SetType(type_ string) {
-	s.Type = type_
-	s.require(serviceUnavailableErrorBodyCodeFieldType)
-}
-
-// SetInstance sets the Instance field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (s *ServiceUnavailableErrorBodyCode) SetInstance(instance string) {
-	s.Instance = instance
-	s.require(serviceUnavailableErrorBodyCodeFieldInstance)
-}
-
-// SetRequestID sets the RequestID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (s *ServiceUnavailableErrorBodyCode) SetRequestID(requestID string) {
-	s.RequestID = requestID
-	s.require(serviceUnavailableErrorBodyCodeFieldRequestID)
-}
-
-// SetStatus sets the Status field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (s *ServiceUnavailableErrorBodyCode) SetStatus(status int) {
-	s.Status = status
-	s.require(serviceUnavailableErrorBodyCodeFieldStatus)
-}
-
-// SetTraceID sets the TraceID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (s *ServiceUnavailableErrorBodyCode) SetTraceID(traceID *string) {
-	s.TraceID = traceID
-	s.require(serviceUnavailableErrorBodyCodeFieldTraceID)
-}
-
-func (s *ServiceUnavailableErrorBodyCode) UnmarshalJSON(data []byte) error {
-	type embed ServiceUnavailableErrorBodyCode
-	var unmarshaler = struct {
-		embed
-	}{
-		embed: embed(*s),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*s = ServiceUnavailableErrorBodyCode(unmarshaler.embed)
-	extraProperties, err := internal.ExtractExtraProperties(data, *s)
-	if err != nil {
-		return err
-	}
-	s.ExtraProperties = extraProperties
-	s.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (s *ServiceUnavailableErrorBodyCode) MarshalJSON() ([]byte, error) {
-	type embed ServiceUnavailableErrorBodyCode
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*s),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
-	return internal.MarshalJSONWithExtraProperties(explicitMarshaler, s.ExtraProperties)
-}
-
-func (s *ServiceUnavailableErrorBodyCode) String() string {
-	if s == nil {
-		return "<nil>"
-	}
-	if len(s.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(s); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", s)
-}
-
-type ServiceUnavailableErrorBodyCodeCode string
-
-const (
-	ServiceUnavailableErrorBodyCodeCodeServiceUnavailable ServiceUnavailableErrorBodyCodeCode = "service_unavailable"
-)
-
-func NewServiceUnavailableErrorBodyCodeCodeFromString(s string) (ServiceUnavailableErrorBodyCodeCode, error) {
-	switch s {
-	case "service_unavailable":
-		return ServiceUnavailableErrorBodyCodeCodeServiceUnavailable, nil
-	}
-	var t ServiceUnavailableErrorBodyCodeCode
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (s ServiceUnavailableErrorBodyCodeCode) Ptr() *ServiceUnavailableErrorBodyCodeCode {
-	return &s
-}
-
 // Use patient, practice or address to select the shipping destination.
 type ShippingDestinationAddressType string
 
@@ -3108,14 +2574,22 @@ var (
 )
 
 type UnsupportedMediaTypeErrorBody struct {
-	Code      UnsupportedMediaTypeErrorBodyCode `json:"code" url:"code"`
-	Detail    string                            `json:"detail" url:"detail"`
-	Title     string                            `json:"title" url:"title"`
-	Type      string                            `json:"type" url:"type"`
-	Instance  string                            `json:"instance" url:"instance"`
-	RequestID string                            `json:"requestId" url:"requestId"`
-	Status    int                               `json:"status" url:"status"`
-	TraceID   *string                           `json:"traceId,omitempty" url:"traceId,omitempty"`
+	// A stable code for the problem. Branch on it, not on detail.
+	Code UnsupportedMediaTypeErrorBodyCode `json:"code" url:"code"`
+	// What went wrong and what to do, for a person to read.
+	Detail string `json:"detail" url:"detail"`
+	// A short summary of the problem's type.
+	Title string `json:"title" url:"title"`
+	// A URI that names the problem's type.
+	Type string `json:"type" url:"type"`
+	// The path of the request.
+	Instance string `json:"instance" url:"instance"`
+	// Identifies the request, as its X-Request-Id header does. Send it when you report a problem.
+	RequestID string `json:"requestId" url:"requestId"`
+	// The HTTP status code of the response.
+	Status int `json:"status" url:"status"`
+	// The request trace ID.
+	TraceID *string `json:"traceId,omitempty" url:"traceId,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3299,6 +2773,7 @@ func (u *UnsupportedMediaTypeErrorBody) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+// A stable code for the problem. Branch on it, not on detail.
 type UnsupportedMediaTypeErrorBodyCode string
 
 const (
@@ -3810,9 +3285,9 @@ var webhookOrderNullableFields = map[string]*big.Int{
 type WebhookOrder struct {
 	// When cancellation was requested, or null when no cancellation is waiting.
 	CancelRequestedAt *time.Time `json:"cancelRequestedAt,omitempty" url:"cancelRequestedAt,omitempty"`
-	// Your order identifier, unique within the practice and mode.
+	// Your order identifier, unique within the practice and mode. A failed or cancelled order keeps it.
 	ExternalOrderID *string `json:"externalOrderId,omitempty" url:"externalOrderId,omitempty"`
-	// The failure or cancellation refusal reason, or null when there is none.
+	// Why the order failed, for a person to read. Null unless the order failed; a refused cancel leaves it null.
 	FailureReason *string `json:"failureReason,omitempty" url:"failureReason,omitempty"`
 	// The public record identifier.
 	ID string `json:"id" url:"id"`
@@ -3822,7 +3297,7 @@ type WebhookOrder struct {
 	Prescriptions []*WebhookOrderPrescriptionsItem `json:"prescriptions" url:"prescriptions"`
 	// The current fulfillment status.
 	Status WebhookOrderStatus `json:"status" url:"status"`
-	// The carrier's tracking page for the newest package, or null before the order ships.
+	// The carrier's tracking page for the newest package. Null when there is no package yet or the carrier has no tracking page.
 	TrackingURL *string `json:"trackingUrl,omitempty" url:"trackingUrl,omitempty"`
 	// When the record was last updated.
 	UpdatedAt time.Time `json:"updatedAt" url:"updatedAt"`
@@ -4054,7 +3529,7 @@ type WebhookOrderPrescriptionsItem struct {
 	ID string `json:"id" url:"id"`
 	// The current fulfillment status.
 	Status WebhookOrderPrescriptionsItemStatus `json:"status" url:"status"`
-	// The failure or cancellation refusal reason, or null when there is none.
+	// Why the order failed, for a person to read. Null unless the order failed; a refused cancel leaves it null.
 	FailureReason *string `json:"failureReason,omitempty" url:"failureReason,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted

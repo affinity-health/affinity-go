@@ -18,10 +18,11 @@ var (
 
 type CreateFeedbackRequest struct {
 	// A unique key per operation, 1 to 255 printable ASCII characters without spaces. Retry the same key and body to avoid repeating the action. The replay response depends on the operation. See https://docs.affinityrx.com/guides/#retry-safely.
-	IdempotencyKey string  `json:"-" url:"-"`
-	Message        string  `json:"message" url:"-"`
-	PageURL        *string `json:"pageUrl,omitempty" url:"-"`
-	// The `requestId` of the response, as the API returned it.
+	IdempotencyKey string `json:"-" url:"-"`
+	// Text with at least one visible character.
+	Message string  `json:"message" url:"-"`
+	PageURL *string `json:"pageUrl,omitempty" url:"-"`
+	// The `requestId` of the response, as the API returned it: a UUID or its `req_` form.
 	RequestID *string `json:"requestId,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted

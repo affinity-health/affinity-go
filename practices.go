@@ -26,7 +26,8 @@ type CreatePracticesRequest struct {
 	ExternalID  *string       `json:"externalId,omitempty" url:"-"`
 	Address     *AddressInput `json:"address" url:"-"`
 	LiveEnabled *bool         `json:"liveEnabled,omitempty" url:"-"`
-	Name        string        `json:"name" url:"-"`
+	// Text with at least one visible character.
+	Name string `json:"name" url:"-"`
 	// A US phone number: 10 digits, with or without +1 or 1 before them. Spaces, dashes, dots and parentheses are allowed, such as (512) 555-0100. Affinity stores and returns +15125550100.
 	Phone string `json:"phone" url:"-"`
 
@@ -111,6 +112,7 @@ var (
 )
 
 type GetPracticesRequest struct {
+	// The practice ID.
 	PracticeID string `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -150,7 +152,7 @@ type ListPracticesRequest struct {
 	ExternalID *string `json:"-" url:"externalId,omitempty"`
 	// Match practice names containing this text, ignoring case. Restart pagination after changing query.
 	Query *string `json:"-" url:"query,omitempty"`
-	// name and location sort A to Z; mode sorts Test before Live; created sorts oldest first. A _desc suffix reverses the order. Defaults to created_desc. Missing locations sort last. Restart pagination after changing sort.
+	// name and location sort A to Z; mode sorts practices without Live access before those with it; created sorts oldest first. A _desc suffix reverses the order. Defaults to created_desc. Missing locations sort last. Restart pagination after changing sort.
 	Sort *ListPracticesRequestSort `json:"-" url:"sort,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -599,7 +601,7 @@ func (p PracticeListObject) Ptr() *PracticeListObject {
 	return &p
 }
 
-// name and location sort A to Z; mode sorts Test before Live; created sorts oldest first. A _desc suffix reverses the order. Defaults to created_desc. Missing locations sort last. Restart pagination after changing sort.
+// name and location sort A to Z; mode sorts practices without Live access before those with it; created sorts oldest first. A _desc suffix reverses the order. Defaults to created_desc. Missing locations sort last. Restart pagination after changing sort.
 type ListPracticesRequestSort string
 
 const (
@@ -654,10 +656,12 @@ var updatePracticesRequestAddressNullableFields = map[string]*big.Int{
 }
 
 type UpdatePracticesRequestAddress struct {
+	// The street address.
 	Line1 *string `json:"line1,omitempty" url:"line1,omitempty"`
 	// The apartment or suite. Send null or empty text to remove it. An omitted `line2` keeps the saved suite, also when `line1` changes.
 	Line2 *string `json:"line2,omitempty" url:"line2,omitempty"`
-	City  *string `json:"city,omitempty" url:"city,omitempty"`
+	// The city name.
+	City *string `json:"city,omitempty" url:"city,omitempty"`
 	// The two-letter US state or territory code, such as TX, in any letter case. Affinity stores and returns it in upper case.
 	State *string `json:"state,omitempty" url:"state,omitempty"`
 	// The US ZIP code: 78701, or ZIP+4 as 78701-1234, 78701 1234 or 787011234. Affinity stores and returns 78701 or 78701-1234.
@@ -818,14 +822,16 @@ var (
 type UpdatePracticesRequest struct {
 	// A unique key per operation, 1 to 255 printable ASCII characters without spaces. Retry the same key and body to avoid repeating the action. The replay response depends on the operation. See https://docs.affinityrx.com/guides/#retry-safely.
 	IdempotencyKey string `json:"-" url:"-"`
-	PracticeID     string `json:"-" url:"-"`
+	// The practice ID.
+	PracticeID string `json:"-" url:"-"`
 	// Your practice identifier, unique among your platform's active practices. Send null to clear it.
 	ExternalID *string `json:"externalId,omitempty" url:"-"`
 	// Affinity merges the address parts you send into the saved address. An omitted part keeps its saved value. To move to an address with no suite, send `"line2": null` with the new `line1`, `city`, `state` and `postalCode`.
 	Address *UpdatePracticesRequestAddress `json:"address,omitempty" url:"-"`
 	// Omit it or send null to leave Live unchanged.
-	LiveEnabled *bool   `json:"liveEnabled,omitempty" url:"-"`
-	Name        *string `json:"name,omitempty" url:"-"`
+	LiveEnabled *bool `json:"liveEnabled,omitempty" url:"-"`
+	// Text with at least one visible character.
+	Name *string `json:"name,omitempty" url:"-"`
 	// A US phone number: 10 digits, with or without +1 or 1 before them. Spaces, dashes, dots and parentheses are allowed, such as (512) 555-0100. Affinity stores and returns +15125550100. Empty text counts as null.
 	Phone *string `json:"phone,omitempty" url:"-"`
 

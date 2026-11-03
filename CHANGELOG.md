@@ -6,6 +6,20 @@ break the interface.
 
 ## Unreleased
 
+## 0.7.0 - 2026-11-03
+
+Generated from the corrected API `2026-11-01` document. Requests and responses on the wire are
+unchanged.
+
+### Removed
+
+- `affinity.MethodNotAllowedError`. The API does not answer `405` to an SDK call. A `405` from a proxy raises a `*core.APIError`.
+- The `ContentTooLargeErrorBody`, `ServiceUnavailableErrorBody` and their `…Code` and `…CodeCode` types and constants. `ContentTooLargeError.Body` and `ServiceUnavailableError.Body` are now `*Problem`, like the other errors (before, `ContentTooLargeError.Body` was `any`).
+
+### Changed
+
+- Clearer descriptions in the types and reference. Every enum member keeps its name.
+
 ## 0.6.0 - 2026-11-02
 
 This release is generated from the API `2026-11-01` contract that production serves. That contract
