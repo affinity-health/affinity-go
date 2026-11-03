@@ -322,6 +322,174 @@ func (l *ListOrdersRequest) SetSort(sort *ListOrdersRequestSort) {
 }
 
 var (
+	addressInputFieldLine1      = big.NewInt(1 << 0)
+	addressInputFieldLine2      = big.NewInt(1 << 1)
+	addressInputFieldCity       = big.NewInt(1 << 2)
+	addressInputFieldState      = big.NewInt(1 << 3)
+	addressInputFieldPostalCode = big.NewInt(1 << 4)
+)
+
+// addressInputNullableFields maps the wire names of AddressInput's nullable fields (required or optional) to their field bits.
+var addressInputNullableFields = map[string]*big.Int{
+	"line2": addressInputFieldLine2,
+}
+
+// The US mailing address.
+type AddressInput struct {
+	// The street address.
+	Line1 string `json:"line1" url:"line1"`
+	// The apartment or suite, or null when there is none. Empty text, N/A, NA, none and - count as null. See notes, TBD and unknown return 422.
+	Line2 *string `json:"line2,omitempty" url:"line2,omitempty"`
+	// The city name.
+	City string `json:"city" url:"city"`
+	// The two-letter US state or territory code, such as TX, in any letter case. Affinity stores and returns it in upper case.
+	State string `json:"state" url:"state"`
+	// The US ZIP code: 78701, or ZIP+4 as 78701-1234, 78701 1234 or 787011234. Affinity stores and returns 78701 or 78701-1234.
+	PostalCode string `json:"postalCode" url:"postalCode"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (a *AddressInput) GetLine1() string {
+	if a == nil {
+		return ""
+	}
+	return a.Line1
+}
+
+func (a *AddressInput) GetLine2() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Line2
+}
+
+func (a *AddressInput) GetCity() string {
+	if a == nil {
+		return ""
+	}
+	return a.City
+}
+
+func (a *AddressInput) GetState() string {
+	if a == nil {
+		return ""
+	}
+	return a.State
+}
+
+func (a *AddressInput) GetPostalCode() string {
+	if a == nil {
+		return ""
+	}
+	return a.PostalCode
+}
+
+func (a *AddressInput) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
+	return a.extraProperties
+}
+
+func (a *AddressInput) require(field *big.Int) {
+	next := new(big.Int)
+	if a.explicitFields != nil {
+		next.Set(a.explicitFields)
+	}
+	next.Or(next, field)
+	a.explicitFields = next
+}
+
+// SetLine1 sets the Line1 field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AddressInput) SetLine1(line1 string) {
+	a.Line1 = line1
+	a.require(addressInputFieldLine1)
+}
+
+// SetLine2 sets the Line2 field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AddressInput) SetLine2(line2 *string) {
+	a.Line2 = line2
+	a.require(addressInputFieldLine2)
+}
+
+// SetCity sets the City field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AddressInput) SetCity(city string) {
+	a.City = city
+	a.require(addressInputFieldCity)
+}
+
+// SetState sets the State field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AddressInput) SetState(state string) {
+	a.State = state
+	a.require(addressInputFieldState)
+}
+
+// SetPostalCode sets the PostalCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AddressInput) SetPostalCode(postalCode string) {
+	a.PostalCode = postalCode
+	a.require(addressInputFieldPostalCode)
+}
+
+func (a *AddressInput) UnmarshalJSON(data []byte) error {
+	type unmarshaler AddressInput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AddressInput(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, addressInputNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		a.require(presentFields)
+	}
+	a.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AddressInput) MarshalJSON() ([]byte, error) {
+	type embed AddressInput
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (a *AddressInput) String() string {
+	if a == nil {
+		return "<nil>"
+	}
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+var (
 	allergyFieldCategory = big.NewInt(1 << 0)
 	allergyFieldDisplay  = big.NewInt(1 << 1)
 )
@@ -1991,11 +2159,11 @@ type PatientInput struct {
 	DateOfBirth string `json:"dateOfBirth" url:"dateOfBirth"`
 	// The patient's email address.
 	Email string `json:"email" url:"email"`
-	// The first name.
+	// The first name. N/A, TBD, unknown and none return 422.
 	FirstName string `json:"firstName" url:"firstName"`
 	// The patient's sex as sent to the pharmacy.
 	Sex PatientInputSex `json:"sex" url:"sex"`
-	// The last name.
+	// The last name. N/A, TBD, unknown and none return 422.
 	LastName string `json:"lastName" url:"lastName"`
 	// The patient's middle name, or null when there is none. Empty text counts as null.
 	MiddleName *string `json:"middleName,omitempty" url:"middleName,omitempty"`
@@ -2224,7 +2392,7 @@ var (
 type PatientInputAllergiesItem struct {
 	// The allergy category.
 	Category PatientInputAllergiesItemCategory `json:"category" url:"category"`
-	// The reported allergy name.
+	// The reported allergy name. A whole-value no-allergy statement (NKDA, NKFA, none, unknown, denies, no, N/A and the same kind of phrase) returns 422, ignoring case, dots, hyphens, slashes, spaces and a trailing period. Send `[]` instead.
 	Display string `json:"display" url:"display"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -2886,9 +3054,9 @@ var prescriptionInputNullableFields = map[string]*big.Int{
 }
 
 type PrescriptionInput struct {
-	// The reason for compounding, required when the medication's requirements include it. Empty text counts as null.
+	// One of the medication's compoundingReasons values, required when the medication's requirements include it. Another value returns 422. Empty text counts as null.
 	CompoundingReason *string `json:"compoundingReason,omitempty" url:"compoundingReason,omitempty"`
-	// The prescriber's directions for use.
+	// The prescriber's directions for use, as the clinician wrote them. None, N/A, NA, TBD, unknown and see notes return 422.
 	Directions string `json:"directions" url:"directions"`
 	// The medication's public identifier from the current catalog.
 	MedicationID string `json:"medicationId" url:"medicationId"`

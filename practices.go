@@ -23,10 +23,10 @@ type CreatePracticesRequest struct {
 	// A unique key per operation, 1 to 255 printable ASCII characters without spaces. Retry the same key and body to avoid repeating the action. The replay response depends on the operation. See https://docs.affinityrx.com/guides/#retry-safely.
 	IdempotencyKey string `json:"-" url:"-"`
 	// Your practice identifier, unique among your platform's active practices.
-	ExternalID  *string       `json:"externalId,omitempty" url:"-"`
-	Address     *AddressInput `json:"address" url:"-"`
-	LiveEnabled *bool         `json:"liveEnabled,omitempty" url:"-"`
-	// Text with at least one visible character.
+	ExternalID  *string               `json:"externalId,omitempty" url:"-"`
+	Address     *PracticeAddressInput `json:"address" url:"-"`
+	LiveEnabled *bool                 `json:"liveEnabled,omitempty" url:"-"`
+	// The practice name. PerfectRx prints it: use Windows-1252 characters, without < or >.
 	Name string `json:"name" url:"-"`
 	// A US phone number: 10 digits, with or without +1 or 1 before them. Spaces, dashes, dots and parentheses are allowed, such as (512) 555-0100. Affinity stores and returns +15125550100.
 	Phone string `json:"phone" url:"-"`
@@ -60,7 +60,7 @@ func (c *CreatePracticesRequest) SetExternalID(externalID *string) {
 
 // SetAddress sets the Address field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreatePracticesRequest) SetAddress(address *AddressInput) {
+func (c *CreatePracticesRequest) SetAddress(address *PracticeAddressInput) {
 	c.Address = address
 	c.require(createPracticesRequestFieldAddress)
 }
@@ -416,6 +416,174 @@ func (p *Practice) String() string {
 }
 
 var (
+	practiceAddressInputFieldLine1      = big.NewInt(1 << 0)
+	practiceAddressInputFieldLine2      = big.NewInt(1 << 1)
+	practiceAddressInputFieldCity       = big.NewInt(1 << 2)
+	practiceAddressInputFieldState      = big.NewInt(1 << 3)
+	practiceAddressInputFieldPostalCode = big.NewInt(1 << 4)
+)
+
+// practiceAddressInputNullableFields maps the wire names of PracticeAddressInput's nullable fields (required or optional) to their field bits.
+var practiceAddressInputNullableFields = map[string]*big.Int{
+	"line2": practiceAddressInputFieldLine2,
+}
+
+// The practice's US mailing address. PerfectRx prints it: use Windows-1252 characters, without < or >. Line 1 and line 2 together: 70 characters or fewer.
+type PracticeAddressInput struct {
+	// The street address. Line 1 and line 2 together: 70 characters or fewer.
+	Line1 string `json:"line1" url:"line1"`
+	// The apartment or suite, or null when there is none. Empty text, N/A, NA, none and - count as null. See notes, TBD and unknown return 422. Line 1 and line 2 together: 70 characters or fewer.
+	Line2 *string `json:"line2,omitempty" url:"line2,omitempty"`
+	// The city name.
+	City string `json:"city" url:"city"`
+	// The two-letter code of a US state, DC or PR, in any letter case. Affinity stores and returns it in upper case.
+	State string `json:"state" url:"state"`
+	// The US ZIP code: 78701, or ZIP+4 as 78701-1234, 78701 1234 or 787011234. Affinity stores and returns 78701 or 78701-1234.
+	PostalCode string `json:"postalCode" url:"postalCode"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PracticeAddressInput) GetLine1() string {
+	if p == nil {
+		return ""
+	}
+	return p.Line1
+}
+
+func (p *PracticeAddressInput) GetLine2() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Line2
+}
+
+func (p *PracticeAddressInput) GetCity() string {
+	if p == nil {
+		return ""
+	}
+	return p.City
+}
+
+func (p *PracticeAddressInput) GetState() string {
+	if p == nil {
+		return ""
+	}
+	return p.State
+}
+
+func (p *PracticeAddressInput) GetPostalCode() string {
+	if p == nil {
+		return ""
+	}
+	return p.PostalCode
+}
+
+func (p *PracticeAddressInput) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.extraProperties
+}
+
+func (p *PracticeAddressInput) require(field *big.Int) {
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
+	}
+	next.Or(next, field)
+	p.explicitFields = next
+}
+
+// SetLine1 sets the Line1 field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PracticeAddressInput) SetLine1(line1 string) {
+	p.Line1 = line1
+	p.require(practiceAddressInputFieldLine1)
+}
+
+// SetLine2 sets the Line2 field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PracticeAddressInput) SetLine2(line2 *string) {
+	p.Line2 = line2
+	p.require(practiceAddressInputFieldLine2)
+}
+
+// SetCity sets the City field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PracticeAddressInput) SetCity(city string) {
+	p.City = city
+	p.require(practiceAddressInputFieldCity)
+}
+
+// SetState sets the State field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PracticeAddressInput) SetState(state string) {
+	p.State = state
+	p.require(practiceAddressInputFieldState)
+}
+
+// SetPostalCode sets the PostalCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PracticeAddressInput) SetPostalCode(postalCode string) {
+	p.PostalCode = postalCode
+	p.require(practiceAddressInputFieldPostalCode)
+}
+
+func (p *PracticeAddressInput) UnmarshalJSON(data []byte) error {
+	type unmarshaler PracticeAddressInput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PracticeAddressInput(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, practiceAddressInputNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PracticeAddressInput) MarshalJSON() ([]byte, error) {
+	type embed PracticeAddressInput
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (p *PracticeAddressInput) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+var (
 	practiceListFieldData       = big.NewInt(1 << 0)
 	practiceListFieldHasMore    = big.NewInt(1 << 1)
 	practiceListFieldNextCursor = big.NewInt(1 << 2)
@@ -656,13 +824,13 @@ var updatePracticesRequestAddressNullableFields = map[string]*big.Int{
 }
 
 type UpdatePracticesRequestAddress struct {
-	// The street address.
+	// The street address. Line 1 and line 2 together: 70 characters or fewer.
 	Line1 *string `json:"line1,omitempty" url:"line1,omitempty"`
-	// The apartment or suite. Send null or empty text to remove it. An omitted `line2` keeps the saved suite, also when `line1` changes.
+	// The apartment or suite. Send null, empty text, N/A, NA, none or - to remove it. See notes, TBD and unknown return 422. An omitted `line2` keeps the saved suite, also when `line1` changes.
 	Line2 *string `json:"line2,omitempty" url:"line2,omitempty"`
 	// The city name.
 	City *string `json:"city,omitempty" url:"city,omitempty"`
-	// The two-letter US state or territory code, such as TX, in any letter case. Affinity stores and returns it in upper case.
+	// The two-letter code of a US state, DC or PR, in any letter case. Affinity stores and returns it in upper case.
 	State *string `json:"state,omitempty" url:"state,omitempty"`
 	// The US ZIP code: 78701, or ZIP+4 as 78701-1234, 78701 1234 or 787011234. Affinity stores and returns 78701 or 78701-1234.
 	PostalCode *string `json:"postalCode,omitempty" url:"postalCode,omitempty"`
@@ -826,11 +994,11 @@ type UpdatePracticesRequest struct {
 	PracticeID string `json:"-" url:"-"`
 	// Your practice identifier, unique among your platform's active practices. Send null to clear it.
 	ExternalID *string `json:"externalId,omitempty" url:"-"`
-	// Affinity merges the address parts you send into the saved address. An omitted part keeps its saved value. To move to an address with no suite, send `"line2": null` with the new `line1`, `city`, `state` and `postalCode`.
+	// Affinity merges the address parts you send into the saved address. An omitted part keeps its saved value. To move to an address with no suite, send `"line2": null` with the new `line1`, `city`, `state` and `postalCode`. PerfectRx prints it: use Windows-1252 characters, without < or >. Line 1 and line 2 together: 70 characters or fewer.
 	Address *UpdatePracticesRequestAddress `json:"address,omitempty" url:"-"`
 	// Omit it or send null to leave Live unchanged.
 	LiveEnabled *bool `json:"liveEnabled,omitempty" url:"-"`
-	// Text with at least one visible character.
+	// The practice name. PerfectRx prints it: use Windows-1252 characters, without < or >.
 	Name *string `json:"name,omitempty" url:"-"`
 	// A US phone number: 10 digits, with or without +1 or 1 before them. Spaces, dashes, dots and parentheses are allowed, such as (512) 555-0100. Affinity stores and returns +15125550100. Empty text counts as null.
 	Phone *string `json:"phone,omitempty" url:"-"`

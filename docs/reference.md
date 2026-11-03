@@ -834,7 +834,7 @@ Platforms only. Name, phone and address are required. The practice starts in Tes
 ```go
 request := &affinity.CreatePracticesRequest{
     IdempotencyKey: "Idempotency-Key",
-    Address: &affinity.AddressInput{
+    Address: &affinity.PracticeAddressInput{
         Line1: "line1",
         City: "city",
         State: "state",
@@ -877,7 +877,7 @@ _, err := client.Practices.Create(
 <dl>
 <dd>
 
-**address:** `*affinity.AddressInput` 
+**address:** `*affinity.PracticeAddressInput` 
     
 </dd>
 </dl>
@@ -893,7 +893,7 @@ _, err := client.Practices.Create(
 <dl>
 <dd>
 
-**name:** `string` — Text with at least one visible character.
+**name:** `string` — The practice name. PerfectRx prints it: use Windows-1252 characters, without < or >.
     
 </dd>
 </dl>
@@ -1046,7 +1046,7 @@ _, err := client.Practices.Update(
 <dl>
 <dd>
 
-**address:** `*affinity.UpdatePracticesRequestAddress` — Affinity merges the address parts you send into the saved address. An omitted part keeps its saved value. To move to an address with no suite, send `"line2": null` with the new `line1`, `city`, `state` and `postalCode`.
+**address:** `*affinity.UpdatePracticesRequestAddress` — Affinity merges the address parts you send into the saved address. An omitted part keeps its saved value. To move to an address with no suite, send `"line2": null` with the new `line1`, `city`, `state` and `postalCode`. PerfectRx prints it: use Windows-1252 characters, without < or >. Line 1 and line 2 together: 70 characters or fewer.
     
 </dd>
 </dl>
@@ -1062,7 +1062,7 @@ _, err := client.Practices.Update(
 <dl>
 <dd>
 
-**name:** `*string` — Text with at least one visible character.
+**name:** `*string` — The practice name. PerfectRx prints it: use Windows-1252 characters, without < or >.
     
 </dd>
 </dl>

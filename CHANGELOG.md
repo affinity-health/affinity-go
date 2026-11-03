@@ -6,6 +6,27 @@ break the interface.
 
 ## Unreleased
 
+## 0.8.0 - 2026-11-03
+
+Generated from the API `2026-11-01` document that production serves (sha256 `6806fb50…`).
+Requests and responses on the wire are unchanged.
+
+### Added
+
+- `affinity.PracticeAddressInput`, the type of the `address` you send to create a practice. It has the same fields as
+  `AddressInput`.
+
+### Changed
+
+- Creating a practice takes `PracticeAddressInput` as its address (before: `AddressInput`). Orders keep
+  `AddressInput`.
+- A `413` answer to a get or list call returns `*core.APIError` instead of `*affinity.ContentTooLargeError`. The API answers `413` only to a
+  request with a body.
+- The reference and type descriptions name the limits the API enforces: a practice name of 100
+  characters or fewer, practice address lines 1 and 2 of 70 characters or fewer together, Windows-1252
+  characters without `<` or `>`, and US phone numbers of 10 digits. They also describe the wider
+  no-allergy refusal and `restrictedStates`.
+
 ## 0.7.0 - 2026-11-03
 
 Generated from the corrected API `2026-11-01` document. Requests and responses on the wire are

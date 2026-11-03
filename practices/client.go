@@ -110,7 +110,7 @@ func (c *Client) List(
 //
 //	request := &affinity.CreatePracticesRequest{
 //	    IdempotencyKey: "Idempotency-Key",
-//	    Address: &affinity.AddressInput{
+//	    Address: &affinity.PracticeAddressInput{
 //	        Line1: "line1",
 //	        City: "city",
 //	        State: "state",

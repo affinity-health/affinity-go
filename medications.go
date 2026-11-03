@@ -163,7 +163,7 @@ type Medication struct {
 	QuantityUnit *string `json:"quantityUnit,omitempty" url:"quantityUnit,omitempty"`
 	// The optional prescription field paths that this medication requires.
 	Requirements []string `json:"requirements" url:"requirements"`
-	// The states where this medication cannot ship; other states are permitted subject to pharmacy coverage.
+	// Every state where this medication cannot ship, including states the pharmacy does not cover. It can ship to every other state.
 	RestrictedStates []string `json:"restrictedStates" url:"restrictedStates"`
 	// The shipping options available for this medication.
 	ShippingOptions []*ShippingOption `json:"shippingOptions" url:"shippingOptions"`
@@ -938,7 +938,7 @@ type GetMedicationsResponse struct {
 	QuantityUnit *string `json:"quantityUnit,omitempty" url:"quantityUnit,omitempty"`
 	// The optional prescription field paths that this medication requires.
 	Requirements []string `json:"requirements" url:"requirements"`
-	// The states where this medication cannot ship; other states are permitted subject to pharmacy coverage.
+	// Every state where this medication cannot ship, including states the pharmacy does not cover. It can ship to every other state.
 	RestrictedStates []string `json:"restrictedStates" url:"restrictedStates"`
 	// The shipping options available for this medication.
 	ShippingOptions []*ShippingOption `json:"shippingOptions" url:"shippingOptions"`
