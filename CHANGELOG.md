@@ -6,6 +6,19 @@ break the interface.
 
 ## Unreleased
 
+## 0.9.0 - 2026-11-04
+
+Generated from the API `2026-11-01` document (sha256 `90dfa01c…`). It adds two optional request
+fields; nothing else on the wire changed.
+
+### Added
+
+- `Query` on `affinity.ListMedicationsRequest`: find medications by name. Every word must appear in the name, in any order, ignoring case
+  and accents. The list pager keeps the query on every page.
+- `ID` on `affinity.PatientInput`: the `pat_` ID of a saved patient of the order's practice. The order reuses that patient
+  and updates it from the sent fields. An unknown ID, or one of another practice or mode, is a
+  `404`.
+
 ## 0.8.0 - 2026-11-03
 
 Generated from the API `2026-11-01` document that production serves (sha256 `6806fb50…`).

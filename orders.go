@@ -2142,6 +2142,7 @@ var (
 	patientInputFieldMiddleName  = big.NewInt(1 << 7)
 	patientInputFieldPhone       = big.NewInt(1 << 8)
 	patientInputFieldExternalID  = big.NewInt(1 << 9)
+	patientInputFieldID          = big.NewInt(1 << 10)
 )
 
 // patientInputNullableFields maps the wire names of PatientInput's nullable fields (required or optional) to their field bits.
@@ -2169,8 +2170,10 @@ type PatientInput struct {
 	MiddleName *string `json:"middleName,omitempty" url:"middleName,omitempty"`
 	// A US phone number: 10 digits, with or without +1 or 1 before them. Spaces, dashes, dots and parentheses are allowed, such as (512) 555-0100. Affinity stores and returns +15125550100.
 	Phone string `json:"phone" url:"phone"`
-	// Your patient identifier within the practice and mode; omit it to create a new patient for each order.
+	// Your patient identifier within the practice and mode. Omit it and id to create a new patient for each order. With id, send the saved patient's externalId or omit it. If the saved patient has none, this value is added to it.
 	ExternalID *string `json:"externalId,omitempty" url:"externalId,omitempty"`
+	// The pat_ ID of a saved patient of the order's practice, in the same Test or Live mode. The order reuses that patient and updates it from the sent fields. Send all other patient fields as usual. GET /v1/orders returns the patientId of each order. An unknown ID, or an ID of a different practice or mode, returns 404 not_found.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2247,6 +2250,13 @@ func (p *PatientInput) GetExternalID() *string {
 		return nil
 	}
 	return p.ExternalID
+}
+
+func (p *PatientInput) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
 }
 
 func (p *PatientInput) GetExtraProperties() map[string]interface{} {
@@ -2333,6 +2343,13 @@ func (p *PatientInput) SetPhone(phone string) {
 func (p *PatientInput) SetExternalID(externalID *string) {
 	p.ExternalID = externalID
 	p.require(patientInputFieldExternalID)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PatientInput) SetID(id *string) {
+	p.ID = id
+	p.require(patientInputFieldID)
 }
 
 func (p *PatientInput) UnmarshalJSON(data []byte) error {

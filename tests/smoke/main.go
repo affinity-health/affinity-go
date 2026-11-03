@@ -299,6 +299,36 @@ func run(ctx context.Context, c *client.Client, baseURL, webhookURL string, orde
 		}
 		record("medications.list for a practice", err, note)
 	}
+	{
+		// query matches names that contain every word, ignoring case. Search for the chosen
+		// medication's longest word.
+		word := ""
+		for _, w := range strings.FieldsFunc(medication.Name, func(r rune) bool { return !(r >= 'A' && r <= 'Z' || r >= 'a' && r <= 'z') }) {
+			if len(w) > len(word) {
+				word = w
+			}
+		}
+		var found []*affinity.Medication
+		page, err := c.Medications.List(ctx, &affinity.ListMedicationsRequest{Query: affinity.String(strings.ToLower(word))})
+		if err == nil {
+			it := page.Iterator()
+			for it.Next(ctx) {
+				found = append(found, it.Current())
+			}
+			err = it.Err()
+		}
+		listed := false
+		for _, m := range found {
+			listed = listed || m.ID == medication.ID
+			if err == nil && !strings.Contains(strings.ToLower(m.Name), strings.ToLower(word)) {
+				err = fmt.Errorf("%q does not contain %q", m.Name, word)
+			}
+		}
+		if err == nil && !listed {
+			err = fmt.Errorf("%s is not in the results", medication.ID)
+		}
+		record("medications.list query", err, fmt.Sprintf("%q: %d of %d", word, len(found), len(medications)))
+	}
 
 	// Orders.
 	orderInput := func(quantity int) *affinity.OrderInput {

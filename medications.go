@@ -61,6 +61,7 @@ var (
 	listMedicationsRequestFieldPracticeID    = big.NewInt(1 << 0)
 	listMedicationsRequestFieldLimit         = big.NewInt(1 << 1)
 	listMedicationsRequestFieldStartingAfter = big.NewInt(1 << 2)
+	listMedicationsRequestFieldQuery         = big.NewInt(1 << 3)
 )
 
 type ListMedicationsRequest struct {
@@ -70,6 +71,8 @@ type ListMedicationsRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// Page forward using the previous response's nextCursor. Keep the same filters, sort, organization and mode.
 	StartingAfter *string `json:"-" url:"startingAfter,omitempty"`
+	// Match medication names that contain every word of this text, in any order, ignoring case and accents. Each word must appear in the name, so a misspelled word matches nothing. Strength, form and pharmacy are not searched. An empty query lists every medication. Restart pagination after changing query.
+	Query *string `json:"-" url:"query,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -103,6 +106,13 @@ func (l *ListMedicationsRequest) SetLimit(limit *int) {
 func (l *ListMedicationsRequest) SetStartingAfter(startingAfter *string) {
 	l.StartingAfter = startingAfter
 	l.require(listMedicationsRequestFieldStartingAfter)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListMedicationsRequest) SetQuery(query *string) {
+	l.Query = query
+	l.require(listMedicationsRequestFieldQuery)
 }
 
 var (
